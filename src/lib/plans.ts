@@ -5,6 +5,7 @@ export type PlanConfig = {
   currency: 'USD' | 'NGN';
   flutterwavePlanId?: string; // ID from Flutterwave Dashboard
   features: string[];
+  highlight?: boolean;
 };
 
 export const SUBSCRIPTION_PLANS: Record<string, PlanConfig> = {
@@ -22,6 +23,7 @@ export const SUBSCRIPTION_PLANS: Record<string, PlanConfig> = {
     currency: 'USD',
     flutterwavePlanId: process.env.FLW_PLAN_ID_PRO, 
     features: ['Unlimited Projects', 'AI PRD Generation', 'Priority Support'],
+    highlight: true,
   },
   TEAM: {
     id: 'team',

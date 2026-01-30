@@ -16,6 +16,11 @@ export function signToken(payload: Record<string, unknown>) {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
 }
 
+export interface SessionPayload extends JwtPayload {
+  userId: string;
+  email: string;
+}
+
 export function verifyToken(token: string): JwtPayload | string | null {
   try {
     return jwt.verify(token, JWT_SECRET);
@@ -24,11 +29,15 @@ export function verifyToken(token: string): JwtPayload | string | null {
   }
 }
 
-export async function getSession(): Promise<(JwtPayload | string) | null> {
+export async function getSession(): Promise<SessionPayload | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value;
   if (!token) return null;
-  return verifyToken(token) as JwtPayload | string | null;
+  
+  const decoded = verifyToken(token);
+  if (!decoded || typeof decoded === 'string') return null;
+  
+  return decoded as SessionPayload;
 }
 
 export async function setSession(token: string) {

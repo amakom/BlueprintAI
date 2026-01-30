@@ -3,8 +3,8 @@
 import { Plus } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { CreateProjectModal } from '@/components/dashboard/CreateProjectModal';
+import { ProjectCard } from '@/components/dashboard/ProjectCard';
 
 interface Project {
   id: string;
@@ -59,22 +59,44 @@ export default function DashboardPage() {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    
-    // If less than 24 hours
-    if (diff < 24 * 60 * 60 * 1000) {
-      if (diff < 60 * 60 * 1000) {
-        const minutes = Math.floor(diff / (60 * 1000));
-        return `Edited ${minutes}m ago`;
+  const handleRenameProject = async (id: string, newName: string) => {
+    try {
+      const res = await fetch(`/api/projects/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newName }),
+      });
+
+      if (res.ok) {
+        setProjects((prev) =>
+          prev.map((p) => (p.id === id ? { ...p, name: newName } : p))
+        );
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Failed to rename project');
       }
-      const hours = Math.floor(diff / (60 * 60 * 1000));
-      return `Edited ${hours}h ago`;
+    } catch (error) {
+      console.error('Failed to rename project:', error);
+      alert('An unexpected error occurred');
     }
-    
-    return `Edited ${date.toLocaleDateString()}`;
+  };
+
+  const handleDeleteProject = async (id: string) => {
+    try {
+      const res = await fetch(`/api/projects/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        setProjects((prev) => prev.filter((p) => p.id !== id));
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Failed to delete project');
+      }
+    } catch (error) {
+      console.error('Failed to delete project:', error);
+      alert('An unexpected error occurred');
+    }
   };
 
   return (
@@ -122,22 +144,12 @@ export default function DashboardPage() {
             </div>
 
             {projects.map((project) => (
-              <Link href={`/canvas/${project.id}`} key={project.id}>
-                <div className="bg-white p-5 rounded-xl border border-border hover:border-cyan transition-colors cursor-pointer shadow-sm group h-full flex flex-col">
-                  <div className="h-32 bg-cloud rounded-lg mb-4 flex items-center justify-center relative overflow-hidden">
-                    <span className="text-gray-400 font-medium z-10">Preview</span>
-                    {/* Placeholder for project thumbnail */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-cloud to-white opacity-50" />
-                  </div>
-                  <div className="mt-auto">
-                    <h3 className="font-bold text-navy group-hover:text-cyan transition-colors truncate">{project.name}</h3>
-                    <div className="flex justify-between items-center mt-2">
-                      <p className="text-xs text-gray-500">{formatDate(project.updatedAt)}</p>
-                      <span className="text-xs px-2 py-1 bg-cloud text-gray-600 rounded-full">{project._count.documents} docs</span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
+              <ProjectCard 
+                key={project.id} 
+                project={project}
+                onRename={handleRenameProject}
+                onDelete={handleDeleteProject}
+              />
             ))}
             
             {projects.length === 0 && (

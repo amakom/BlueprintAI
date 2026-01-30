@@ -44,3 +44,42 @@ export async function POST(req: Request) {
     );
   }
 }
+
+export async function GET() {
+  try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // Find user's team memberships
+    const memberships = await prisma.teamMember.findMany({
+      where: { userId: session.userId },
+      select: { teamId: true },
+    });
+
+    const teamIds = memberships.map((m) => m.teamId);
+
+    const projects = await prisma.project.findMany({
+      where: {
+        teamId: { in: teamIds },
+      },
+      orderBy: { updatedAt: 'desc' },
+      include: {
+        team: { select: { name: true } },
+        _count: { select: { documents: true } },
+      },
+    });
+
+    return NextResponse.json({ success: true, projects });
+  } catch (error) {
+    console.error('List Projects error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}

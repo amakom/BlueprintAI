@@ -58,7 +58,7 @@ export async function POST(req: Request) {
     });
 
     // 4. Create Session
-    const token = signToken({ userId: result.user.id, email: result.user.email });
+    const token = await signToken({ userId: result.user.id, email: result.user.email });
     await setSession(token);
 
     return NextResponse.json({ success: true, user: result.user, team: result.team });

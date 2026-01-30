@@ -1,4 +1,9 @@
-import { PlanType } from '@prisma/client';
+export enum PlanType {
+  FREE = 'FREE',
+  PRO = 'PRO',
+  TEAM = 'TEAM',
+  ENTERPRISE = 'ENTERPRISE',
+}
 
 export interface PlanLimits {
   maxProjects: number;

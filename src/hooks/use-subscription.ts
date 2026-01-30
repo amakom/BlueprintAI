@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { PlanType } from '@prisma/client';
-import { getPlanLimits, PlanLimits } from '@/lib/permissions';
+import { getPlanLimits, PlanLimits, PlanType } from '@/lib/permissions';
 
 export interface SubscriptionState {
   plan: PlanType;

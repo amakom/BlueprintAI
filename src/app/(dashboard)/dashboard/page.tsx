@@ -116,7 +116,7 @@ export default function DashboardPage() {
               className="bg-cloud/50 border-2 border-dashed border-gray-300 p-5 rounded-xl flex flex-col items-center justify-center hover:border-cyan hover:bg-cyan/5 transition-colors cursor-pointer h-full min-h-[240px]"
             >
               <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center mb-3 shadow-sm">
-                <Plus className="w-5 h-5 text-cyan" />
+                <Plus className="w-4 h-4 text-cyan" />
               </div>
               <h3 className="font-bold text-navy">Create New</h3>
             </div>

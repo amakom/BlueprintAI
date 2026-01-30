@@ -42,7 +42,7 @@ export function CreateProjectModal({ isOpen, onClose, onSubmit }: CreateProjectM
             onClick={onClose}
             className="text-gray-400 hover:text-navy transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 

@@ -94,7 +94,7 @@ export function PricingTable({ initialTeamId, initialUserEmail, initialUserName 
             <ul className="space-y-4 mb-8">
               {plan.features.map((feat, i) => (
                 <li key={i} className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-cyan shrink-0" />
+                  <Check className="w-4 h-4 text-cyan shrink-0" />
                   <span className="text-navy/80 text-sm">{feat}</span>
                 </li>
               ))}

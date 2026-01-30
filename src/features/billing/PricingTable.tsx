@@ -4,13 +4,20 @@ import { useState } from 'react';
 import { Check, Loader2 } from 'lucide-react';
 import { SUBSCRIPTION_PLANS } from '@/lib/plans';
 
-export function PricingTable() {
+interface PricingTableProps {
+    initialTeamId?: string;
+    initialUserEmail?: string;
+    initialUserName?: string;
+}
+
+export function PricingTable({ initialTeamId, initialUserEmail, initialUserName }: PricingTableProps) {
   const [currency, setCurrency] = useState<'USD' | 'NGN'>('USD');
   const [loading, setLoading] = useState<string | null>(null);
 
-  // Mock user/team for demo
-  const mockUser = { email: 'demo@blueprint.ai', name: 'Demo User' };
-  const mockTeamId = 'cm6jdemo'; 
+  // Use provided data or fall back to mock for demo
+  const userEmail = initialUserEmail || 'demo@blueprint.ai';
+  const userName = initialUserName || 'Demo User';
+  const teamId = initialTeamId || 'cm6jdemo';
 
   const handleSubscribe = async (planId: string) => {
     setLoading(planId);
@@ -21,9 +28,9 @@ export function PricingTable() {
         body: JSON.stringify({ 
             planId, 
             currency,
-            teamId: mockTeamId,
-            userEmail: mockUser.email,
-            userName: mockUser.name
+            teamId,
+            userEmail,
+            userName
         }),
       });
       const data = await res.json();

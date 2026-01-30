@@ -1,10 +1,9 @@
-import { SignJWT, jwtVerify } from 'jose';
 import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
+import { signToken, verifyToken, SessionPayload } from './jwt';
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'super-secret-secret'
-);
+// Re-export JWT utilities
+export { signToken, verifyToken, type SessionPayload };
 
 export async function hashPassword(password: string) {
   return await bcrypt.hash(password, 10);
@@ -12,28 +11,6 @@ export async function hashPassword(password: string) {
 
 export async function comparePassword(password: string, hash: string) {
   return await bcrypt.compare(password, hash);
-}
-
-export async function signToken(payload: Record<string, unknown>) {
-  return await new SignJWT(payload)
-    .setProtectedHeader({ alg: 'HS256' })
-    .setExpirationTime('7d')
-    .sign(JWT_SECRET);
-}
-
-export interface SessionPayload {
-  userId: string;
-  email: string;
-  [key: string]: unknown;
-}
-
-export async function verifyToken(token: string): Promise<SessionPayload | null> {
-  try {
-    const { payload } = await jwtVerify(token, JWT_SECRET);
-    return payload as SessionPayload;
-  } catch {
-    return null;
-  }
 }
 
 export async function getSession(): Promise<SessionPayload | null> {

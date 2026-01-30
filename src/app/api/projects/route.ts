@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
+import { PLAN_LIMITS, PlanType } from '@/lib/permissions';
 
 export async function POST(req: Request) {
   try {
@@ -25,6 +26,27 @@ export async function POST(req: Request) {
         { error: 'No team found. Please create a team first.' },
         { status: 400 }
       );
+    }
+
+    // Enforce Plan Limits
+    const subscription = await prisma.subscription.findUnique({
+        where: { teamId: membership.teamId }
+    });
+
+    const plan = (subscription?.plan as PlanType) || PlanType.FREE;
+    const limits = PLAN_LIMITS[plan];
+
+    if (limits.maxProjects !== Infinity) {
+        const projectCount = await prisma.project.count({
+            where: { teamId: membership.teamId }
+        });
+        
+        if (projectCount >= limits.maxProjects) {
+            return NextResponse.json(
+                { error: `Plan limit reached. Upgrade to create more projects.` },
+                { status: 403 }
+            );
+        }
     }
 
     const project = await prisma.project.create({

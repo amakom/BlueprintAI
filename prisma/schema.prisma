@@ -1,17 +1,15 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Prisma schema for BlueprintAI
+// Docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client"
-  output   = "../node_modules/.prisma/client"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
-// --- Auth & Users (NextAuth.js adapters compatible) ---
+// --- Auth & Users (NextAuth.js compatible) ---
 
 model User {
   id            String    @id @default(cuid())
@@ -26,7 +24,6 @@ model User {
   accounts Account[]
   sessions Session[]
 
-  // App specific relations
   teamMembers TeamMember[]
   comments    Comment[]
   createdDocs Document[]   @relation("CreatedDocs")
@@ -76,7 +73,7 @@ model VerificationToken {
 model Team {
   id        String   @id @default(cuid())
   name      String
-  slug      String   @unique // For URLs like /team-slug/project
+  slug      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -121,16 +118,16 @@ model Project {
 }
 
 enum DocType {
-  PRD // Text-heavy requirements
-  FLOW // Visual flow / diagram
-  CANVAS // Free-form whiteboard
+  PRD
+  FLOW
+  CANVAS
 }
 
 model Document {
   id        String   @id @default(cuid())
   title     String
   type      DocType  @default(PRD)
-  content   Json? // Stores the editor state (JSON) or Canvas nodes
+  content   Json?
   projectId String
   authorId  String
   createdAt DateTime @default(now())
@@ -148,7 +145,7 @@ model Version {
   documentId String
   content    Json
   createdAt  DateTime @default(now())
-  commitMsg  String? // "Updated user flow section"
+  commitMsg  String?
 
   document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
 }
@@ -205,8 +202,8 @@ model Subscription {
   createdAt                 DateTime           @default(now())
   updatedAt                 DateTime           @updatedAt
 
-  team                      Team               @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  invoices                  Invoice[]
+  team      Team       @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  invoices  Invoice[]
 }
 
 model Invoice {
@@ -214,21 +211,21 @@ model Invoice {
   subscriptionId  String
   amount          Float
   currency        Currency
-  status          String   // paid, failed, pending
+  status          String
   flutterwaveRef  String?  @unique
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   
-  subscription    Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
 }
 
 model AIUsageLog {
   id           String   @id @default(cuid())
   teamId       String
-  action       String // "generate_prd", "expand_text"
+  action       String
   inputTokens  Int
   outputTokens Int
-  model        String // "gpt-4", "claude-3-opus"
+  model        String
   createdAt    DateTime @default(now())
 
   team Team @relation(fields: [teamId], references: [id])

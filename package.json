@@ -16,9 +16,9 @@
     "flutterwave-node-v3": "^1.3.0",
     "framer-motion": "^12.29.2",
     "lucide-react": "^0.563.0",
-    "next": "14.1.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "next": "^14.2.23",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
@@ -26,8 +26,8 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.1.0",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.23",
     "prisma": "^5.22.0",
     "tailwindcss": "^4",
     "typescript": "^5"

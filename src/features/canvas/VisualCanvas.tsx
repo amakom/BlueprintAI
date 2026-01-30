@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { 
   ReactFlow, 
   Controls, 
@@ -25,28 +25,52 @@ const nodeTypes: NodeTypes = {
   screen: ScreenNode,
 };
 
-const initialNodes: Node[] = [
-  { 
-    id: '1', 
-    type: 'userStory', 
-    position: { x: 100, y: 100 }, 
-    data: { label: 'Login', description: 'As a user, I want to login with email/password' } 
-  },
-  { 
-    id: '2', 
-    type: 'screen', 
-    position: { x: 500, y: 50 }, 
-    data: { label: 'Login Screen' } 
-  },
-];
+const initialNodes: Node[] = [];
+const initialEdges: Edge[] = [];
 
-const initialEdges: Edge[] = [
-  { id: 'e1-2', source: '1', target: '2', animated: true, style: { stroke: '#2EE6D6', strokeWidth: 2 } },
-];
+interface VisualCanvasProps {
+  projectId: string;
+}
 
-export function VisualCanvas() {
+export function VisualCanvas({ projectId }: VisualCanvasProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Load canvas data
+  useEffect(() => {
+    const loadCanvas = async () => {
+      try {
+        const res = await fetch(`/api/projects/${projectId}/canvas`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.content && data.content.nodes) {
+            setNodes(data.content.nodes);
+            setEdges(data.content.edges || []);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load canvas:', error);
+      }
+    };
+    loadCanvas();
+  }, [projectId, setNodes, setEdges]);
+
+  // Save canvas data
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      await fetch(`/api/projects/${projectId}/canvas`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nodes, edges }),
+      });
+    } catch (error) {
+      console.error('Failed to save canvas:', error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge({ ...params, animated: true, style: { stroke: '#2EE6D6' } }, eds)),
@@ -77,7 +101,18 @@ export function VisualCanvas() {
   };
 
   return (
-    <div className="w-full h-full bg-cloud">
+    <div className="w-full h-full bg-cloud relative">
+      <div className="absolute top-4 right-4 z-10 flex gap-2">
+         <button 
+           onClick={handleSave} 
+           disabled={isSaving}
+           className="bg-white p-2 rounded-md shadow-sm border border-border hover:bg-gray-50 text-navy disabled:opacity-50"
+           title="Save Canvas"
+         >
+           <Save className={`w-5 h-5 ${isSaving ? 'animate-pulse' : ''}`} />
+         </button>
+      </div>
+
       <ReactFlow
         nodes={nodes}
         edges={edges}

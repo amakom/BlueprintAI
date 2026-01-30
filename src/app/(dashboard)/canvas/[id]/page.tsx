@@ -5,9 +5,51 @@ import { VisualCanvas } from '@/features/canvas/VisualCanvas';
 import { Play, Share2, Download, Lock } from 'lucide-react';
 import { useSubscription } from '@/hooks/use-subscription';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
+interface Project {
+  id: string;
+  name: string;
+  team: { name: string };
+}
 
 export default function CanvasPage({ params }: { params: { id: string } }) {
-  const { limits, isLoading, plan } = useSubscription();
+  const { limits, isLoading: isSubLoading, plan } = useSubscription();
+  const [project, setProject] = useState<Project | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProject = async () => {
+      try {
+        const res = await fetch(`/api/projects/${params.id}`);
+        if (res.ok) {
+          const data = await res.json();
+          setProject(data.project);
+        }
+      } catch (error) {
+        console.error('Failed to fetch project:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProject();
+  }, [params.id]);
+
+  if (loading) {
+    return (
+      <div className="flex h-full items-center justify-center bg-cloud text-navy">
+        Loading...
+      </div>
+    );
+  }
+
+  if (!project) {
+    return (
+      <div className="flex h-full items-center justify-center bg-cloud text-navy">
+        Project not found
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-full">
@@ -16,8 +58,9 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
         {/* Top Bar */}
         <header className="h-14 bg-white border-b border-border flex items-center justify-between px-4 z-10 relative shadow-sm">
             <div className="flex items-center gap-2">
-                <span className="text-gray-400">Projects /</span>
-                <h1 className="font-bold text-navy">Mobile App PRD</h1>
+                <Link href="/dashboard" className="text-gray-400 hover:text-navy transition-colors">Projects</Link>
+                <span className="text-gray-300">/</span>
+                <h1 className="font-bold text-navy">{project.name}</h1>
                 <span className="px-2 py-0.5 bg-gray-100 text-gray-500 text-xs rounded-full">Draft</span>
             </div>
             <div className="flex items-center gap-2">
@@ -33,7 +76,7 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
                         LIVE
                     </div>
                 ) : (
-                    !isLoading && plan !== 'TEAM' && plan !== 'ENTERPRISE' && (
+                    !isSubLoading && plan !== 'TEAM' && plan !== 'ENTERPRISE' && (
                         <Link href="/pricing" className="text-xs text-amber font-bold flex items-center gap-1 hover:underline">
                            <Lock className="w-3 h-3" /> Team Sync Locked
                         </Link>
@@ -74,7 +117,7 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
         
         {/* Actual Canvas Implementation */}
         <div className="flex-1 relative">
-            <VisualCanvas />
+            <VisualCanvas projectId={project.id} />
         </div>
       </div>
       {/* Right AI Panel */}

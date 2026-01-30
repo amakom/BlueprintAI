@@ -1,0 +1,114 @@
+'use client';
+
+import { useState } from 'react';
+import { Check, Loader2 } from 'lucide-react';
+import { SUBSCRIPTION_PLANS } from '@/lib/plans';
+
+export function PricingTable() {
+  const [currency, setCurrency] = useState<'USD' | 'NGN'>('USD');
+  const [loading, setLoading] = useState<string | null>(null);
+
+  // Mock user/team for demo
+  const mockUser = { email: 'demo@blueprint.ai', name: 'Demo User' };
+  const mockTeamId = 'cm6jdemo'; 
+
+  const handleSubscribe = async (planId: string) => {
+    setLoading(planId);
+    try {
+      const res = await fetch('/api/billing/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            planId, 
+            currency,
+            teamId: mockTeamId,
+            userEmail: mockUser.email,
+            userName: mockUser.name
+        }),
+      });
+      const data = await res.json();
+      if (data.link) {
+        window.location.href = data.link;
+      } else {
+        alert('Failed to initialize payment');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error connecting to billing service');
+    } finally {
+      setLoading(null);
+    }
+  };
+
+  const plans = [
+    {
+      ...SUBSCRIPTION_PLANS.FREE,
+      priceDisplay: currency === 'USD' ? '$0' : '₦0',
+      period: '/month'
+    },
+    {
+      ...SUBSCRIPTION_PLANS.PRO,
+      priceDisplay: currency === 'USD' ? '$10' : '₦15,000',
+      period: '/month',
+      highlight: true
+    },
+    {
+      ...SUBSCRIPTION_PLANS.TEAM,
+      priceDisplay: currency === 'USD' ? '$39' : '₦60,000',
+      period: '/month'
+    }
+  ];
+
+  return (
+    <div className="w-full max-w-6xl mx-auto px-4 py-12">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl font-bold text-navy mb-4">Simple, transparent pricing</h2>
+        <div className="flex items-center justify-center gap-4">
+            <span className={currency === 'USD' ? 'font-bold text-navy' : 'text-gray-500'}>USD</span>
+            <button 
+                onClick={() => setCurrency(c => c === 'USD' ? 'NGN' : 'USD')}
+                className="w-12 h-6 bg-gray-200 rounded-full relative transition-colors"
+            >
+                <div className={`absolute top-1 w-4 h-4 rounded-full bg-navy transition-all ${currency === 'NGN' ? 'left-7' : 'left-1'}`} />
+            </button>
+            <span className={currency === 'NGN' ? 'font-bold text-navy' : 'text-gray-500'}>NGN</span>
+        </div>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-8">
+        {plans.map((plan) => (
+          <div key={plan.id} className={`bg-white rounded-xl p-8 border ${plan.highlight ? 'border-cyan shadow-lg ring-1 ring-cyan' : 'border-border'}`}>
+            <h3 className="text-xl font-bold text-navy mb-2">{plan.name}</h3>
+            <div className="flex items-baseline gap-1 mb-6">
+              <span className="text-4xl font-bold text-navy">{plan.priceDisplay}</span>
+              <span className="text-gray-500">{plan.period}</span>
+            </div>
+            
+            <ul className="space-y-4 mb-8">
+              {plan.features.map((feat, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-cyan shrink-0" />
+                  <span className="text-navy/80 text-sm">{feat}</span>
+                </li>
+              ))}
+            </ul>
+
+            <button
+              onClick={() => handleSubscribe(plan.id)}
+              disabled={!!loading || plan.price === 0}
+              className={`w-full py-2.5 rounded-lg font-bold transition-all flex items-center justify-center gap-2
+                ${plan.highlight 
+                    ? 'bg-cyan text-navy hover:bg-cyan/90' 
+                    : 'bg-navy text-white hover:bg-navy/90'}
+                ${loading === plan.id ? 'opacity-75 cursor-not-allowed' : ''}
+              `}
+            >
+              {loading === plan.id && <Loader2 className="w-4 h-4 animate-spin" />}
+              {plan.price === 0 ? 'Current Plan' : (loading === plan.id ? 'Processing...' : 'Subscribe')}
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

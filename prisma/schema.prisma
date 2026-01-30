@@ -1,0 +1,235 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- Auth & Users (NextAuth.js adapters compatible) ---
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+
+  // App specific relations
+  teamMembers TeamMember[]
+  comments    Comment[]
+  createdDocs Document[]   @relation("CreatedDocs")
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// --- Multi-tenancy & Teams ---
+
+model Team {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique // For URLs like /team-slug/project
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members       TeamMember[]
+  projects      Project[]
+  subscriptions Subscription[]
+  aiUsageLogs   AIUsageLog[]
+}
+
+enum TeamRole {
+  OWNER
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+model TeamMember {
+  id       String   @id @default(cuid())
+  userId   String
+  teamId   String
+  role     TeamRole @default(VIEWER)
+  joinedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, teamId])
+}
+
+// --- Core Product Entities ---
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  teamId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  team      Team       @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  documents Document[]
+}
+
+enum DocType {
+  PRD // Text-heavy requirements
+  FLOW // Visual flow / diagram
+  CANVAS // Free-form whiteboard
+}
+
+model Document {
+  id        String   @id @default(cuid())
+  title     String
+  type      DocType  @default(PRD)
+  content   Json? // Stores the editor state (JSON) or Canvas nodes
+  projectId String
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  author  User    @relation("CreatedDocs", fields: [authorId], references: [id])
+
+  comments Comment[]
+  versions Version[]
+}
+
+model Version {
+  id         String   @id @default(cuid())
+  documentId String
+  content    Json
+  createdAt  DateTime @default(now())
+  commitMsg  String? // "Updated user flow section"
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+}
+
+model Comment {
+  id         String   @id @default(cuid())
+  content    String
+  documentId String
+  userId     String
+  resolved   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id])
+}
+
+// --- Billing & AI Usage ---
+
+enum PlanType {
+  FREE
+  PRO
+  TEAM
+  ENTERPRISE
+}
+
+enum Currency {
+  USD
+  NGN
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  PAST_DUE
+  UNPAID
+}
+
+model Subscription {
+  id                        String             @id @default(cuid())
+  teamId                    String
+  flutterwaveCustomerId     String?
+  flutterwaveSubscriptionId String?            @unique
+  status                    SubscriptionStatus @default(ACTIVE)
+  plan                      PlanType           @default(FREE)
+  currency                  Currency           @default(USD)
+  amount                    Float              @default(0)
+  interval                  String             @default("monthly")
+  
+  currentPeriodStart        DateTime?
+  currentPeriodEnd          DateTime?
+  cancelAtPeriodEnd         Boolean            @default(false)
+  
+  createdAt                 DateTime           @default(now())
+  updatedAt                 DateTime           @updatedAt
+
+  team                      Team               @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  invoices                  Invoice[]
+}
+
+model Invoice {
+  id              String   @id @default(cuid())
+  subscriptionId  String
+  amount          Float
+  currency        Currency
+  status          String   // paid, failed, pending
+  flutterwaveRef  String?  @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  subscription    Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+}
+
+model AIUsageLog {
+  id           String   @id @default(cuid())
+  teamId       String
+  action       String // "generate_prd", "expand_text"
+  inputTokens  Int
+  outputTokens Int
+  model        String // "gpt-4", "claude-3-opus"
+  createdAt    DateTime @default(now())
+
+  team Team @relation(fields: [teamId], references: [id])
+}

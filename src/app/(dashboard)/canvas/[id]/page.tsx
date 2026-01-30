@@ -1,11 +1,9 @@
 'use client';
 
-import { AIChatPanel } from '@/components/layout/AIChatPanel';
-import { VisualCanvas } from '@/features/canvas/VisualCanvas';
-import { Play, Share2, Download, Lock } from 'lucide-react';
+import { Play, Share2, Download, Lock, Check, X, Edit2 } from 'lucide-react';
 import { useSubscription } from '@/hooks/use-subscription';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { CanvasProvider } from '@/features/canvas/CanvasContext';
 
 interface Project {
@@ -18,6 +16,11 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
   const { limits, isLoading: isSubLoading, plan } = useSubscription();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
+  
+  // Renaming state
+  const [isRenaming, setIsRenaming] = useState(false);
+  const [newName, setNewName] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -26,6 +29,7 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
         if (res.ok) {
           const data = await res.json();
           setProject(data.project);
+          setNewName(data.project.name);
         }
       } catch (error) {
         console.error('Failed to fetch project:', error);
@@ -35,6 +39,38 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
     };
     fetchProject();
   }, [params.id]);
+
+  useEffect(() => {
+    if (isRenaming && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isRenaming]);
+
+  const handleRenameSubmit = async () => {
+    if (!project || !newName.trim() || newName === project.name) {
+      setIsRenaming(false);
+      if (project) setNewName(project.name);
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/projects/${project.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newName }),
+      });
+
+      if (res.ok) {
+        setProject({ ...project, name: newName });
+        setIsRenaming(false);
+      } else {
+        alert('Failed to rename project');
+      }
+    } catch (error) {
+      console.error('Failed to rename project:', error);
+      alert('An unexpected error occurred');
+    }
+  };
 
   if (loading) {
     return (
@@ -62,7 +98,48 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
               <div className="flex items-center gap-2">
                   <Link href="/dashboard" className="text-gray-400 hover:text-navy transition-colors">Projects</Link>
                   <span className="text-gray-300">/</span>
-                  <h1 className="font-bold text-navy">{project.name}</h1>
+                  
+                  {isRenaming ? (
+                    <div className="flex items-center gap-1">
+                      <input
+                        ref={inputRef}
+                        type="text"
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') handleRenameSubmit();
+                          if (e.key === 'Escape') {
+                            setIsRenaming(false);
+                            setNewName(project.name);
+                          }
+                        }}
+                        className="font-bold text-navy border border-cyan rounded px-2 py-1 outline-none focus:ring-2 focus:ring-cyan/20 w-48"
+                      />
+                      <button onClick={handleRenameSubmit} className="p-1 hover:bg-green-50 text-green-600 rounded">
+                        <Check className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setIsRenaming(false);
+                          setNewName(project.name);
+                        }} 
+                        className="p-1 hover:bg-red-50 text-red-600 rounded"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 group">
+                      <h1 className="font-bold text-navy">{project.name}</h1>
+                      <button 
+                        onClick={() => setIsRenaming(true)}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-cloud rounded text-gray-400 hover:text-navy"
+                      >
+                        <Edit2 className="w-3 h-3" />
+                      </button>
+                    </div>
+                  )}
+                  
                   <span className="px-2 py-0.5 bg-gray-100 text-gray-500 text-xs rounded-full">Draft</span>
               </div>
               <div className="flex items-center gap-2">

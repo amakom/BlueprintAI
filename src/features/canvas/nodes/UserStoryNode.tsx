@@ -28,8 +28,8 @@ export function UserStoryNode({ data, selected }: NodeProps<Node<UserStoryData>>
       </div>
 
       {/* Handles */}
-      <Handle type="target" position={Position.Top} className="w-3 h-3 bg-navy border-2 border-white" />
-      <Handle type="source" position={Position.Bottom} className="w-3 h-3 bg-cyan border-2 border-white" />
+      <Handle type="target" position={Position.Left} className="w-3 h-3 bg-navy border-2 border-white" />
+      <Handle type="source" position={Position.Right} className="w-3 h-3 bg-cyan border-2 border-white" />
     </div>
   );
 }

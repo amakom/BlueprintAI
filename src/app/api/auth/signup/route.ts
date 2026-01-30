@@ -3,8 +3,18 @@ import { prisma } from '@/lib/prisma';
 import { hashPassword, setSession, signToken } from '@/lib/auth';
 
 export async function POST(req: Request) {
+  console.log('Signup request started');
+  
+  if (!process.env.DATABASE_URL) {
+    console.error('Missing DATABASE_URL');
+    return NextResponse.json({ error: 'Configuration Error: Missing DATABASE_URL' }, { status: 500 });
+  }
+
   try {
-    const { name, email, password } = await req.json();
+    const body = await req.json();
+    console.log('Request body parsed', { email: body.email, name: body.name });
+    
+    const { name, email, password } = body;
 
     if (!email || !password || !name) {
       return NextResponse.json(
@@ -13,22 +23,19 @@ export async function POST(req: Request) {
       );
     }
 
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (existingUser) {
-      return NextResponse.json(
-        { error: 'User already exists' },
-        { status: 400 }
-      );
-    }
-
+    // Hash password
+    console.log('Hashing password...');
     const hashedPassword = await hashPassword(password);
+    console.log('Password hashed');
 
-    // Transaction: Create User -> Create Team -> Add Member
+    // Create User & Team
+    console.log('Starting transaction...');
     const result = await prisma.$transaction(async (tx) => {
-      // 1. Create User
+      const existingUser = await tx.user.findUnique({ where: { email } });
+      if (existingUser) {
+        throw new Error('User already exists');
+      }
+
       const user = await tx.user.create({
         data: {
           name,
@@ -37,15 +44,16 @@ export async function POST(req: Request) {
         },
       });
 
-      // 2. Create Default Team
+      const teamName = `${name}'s Team`;
+      const slug = `${name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Math.floor(Math.random() * 1000)}`;
+      
       const team = await tx.team.create({
         data: {
-          name: `${name}'s Team`,
-          slug: name.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Math.floor(Math.random() * 1000),
+          name: teamName,
+          slug,
         },
       });
 
-      // 3. Add User to Team as Owner
       await tx.teamMember.create({
         data: {
           userId: user.id,
@@ -56,16 +64,27 @@ export async function POST(req: Request) {
 
       return { user, team };
     });
+    console.log('Transaction completed', result.user.id);
 
-    // 4. Create Session
+    // Create Session
+    console.log('Signing token...');
     const token = await signToken({ userId: result.user.id, email: result.user.email });
+    console.log('Setting session...');
     await setSession(token);
+    console.log('Session set');
 
     return NextResponse.json({ success: true, user: result.user, team: result.team });
-  } catch (error) {
-    console.error('Signup error:', error);
+  } catch (error: any) {
+    console.error('Signup error full object:', error);
+    const errorMessage = error?.message || 'Unknown error occurred';
+    const errorStack = error?.stack || 'No stack trace';
+    
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Internal server error' },
+      { 
+        error: errorMessage,
+        details: 'Check Vercel logs for full stack trace', 
+        stack: process.env.NODE_ENV === 'development' ? errorStack : undefined 
+      },
       { status: 500 }
     );
   }

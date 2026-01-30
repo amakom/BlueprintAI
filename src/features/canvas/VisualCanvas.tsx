@@ -11,7 +11,8 @@ import {
   Connection,
   Edge,
   Node,
-  Panel
+  Panel,
+  NodeTypes
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -19,7 +20,7 @@ import { UserStoryNode } from './nodes/UserStoryNode';
 import { ScreenNode } from './nodes/ScreenNode';
 import { Plus, Sparkles, Save, Share2 } from 'lucide-react';
 
-const nodeTypes = {
+const nodeTypes: NodeTypes = {
   userStory: UserStoryNode,
   screen: ScreenNode,
 };

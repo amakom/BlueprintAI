@@ -1,7 +1,9 @@
-import { Handle, Position, NodeProps } from '@xyflow/react';
+import { Handle, Position, NodeProps, Node } from '@xyflow/react';
 import { User, FileText } from 'lucide-react';
 
-export function UserStoryNode({ data, selected }: NodeProps) {
+type UserStoryNodeData = Node<{ label: string; description?: string }>['data'];
+
+export function UserStoryNode({ data, selected }: NodeProps<UserStoryNodeData>) {
   return (
     <div className={`w-64 bg-white rounded-lg border-2 shadow-sm transition-all ${
       selected ? 'border-cyan ring-2 ring-cyan/20' : 'border-border'

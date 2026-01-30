@@ -1,7 +1,9 @@
-import { Handle, Position, NodeProps } from '@xyflow/react';
+import { Handle, Position, NodeProps, Node } from '@xyflow/react';
 import { Smartphone } from 'lucide-react';
 
-export function ScreenNode({ data, selected }: NodeProps) {
+type ScreenNodeData = Node<{ label: string }>['data'];
+
+export function ScreenNode({ data, selected }: NodeProps<ScreenNodeData>) {
   return (
     <div className={`w-72 bg-white rounded-xl border-2 shadow-md transition-all ${
       selected ? 'border-cyan ring-4 ring-cyan/10' : 'border-gray-200'

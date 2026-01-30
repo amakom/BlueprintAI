@@ -1,5 +1,8 @@
+'use client';
+
 import Link from 'next/link';
-import { Home, Layers, Settings, FileText, PlusCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Home, Layers, Settings, FileText, PlusCircle, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -9,6 +12,17 @@ const navItems = [
 ];
 
 export function Sidebar() {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      router.push('/login');
+    } catch (error) {
+      console.error('Logout failed', error);
+    }
+  };
+
   return (
     <aside className="w-60 bg-navy text-white flex flex-col h-screen border-r border-navy/20">
       <div className="p-6">
@@ -69,14 +83,23 @@ export function Sidebar() {
       </nav>
 
       <div className="p-4 border-t border-white/10">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-cyan text-navy flex items-center justify-center font-bold">
-            U
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-cyan text-navy flex items-center justify-center font-bold">
+              U
+            </div>
+            <div className="text-sm">
+              <p className="font-medium text-white">User Name</p>
+              <p className="text-xs text-gray-400">Pro Plan</p>
+            </div>
           </div>
-          <div className="text-sm">
-            <p className="font-medium text-white">User Name</p>
-            <p className="text-xs text-gray-400">Pro Plan</p>
-          </div>
+          <button 
+            onClick={handleLogout}
+            className="text-gray-400 hover:text-white transition-colors p-1 rounded-md hover:bg-white/10"
+            title="Sign Out"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </aside>

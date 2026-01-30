@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { PlanType } from '@prisma/client';
+import { PlanType } from '@/lib/permissions';
 import { getPlanLimits } from '@/lib/permissions';
 
 export async function checkTeamLimit(teamId: string, checkFn: (limits: ReturnType<typeof getPlanLimits>) => boolean) {
@@ -7,7 +7,8 @@ export async function checkTeamLimit(teamId: string, checkFn: (limits: ReturnTyp
     where: { teamId, status: 'ACTIVE' },
   });
 
-  const plan = (subscription?.plan as PlanType) || PlanType.FREE;
+  // Cast Prisma's PlanType to our internal PlanType
+  const plan = (subscription?.plan as unknown as PlanType) || PlanType.FREE;
   const limits = getPlanLimits(plan);
 
   return checkFn(limits);

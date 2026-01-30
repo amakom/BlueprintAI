@@ -106,7 +106,7 @@ export function AIChatPanel() {
       </div>
 
       <div className="p-4 border-t border-border bg-white">
-        {!limits.canUseAI && !isLoading ? (
+        {!limits.canGenerateAI && !isLoading ? (
             <div className="text-center p-2 bg-cloud rounded-md">
                 <p className="text-sm text-gray-500 mb-2">Upgrade to Pro to use AI</p>
                 <Link href="/pricing" className="text-xs text-cyan font-bold hover:underline flex items-center justify-center gap-1">

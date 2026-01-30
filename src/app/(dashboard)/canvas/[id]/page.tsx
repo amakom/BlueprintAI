@@ -5,6 +5,8 @@ import { useSubscription } from '@/hooks/use-subscription';
 import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
 import { CanvasProvider } from '@/features/canvas/CanvasContext';
+import { VisualCanvas } from '@/features/canvas/VisualCanvas';
+import { AIChatPanel } from '@/components/layout/AIChatPanel';
 
 interface Project {
   id: string;

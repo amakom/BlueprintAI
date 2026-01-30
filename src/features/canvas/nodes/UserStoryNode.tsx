@@ -8,21 +8,21 @@ type UserStoryData = {
 
 export function UserStoryNode({ data, selected }: NodeProps<Node<UserStoryData>>) {
   return (
-    <div className={`w-64 bg-white rounded-lg border-2 shadow-sm transition-all ${
+    <div className={`w-52 bg-white rounded-lg border-2 shadow-sm transition-all ${
       selected ? 'border-cyan ring-2 ring-cyan/20' : 'border-border'
     }`}>
       {/* Header */}
-      <div className="bg-cloud p-3 rounded-t-md border-b border-border flex items-center gap-2">
+      <div className="bg-cloud p-2 rounded-t-md border-b border-border flex items-center gap-2">
         <div className="bg-amber/10 p-1 rounded">
-          <User className="w-4 h-4 text-amber" />
+          <User className="w-3 h-3 text-amber" />
         </div>
-        <span className="font-bold text-sm text-navy">User Story</span>
+        <span className="font-bold text-xs text-navy">User Story</span>
       </div>
       
       {/* Content */}
-      <div className="p-3">
-        <div className="text-sm font-medium text-navy mb-2">{data.label}</div>
-        <p className="text-xs text-gray-500 line-clamp-3">
+      <div className="p-2">
+        <div className="text-sm font-medium text-navy mb-1">{data.label}</div>
+        <p className="text-[10px] text-gray-500 line-clamp-3 leading-tight">
           {data.description || "As a user, I want to..."}
         </p>
       </div>

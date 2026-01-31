@@ -25,6 +25,7 @@ BlueprintAI is an AI-augmented visual PRD and product design platform. It combin
 
 2. Set up the database:
    - Configure `DATABASE_URL` in `.env`
+   - Configure `OWNER_EMAIL` in `.env` (Optional: for Admin access)
    - Run migrations: `npx prisma migrate dev`
 
 3. Run the development server:

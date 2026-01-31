@@ -62,6 +62,61 @@ export async function POST(req: Request) {
         },
       });
 
+      // Auto-create first project
+      const project = await tx.project.create({
+        data: {
+          name: 'My First Project',
+          description: 'Welcome to your first BlueprintAI project! This project was automatically created to help you get started.',
+          teamId: team.id,
+        },
+      });
+
+      // Seed with initial Canvas Document
+      const initialContent = {
+        nodes: [
+          {
+            id: 'welcome-1',
+            type: 'userStory',
+            position: { x: 100, y: 100 },
+            data: { 
+              title: 'Welcome to BlueprintAI', 
+              role: 'Builder', 
+              goal: 'visualize my product requirements', 
+              benefit: 'I can build faster' 
+            }
+          },
+          {
+            id: 'welcome-2',
+            type: 'userStory',
+            position: { x: 500, y: 100 },
+            data: { 
+              title: 'Try AI Generation', 
+              role: 'Product Owner', 
+              goal: 'use the AI assistant', 
+              benefit: 'I can generate stories automatically' 
+            }
+          }
+        ],
+        edges: [
+            {
+                id: 'e1-2',
+                source: 'welcome-1',
+                target: 'welcome-2',
+                animated: true,
+            }
+        ]
+      };
+
+      await tx.document.create({
+        data: {
+          title: 'Project Canvas',
+          type: 'CANVAS',
+          content: initialContent,
+          projectId: project.id,
+          authorId: user.id,
+        },
+      });
+
       return { user, team };
     });
     console.log('Transaction completed', result.user.id);

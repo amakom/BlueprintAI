@@ -1,6 +1,6 @@
 'use client';
 
-import { Plus } from 'lucide-react';
+import { Plus, Sparkles, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CreateProjectModal } from '@/components/dashboard/CreateProjectModal';
@@ -38,12 +38,12 @@ export default function DashboardPage() {
     }
   };
 
-  const handleCreateProject = async ({ name, description }: { name: string; description: string }) => {
+  const handleCreateProject = async ({ name, description, type, aiPrompt }: { name: string; description: string; type: string; aiPrompt: string }) => {
     try {
       const res = await fetch('/api/projects', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, description }),
+        body: JSON.stringify({ name, description, type, aiPrompt }),
       });
 
       const data = await res.json();
@@ -99,67 +99,70 @@ export default function DashboardPage() {
     }
   };
 
-  return (
-    <div className="flex-1 overflow-y-auto p-8">
-      <CreateProjectModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleCreateProject}
-      />
+  if (loading) {
+    return (
+      <div className="flex h-[calc(100vh-4rem)] items-center justify-center">
+        <div className="w-8 h-8 border-4 border-cyan border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
-      <header className="flex items-center justify-between mb-8">
+  return (
+    <div className="container mx-auto px-6 py-8">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-navy">Welcome back</h1>
-          <p className="text-gray-500 mt-1">Here&#39;s what&#39;s happening with your projects.</p>
+          <h1 className="text-2xl font-bold text-navy">Projects</h1>
+          <p className="text-gray-500">Manage and organize your product blueprints</p>
         </div>
-        <button 
+        <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-cyan hover:bg-cyan/90 text-navy font-bold py-2 px-4 rounded-md flex items-center gap-2 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-navy text-white rounded-lg hover:bg-navy/90 transition-colors font-medium shadow-lg shadow-navy/20"
         >
           <Plus className="w-4 h-4" />
           New Project
         </button>
-      </header>
+      </div>
 
-      <section>
-        <h2 className="text-lg font-bold text-navy mb-4">Recent Projects</h2>
-        
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-[240px] bg-gray-100 rounded-xl animate-pulse" />
-            ))}
+      {projects.length === 0 ? (
+        // Guided Empty State
+        <div className="flex flex-col items-center justify-center py-20 bg-white border-2 border-dashed border-gray-200 rounded-xl">
+          <div className="w-16 h-16 bg-cyan/10 rounded-full flex items-center justify-center mb-6">
+            <Sparkles className="w-8 h-8 text-cyan" />
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Create New Card */}
-            <div 
-              onClick={() => setIsModalOpen(true)}
-              className="bg-cloud/50 border-2 border-dashed border-gray-300 p-5 rounded-xl flex flex-col items-center justify-center hover:border-cyan hover:bg-cyan/5 transition-colors cursor-pointer h-full min-h-[240px]"
-            >
-              <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center mb-3 shadow-sm">
-                <Plus className="w-4 h-4 text-cyan" />
-              </div>
-              <h3 className="font-bold text-navy">Create New</h3>
-            </div>
+          <h2 className="text-xl font-bold text-navy mb-2">Start Your First Blueprint</h2>
+          <p className="text-gray-500 max-w-md text-center mb-8">
+            Create a new project to start visualizing your product requirements. 
+            Use our AI assistant to generate your initial structure in seconds.
+          </p>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 px-6 py-3 bg-cyan text-navy rounded-lg hover:bg-cyan/90 transition-all font-bold shadow-lg shadow-cyan/20 hover:scale-105"
+          >
+            Create Project <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              id={project.id}
+              title={project.name}
+              updatedAt={project.updatedAt}
+              documentCount={project._count.documents}
+              teamName={project.team.name}
+              onRename={handleRenameProject}
+              onDelete={handleDeleteProject}
+            />
+          ))}
+        </div>
+      )}
 
-            {projects.map((project) => (
-              <ProjectCard 
-                key={project.id} 
-                project={project}
-                onRename={handleRenameProject}
-                onDelete={handleDeleteProject}
-              />
-            ))}
-            
-            {projects.length === 0 && (
-              <div className="col-span-full py-12 text-center text-gray-400">
-                No projects found. Create one to get started!
-              </div>
-            )}
-          </div>
-        )}
-      </section>
+      <CreateProjectModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleCreateProject}
+      />
     </div>
   );
 }

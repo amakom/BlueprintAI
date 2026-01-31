@@ -4,24 +4,20 @@ import { useState, useRef, useEffect } from 'react';
 import { MoreVertical, Trash2, Edit2, FileText, Check, X } from 'lucide-react';
 import Link from 'next/link';
 
-interface Project {
-  id: string;
-  name: string;
-  updatedAt: string;
-  team: { name: string };
-  _count: { documents: number };
-}
-
 interface ProjectCardProps {
-  project: Project;
+  id: string;
+  title: string;
+  updatedAt: string;
+  documentCount: number;
+  teamName: string;
   onRename: (id: string, newName: string) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
 }
 
-export function ProjectCard({ project, onRename, onDelete }: ProjectCardProps) {
+export function ProjectCard({ id, title, updatedAt, documentCount, teamName, onRename, onDelete }: ProjectCardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isRenaming, setIsRenaming] = useState(false);
-  const [newName, setNewName] = useState(project.name);
+  const [newName, setNewName] = useState(title);
   const [isLoading, setIsLoading] = useState(false);
   
   const menuRef = useRef<HTMLDivElement>(null);
@@ -47,14 +43,14 @@ export function ProjectCard({ project, onRename, onDelete }: ProjectCardProps) {
 
   const handleRenameSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!newName.trim() || newName === project.name) {
+    if (!newName.trim() || newName === title) {
       setIsRenaming(false);
-      setNewName(project.name);
+      setNewName(title);
       return;
     }
 
     setIsLoading(true);
-    await onRename(project.id, newName);
+    await onRename(id, newName);
     setIsLoading(false);
     setIsRenaming(false);
   };
@@ -62,7 +58,7 @@ export function ProjectCard({ project, onRename, onDelete }: ProjectCardProps) {
   const handleDelete = async () => {
     if (confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
       setIsLoading(true);
-      await onDelete(project.id);
+      await onDelete(id);
       setIsLoading(false);
     }
   };
@@ -86,7 +82,7 @@ export function ProjectCard({ project, onRename, onDelete }: ProjectCardProps) {
   return (
     <div className="relative group h-full">
         {/* Card Content - Wrapped in Link but handles menu separately */}
-        <Link href={`/canvas/${project.id}`} className="block h-full">
+        <Link href={`/canvas/${id}`} className="block h-full">
             <div className="bg-white p-5 rounded-xl border border-border hover:border-cyan transition-colors shadow-sm h-full flex flex-col relative">
                 <div className="h-32 bg-cloud rounded-lg mb-4 flex items-center justify-center relative overflow-hidden">
                     <span className="text-gray-400 font-medium z-10 flex items-center gap-2">
@@ -107,7 +103,7 @@ export function ProjectCard({ project, onRename, onDelete }: ProjectCardProps) {
                                     if (e.key === 'Enter') handleRenameSubmit();
                                     if (e.key === 'Escape') {
                                         setIsRenaming(false);
-                                        setNewName(project.name);
+                                        setNewName(title);
                                     }
                                 }}
                                 onClick={(e) => e.stopPropagation()}
@@ -123,7 +119,7 @@ export function ProjectCard({ project, onRename, onDelete }: ProjectCardProps) {
                                 onClick={(e) => { 
                                     e.stopPropagation(); 
                                     setIsRenaming(false);
-                                    setNewName(project.name);
+                                    setNewName(title);
                                 }}
                                 className="p-1 text-red-500 hover:bg-red-50 rounded"
                             >
@@ -131,15 +127,15 @@ export function ProjectCard({ project, onRename, onDelete }: ProjectCardProps) {
                             </button>
                         </div>
                     ) : (
-                        <h3 className="font-bold text-navy group-hover:text-cyan transition-colors truncate" title={project.name}>
-                            {project.name}
+                        <h3 className="font-bold text-navy group-hover:text-cyan transition-colors truncate" title={title}>
+                            {title}
                         </h3>
                     )}
                     
                     <div className="flex justify-between items-center mt-2">
-                        <p className="text-xs text-gray-500">{formatDate(project.updatedAt)}</p>
+                        <p className="text-xs text-gray-500">{formatDate(updatedAt)}</p>
                         <span className="text-xs px-2 py-1 bg-cloud text-gray-600 rounded-full">
-                            {project._count?.documents || 0} docs
+                            {documentCount} docs
                         </span>
                     </div>
                 </div>

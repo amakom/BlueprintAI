@@ -15,7 +15,9 @@ type UserStoryData = {
 
 export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryData>>) {
   const { setNodes, deleteElements } = useReactFlow();
-  const { userName } = useCanvas();
+  const { userName, aiSettings } = useCanvas();
+  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   
   // Auto-resize textarea and node height logic
@@ -92,7 +94,7 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
     setTimeout(() => {
       const currentDescription = data.description || '';
       const newHistoryItem: AIHistoryItem = {
-        id: crypto.randomUUID(),
+        id: generateId(),
         timestamp: Date.now(),
         content: currentDescription,
         tone: 'Manual/Previous',
@@ -123,7 +125,7 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
   const handleRestore = useCallback((item: AIHistoryItem) => {
     const currentDescription = data.description || '';
     const newHistoryItem: AIHistoryItem = {
-        id: crypto.randomUUID(),
+        id: generateId(),
         timestamp: Date.now(),
         content: currentDescription,
         tone: 'Pre-Restore',

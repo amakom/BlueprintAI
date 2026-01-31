@@ -101,7 +101,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
   };
 
   const onConnect = useCallback(
-    (params: Connection) => setEdges((eds) => addEdge({ ...params, type: 'deletable', animated: true, style: { stroke: '#2EE6D6' } }, eds)),
+    (params: Connection) => setEdges((eds) => addEdge({ ...params, type: 'deletable', animated: true, style: { stroke: 'var(--cyan)' } }, eds)),
     [setEdges]
   );
 

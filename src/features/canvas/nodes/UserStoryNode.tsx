@@ -92,8 +92,8 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
         isVisible={selected} 
         minWidth={208}
         minHeight={100}
-        handleStyle={{ width: 10, height: 10, borderRadius: '50%', border: '1px solid #0B1F33', backgroundColor: 'white' }}
-        lineStyle={{ border: '1px solid #2EE6D6' }}
+        handleStyle={{ width: 10, height: 10, borderRadius: '50%', border: '1px solid var(--navy)', backgroundColor: 'white' }}
+        lineStyle={{ border: '1px solid var(--cyan)' }}
       />
       
       {/* Header */}

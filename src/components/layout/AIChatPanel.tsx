@@ -88,7 +88,7 @@ export function AIChatPanel() {
       <div className="p-4 border-b border-border bg-cloud/50">
         <h2 className="font-bold text-navy flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-cyan" />
-            Blueprint AI
+            BlueprintAI
         </h2>
         <p className="text-xs text-gray-500 mt-1">
             Generate PRDs, user flows, and tickets.

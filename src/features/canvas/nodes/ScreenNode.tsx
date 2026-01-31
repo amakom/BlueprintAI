@@ -30,8 +30,8 @@ export function ScreenNode({ id, data, selected }: NodeProps<Node<ScreenNodeData
         isVisible={selected} 
         minWidth={224}
         minHeight={256}
-        handleStyle={{ width: 8, height: 8, borderRadius: 4 }}
-        lineStyle={{ border: 0 }}
+        handleStyle={{ width: 10, height: 10, borderRadius: '50%', border: '1px solid #0B1F33', backgroundColor: 'white' }}
+        lineStyle={{ border: '1px solid #2EE6D6' }}
       />
       
       {/* Phone Header */}

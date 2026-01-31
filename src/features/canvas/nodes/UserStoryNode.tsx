@@ -11,19 +11,44 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
   const { setNodes, deleteElements } = useReactFlow();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   
-  // Auto-resize textarea logic
-  const adjustTextareaHeight = useCallback(() => {
+  // Auto-resize textarea and node height logic
+  const adjustHeight = useCallback(() => {
     const textarea = textareaRef.current;
     if (textarea) {
+      // Reset height to auto to get correct scrollHeight
       textarea.style.height = 'auto';
-      textarea.style.height = `${textarea.scrollHeight}px`;
+      const newHeight = textarea.scrollHeight;
+      textarea.style.height = `${newHeight}px`;
+
+      // Update node style height if needed
+      setNodes((nodes) => nodes.map((node) => {
+        if (node.id === id) {
+          // Calculate total desired height: header (approx 40px) + padding (16px) + input (approx 24px) + textarea
+          const minTotalHeight = 40 + 16 + 24 + newHeight + 10; 
+          
+          // Only update if the current style height is insufficient or if we want to force grow
+          // We'll update the style to undefined to let it grow naturally, or set it to the new min height
+          // But NodeResizer sets a fixed height. We need to override it or update it.
+          
+          const currentHeight = node.style?.height;
+          if (typeof currentHeight === 'number' && currentHeight < minTotalHeight) {
+             return { ...node, style: { ...node.style, height: minTotalHeight } };
+          }
+          // If user hasn't manually resized (no style.height), let it be auto (handled by CSS)
+          // But NodeResizer might initialize it. 
+          
+          // Better strategy: Always update height to fit content if content expands
+          return { ...node, style: { ...node.style, height: minTotalHeight } };
+        }
+        return node;
+      }));
     }
-  }, []);
+  }, [id, setNodes]);
 
   // Adjust height on initial render and when value changes
   useEffect(() => {
-    adjustTextareaHeight();
-  }, [data.description, adjustTextareaHeight]);
+    adjustHeight();
+  }, [data.description, adjustHeight]);
 
   const updateLabel = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
     setNodes((nodes) => nodes.map((node) => {
@@ -41,8 +66,8 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
       }
       return node;
     }));
-    adjustTextareaHeight();
-  }, [id, setNodes, adjustTextareaHeight]);
+    adjustHeight();
+  }, [id, setNodes, adjustHeight]);
 
   const handleDelete = useCallback(() => {
     deleteElements({ nodes: [{ id }] });
@@ -56,8 +81,8 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
         isVisible={selected} 
         minWidth={208}
         minHeight={100}
-        handleStyle={{ width: 8, height: 8, borderRadius: 4 }}
-        lineStyle={{ border: 0 }}
+        handleStyle={{ width: 10, height: 10, borderRadius: '50%', border: '1px solid #0B1F33', backgroundColor: 'white' }}
+        lineStyle={{ border: '1px solid #2EE6D6' }}
       />
       
       {/* Header */}

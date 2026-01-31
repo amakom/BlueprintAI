@@ -15,19 +15,31 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
   const adjustHeight = useCallback(() => {
     const textarea = textareaRef.current;
     if (textarea) {
-      // To get the correct scrollHeight when flex-1 is active, we must temporarily shrink it
-      // otherwise it takes the full container height, leading to a feedback loop
+      // Store original styles to restore them later
+      const originalHeight = textarea.style.height;
+      const originalMinHeight = textarea.style.minHeight;
+      const originalFlex = textarea.style.flex;
+
+      // Force shrinkage to measure PURE content height
+      // We must disable flex and min-height to get the true scrollHeight of the text
       textarea.style.height = '1px';
-      const newHeight = textarea.scrollHeight;
-      
-      // Restore auto height to let flex take over
-      textarea.style.height = 'auto';
+      textarea.style.minHeight = '0px';
+      textarea.style.flex = 'none'; 
+
+      const scrollHeight = textarea.scrollHeight;
+
+      // Restore styles to let the UI render correctly
+      textarea.style.height = originalHeight;
+      textarea.style.minHeight = originalMinHeight;
+      textarea.style.flex = originalFlex;
 
       setNodes((nodes) => nodes.map((node) => {
         if (node.id === id) {
-          // Calculate total desired height: header (approx 40px) + padding (16px) + input (approx 24px) + textarea
-          // 40 (header) + 16 (padding) + 24 (input) + 10 (buffer) = 90
-          const minTotalHeight = 90 + newHeight; 
+          // Calculate total desired height
+          // Header (40) + Padding (16) + Input (24) + Buffer (14) = 94px overhead
+          // We also respect the textarea's CSS min-height of 60px
+          const effectiveContentHeight = Math.max(scrollHeight, 60);
+          const minTotalHeight = 94 + effectiveContentHeight; 
           
           const currentHeight = node.style?.height;
           

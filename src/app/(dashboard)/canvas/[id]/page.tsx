@@ -1,8 +1,9 @@
 'use client';
 
-import { Play, Share2, Download, Lock, Check, X, Edit2 } from 'lucide-react';
+import { Play, Share2, Download, Lock, Check, X, Edit2, Trash2 } from 'lucide-react';
 import { useSubscription } from '@/hooks/use-subscription';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { CanvasProvider } from '@/features/canvas/CanvasContext';
 import { VisualCanvas } from '@/features/canvas/VisualCanvas';
@@ -15,6 +16,7 @@ interface Project {
 }
 
 export default function CanvasPage({ params }: { params: { id: string } }) {
+  const router = useRouter();
   const { limits, isLoading: isSubLoading, plan } = useSubscription();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
@@ -70,6 +72,25 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
       }
     } catch (error) {
       console.error('Failed to rename project:', error);
+      alert('An unexpected error occurred');
+    }
+  };
+
+  const handleDeleteProject = async () => {
+    if (!project || !window.confirm('Are you sure you want to delete this project? This action cannot be undone.')) return;
+
+    try {
+      const res = await fetch(`/api/projects/${project.id}`, {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        router.push('/dashboard');
+      } else {
+        alert('Failed to delete project');
+      }
+    } catch (error) {
+      console.error('Failed to delete project:', error);
       alert('An unexpected error occurred');
     }
   };
@@ -136,8 +157,16 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
                       <button 
                         onClick={() => setIsRenaming(true)}
                         className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-cloud rounded text-gray-400 hover:text-navy"
+                        title="Rename Project"
                       >
                         <Edit2 className="w-3 h-3" />
+                      </button>
+                      <button 
+                        onClick={handleDeleteProject}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-red-50 rounded text-gray-400 hover:text-red-500"
+                        title="Delete Project"
+                      >
+                        <Trash2 className="w-3 h-3" />
                       </button>
                     </div>
                   )}

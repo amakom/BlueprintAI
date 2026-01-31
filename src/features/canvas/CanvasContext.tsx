@@ -53,7 +53,12 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
           const data = await res.json();
           if (data.content && data.content.nodes) {
             setNodes(data.content.nodes);
-            setEdges(data.content.edges || []);
+            // Ensure all loaded edges are deletable
+            const loadedEdges = (data.content.edges || []).map((edge: Edge) => ({
+              ...edge,
+              type: 'deletable',
+            }));
+            setEdges(loadedEdges);
           }
         }
       } catch (error) {
@@ -81,7 +86,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
   };
 
   const onConnect = useCallback(
-    (params: Connection) => setEdges((eds) => addEdge({ ...params, animated: true, style: { stroke: '#2EE6D6' } }, eds)),
+    (params: Connection) => setEdges((eds) => addEdge({ ...params, type: 'deletable', animated: true, style: { stroke: '#2EE6D6' } }, eds)),
     [setEdges]
   );
 

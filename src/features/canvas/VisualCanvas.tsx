@@ -6,19 +6,25 @@ import {
   Background, 
   Panel,
   NodeTypes,
+  EdgeTypes,
   Node
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
 import { UserStoryNode } from './nodes/UserStoryNode';
 import { ScreenNode } from './nodes/ScreenNode';
-import { Plus, Save } from 'lucide-react';
+import { DeletableEdge } from './edges/DeletableEdge';
+import { Plus, Save, Smartphone } from 'lucide-react';
 import { useCanvas } from './CanvasContext';
 import { useEffect } from 'react';
 
 const nodeTypes: NodeTypes = {
   userStory: UserStoryNode,
   screen: ScreenNode,
+};
+
+const edgeTypes: EdgeTypes = {
+  deletable: DeletableEdge,
 };
 
 interface VisualCanvasProps {
@@ -73,6 +79,8 @@ export function VisualCanvas({ projectId }: VisualCanvasProps) {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        defaultEdgeOptions={{ type: 'deletable' }}
         fitView
         className="bg-cloud"
       >
@@ -85,6 +93,9 @@ export function VisualCanvas({ projectId }: VisualCanvasProps) {
                 <Plus className="w-4 h-4" />
             </button>
             <div className="w-px bg-gray-200 mx-1"></div>
+            <button onClick={() => onAddNode('screen')} className="p-2 hover:bg-gray-100 rounded-full text-navy" title="Add Screen">
+                <Smartphone className="w-4 h-4" />
+            </button>
         </Panel>
       </ReactFlow>
     </div>

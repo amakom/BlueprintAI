@@ -40,7 +40,8 @@ export function VisualCanvas({ projectId }: VisualCanvasProps) {
     addNode, 
     setProjectId, 
     saveCanvas, 
-    isSaving 
+    isSaving,
+    userName
   } = useCanvas();
 
   useEffect(() => {
@@ -53,7 +54,11 @@ export function VisualCanvas({ projectId }: VisualCanvasProps) {
         id,
         type,
         position: { x: Math.random() * 400, y: Math.random() * 400 },
-        data: { label: `New ${type}`, description: 'Edit this description...' }
+        data: { 
+            label: `New ${type}`, 
+            description: 'Edit this description...',
+            userName: userName 
+        }
     };
     addNode(newNode);
   };

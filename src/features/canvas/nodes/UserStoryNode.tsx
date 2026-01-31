@@ -96,7 +96,7 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
             <div className="bg-amber/10 p-1 rounded">
             <User className="w-3 h-3 text-amber" />
             </div>
-            <span className="font-bold text-xs text-navy">User Story</span>
+            <span className="font-bold text-xs text-navy">{data.userName ? `${data.userName} Story` : 'User Story'}</span>
         </div>
         <button 
             onClick={handleDelete}

@@ -109,6 +109,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         setProjectId,
         saveCanvas,
         isSaving,
+        userName
       }}
     >
       {children}

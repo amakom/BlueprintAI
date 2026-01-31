@@ -49,27 +49,27 @@ export function AIChatPanel() {
                 id: `node-${timestamp}-1`,
                 type: 'userStory',
                 position: { x: Math.random() * 400, y: Math.random() * 400 },
-                data: { label: 'Login Screen', description: 'User enters email and password.' }
+                data: { label: 'Login Screen', description: 'User enters email and password.', userName }
             });
             newNodes.push({
                 id: `node-${timestamp}-2`,
                 type: 'userStory',
                 position: { x: Math.random() * 400 + 50, y: Math.random() * 400 + 50 },
-                data: { label: 'Forgot Password', description: 'Flow to reset password via email.' }
+                data: { label: 'Forgot Password', description: 'Flow to reset password via email.', userName }
             });
         } else if (userMsg.toLowerCase().includes('dashboard')) {
              newNodes.push({
                 id: `node-${timestamp}-1`,
                 type: 'userStory',
                 position: { x: Math.random() * 400, y: Math.random() * 400 },
-                data: { label: 'Dashboard Overview', description: 'Main view showing key metrics.' }
+                data: { label: 'Dashboard Overview', description: 'Main view showing key metrics.', userName }
             });
         } else {
              newNodes.push({
                 id: `node-${timestamp}-1`,
                 type: 'userStory',
                 position: { x: Math.random() * 400, y: Math.random() * 400 },
-                data: { label: 'New Feature', description: `Generated for: "${userMsg}"` }
+                data: { label: 'New Feature', description: `Generated for: "${userMsg}"`, userName }
             });
         }
 

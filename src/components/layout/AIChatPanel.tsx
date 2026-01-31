@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useCanvas } from '@/features/canvas/CanvasContext';
 import { useState } from 'react';
 import { Node } from '@xyflow/react';
+import { PRODUCT_TYPES, TONES, ProductType, Tone } from '@/lib/ai-config';
 
 type Message = {
   role: 'user' | 'assistant';
@@ -14,7 +15,7 @@ type Message = {
 
 export function AIChatPanel() {
   const { limits, isLoading } = useSubscription();
-  const { addNode, userName } = useCanvas();
+  const { addNode, userName, aiSettings, setAiSettings } = useCanvas();
   
   const [messages, setMessages] = useState<Message[]>([
     { role: 'assistant', content: 'Hi! I can help you draft your Mobile App PRD. Try asking me to "Generate user stories for login".' }

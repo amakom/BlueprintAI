@@ -18,6 +18,7 @@ import {
   addEdge, 
   Connection 
 } from '@xyflow/react';
+import { AISettings, DEFAULT_AI_SETTINGS } from '@/lib/ai-config';
 
 interface CanvasContextType {
   nodes: Node[];
@@ -33,6 +34,8 @@ interface CanvasContextType {
   saveCanvas: () => Promise<void>;
   isSaving: boolean;
   userName?: string;
+  aiSettings: AISettings;
+  setAiSettings: (settings: AISettings) => void;
 }
 
 const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
@@ -43,6 +46,7 @@ export function CanvasProvider({ children, initialData, readOnly = false }: { ch
   const [projectId, setProjectId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [userName, setUserName] = useState<string | undefined>(undefined);
+  const [aiSettings, setAiSettings] = useState<AISettings>(DEFAULT_AI_SETTINGS);
 
   // Fetch user info
   useEffect(() => {

@@ -111,23 +111,23 @@ export function CanvasProvider({ children, initialData, readOnly = false }: { ch
   }, [setNodes]);
 
   return (
-    <CanvasContext.Provider
-      value={{
-        nodes,
-        edges,
-        onNodesChange,
-        onEdgesChange,
-        onConnect,
-        addNode,
-        setNodes,
-        setEdges,
-        projectId,
-        setProjectId,
-        saveCanvas,
-        isSaving,
-        userName
-      }}
-    >
+    <CanvasContext.Provider value={{
+      nodes,
+      edges,
+      onNodesChange,
+      onEdgesChange,
+      onConnect,
+      addNode,
+      setNodes,
+      setEdges,
+      projectId,
+      setProjectId,
+      saveCanvas,
+      isSaving,
+      userName,
+      aiSettings,
+      setAiSettings
+    }}>
       {children}
     </CanvasContext.Provider>
   );

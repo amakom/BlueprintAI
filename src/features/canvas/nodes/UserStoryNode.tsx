@@ -1,7 +1,11 @@
 import { Handle, Position, NodeProps, Node, useReactFlow, NodeResizer } from '@xyflow/react';
-import { User, Trash2 } from 'lucide-react';
+import { User, Trash2, Wand2, History as HistoryIcon, RotateCcw, X } from 'lucide-react';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useCanvas } from '../CanvasContext';
+import { AIHistoryItem } from '@/lib/ai-config';
+
+// Simple ID generator
+const generateId = () => Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
 
 type UserStoryData = {
   label: string;
@@ -81,11 +85,74 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
     deleteElements({ nodes: [{ id }] });
   }, [id, deleteElements]);
 
+  const handleRegenerate = useCallback(async () => {
+    setIsRegenerating(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      const currentDescription = data.description || '';
+      const newHistoryItem: AIHistoryItem = {
+        id: crypto.randomUUID(),
+        timestamp: Date.now(),
+        content: currentDescription,
+        tone: 'Manual/Previous',
+        productType: 'Unknown'
+      };
+
+      const newDescription = `[${aiSettings.productType} - ${aiSettings.tone}] Regenerated description for ${data.label}. This feature includes robust error handling and analytics tracking.`;
+
+      setNodes((nodes) => nodes.map((node) => {
+        if (node.id === id) {
+          const history = (node.data.history as AIHistoryItem[]) || [];
+          return { 
+            ...node, 
+            data: { 
+              ...node.data, 
+              description: newDescription,
+              history: [newHistoryItem, ...history].slice(0, 10) // Keep last 10
+            } 
+          };
+        }
+        return node;
+      }));
+      setIsRegenerating(false);
+      adjustHeight();
+    }, 1000);
+  }, [id, data.description, data.label, aiSettings, setNodes, adjustHeight]);
+
+  const handleRestore = useCallback((item: AIHistoryItem) => {
+    const currentDescription = data.description || '';
+    const newHistoryItem: AIHistoryItem = {
+        id: crypto.randomUUID(),
+        timestamp: Date.now(),
+        content: currentDescription,
+        tone: 'Pre-Restore',
+        productType: 'Unknown'
+    };
+
+    setNodes((nodes) => nodes.map((node) => {
+      if (node.id === id) {
+        const history = (node.data.history as AIHistoryItem[]) || [];
+        return { 
+          ...node, 
+          data: { 
+            ...node.data, 
+            description: item.content,
+            history: [newHistoryItem, ...history].slice(0, 10)
+          } 
+        };
+      }
+      return node;
+    }));
+    setShowHistory(false);
+    adjustHeight();
+  }, [id, data.description, setNodes, adjustHeight]);
+
   const rawName = data.userName || userName;
   const displayName = rawName ? rawName.charAt(0).toUpperCase() + rawName.slice(1) : undefined;
 
   return (
-    <div className={`bg-white rounded-lg border-2 shadow-sm transition-all group/node min-w-[208px] h-full flex flex-col ${
+    <div className={`bg-white rounded-lg border-2 shadow-sm transition-all group/node min-w-[208px] h-full flex flex-col relative ${
       selected ? 'border-cyan ring-2 ring-cyan/20' : 'border-border'
     }`}>
       <NodeResizer 
@@ -104,14 +171,62 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
             </div>
             <span className="font-bold text-xs text-navy">{displayName ? `${displayName} Story` : 'User Story'}</span>
         </div>
-        <button 
-          onClick={handleDelete}
-            className="text-gray-400 hover:text-red-500 opacity-0 group-hover/node:opacity-100 transition-opacity"
-            title="Delete Node"
-        >
-            <Trash2 className="w-3 h-3" />
-        </button>
+        <div className="flex items-center gap-1 opacity-0 group-hover/node:opacity-100 transition-opacity">
+            <button 
+                onClick={handleRegenerate}
+                disabled={isRegenerating}
+                className="p-1 hover:bg-white rounded text-cyan transition-colors"
+                title={`Regenerate (${aiSettings.tone})`}
+            >
+                <Wand2 className={`w-3 h-3 ${isRegenerating ? 'animate-spin' : ''}`} />
+            </button>
+            <button 
+                onClick={() => setShowHistory(!showHistory)}
+                className={`p-1 hover:bg-white rounded text-navy transition-colors ${showHistory ? 'bg-white' : ''}`}
+                title="History"
+            >
+                <HistoryIcon className="w-3 h-3" />
+            </button>
+            <button 
+            onClick={handleDelete}
+                className="p-1 hover:bg-white rounded text-red-500 transition-colors"
+                title="Delete Node"
+            >
+                <Trash2 className="w-3 h-3" />
+            </button>
+        </div>
       </div>
+
+      {/* History Popover */}
+      {showHistory && (
+        <div className="absolute top-10 right-2 z-50 w-64 bg-white border border-border shadow-xl rounded-md flex flex-col max-h-[200px] overflow-hidden animate-in zoom-in-95 duration-100">
+            <div className="p-2 border-b border-border bg-cloud/50 flex items-center justify-between">
+                <span className="text-[10px] font-bold text-navy uppercase">Version History</span>
+                <button onClick={() => setShowHistory(false)} className="text-gray-400 hover:text-navy">
+                    <X className="w-3 h-3" />
+                </button>
+            </div>
+            <div className="overflow-y-auto flex-1 p-1">
+                {!data.history || data.history.length === 0 ? (
+                    <div className="p-3 text-center text-xs text-gray-400 italic">No history yet</div>
+                ) : (
+                    data.history.map((item) => (
+                        <button 
+                            key={item.id}
+                            onClick={() => handleRestore(item)}
+                            className="w-full text-left p-2 hover:bg-cloud rounded group/item border-b border-border/50 last:border-0"
+                        >
+                            <div className="flex items-center justify-between mb-1">
+                                <span className="text-[10px] text-gray-400">{new Date(item.timestamp).toLocaleTimeString()}</span>
+                                <RotateCcw className="w-3 h-3 text-cyan opacity-0 group-hover/item:opacity-100" />
+                            </div>
+                            <p className="text-xs text-navy line-clamp-2">{item.content}</p>
+                        </button>
+                    ))
+                )}
+            </div>
+        </div>
+      )}
       
       {/* Content */}
       <div className="p-2 flex-1 flex flex-col">

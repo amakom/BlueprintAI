@@ -86,13 +86,49 @@ export function AIChatPanel() {
   return (
     <div className="w-80 bg-white border-l border-border flex flex-col h-full shadow-lg">
       <div className="p-4 border-b border-border bg-cloud/50">
-        <h2 className="font-bold text-navy flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-cyan" />
-            BlueprintAI
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="font-bold text-navy flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-cyan" />
+              BlueprintAI
+          </h2>
+          <button 
+            onClick={() => setShowSettings(!showSettings)}
+            className={`p-1 rounded hover:bg-gray-200 transition-colors ${showSettings ? 'bg-gray-200 text-navy' : 'text-gray-500'}`}
+            title="AI Settings"
+          >
+            <Settings2 className="w-4 h-4" />
+          </button>
+        </div>
         <p className="text-xs text-gray-500 mt-1">
             Generate PRDs, user flows, and tickets.
         </p>
+        
+        {showSettings && (
+          <div className="mt-3 p-3 bg-white rounded-md border border-border shadow-sm animate-in slide-in-from-top-2 duration-200">
+            <div className="space-y-3">
+              <div>
+                <label className="text-[10px] uppercase font-bold text-gray-400 block mb-1">Product Type</label>
+                <select 
+                  value={aiSettings.productType}
+                  onChange={(e) => setAiSettings({...aiSettings, productType: e.target.value as ProductType})}
+                  className="w-full text-xs p-1.5 border border-border rounded bg-cloud text-navy focus:outline-none focus:ring-1 focus:ring-cyan"
+                >
+                  {PRODUCT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="text-[10px] uppercase font-bold text-gray-400 block mb-1">Tone</label>
+                <select 
+                  value={aiSettings.tone}
+                  onChange={(e) => setAiSettings({...aiSettings, tone: e.target.value as Tone})}
+                  className="w-full text-xs p-1.5 border border-border rounded bg-cloud text-navy focus:outline-none focus:ring-1 focus:ring-cyan"
+                >
+                  {TONES.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">

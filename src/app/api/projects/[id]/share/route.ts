@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { auth } from '@/auth';
+import { getSession } from '@/lib/auth';
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const session = await auth();
+  const session = await getSession();
   if (!session?.userId) {
     return new NextResponse('Unauthorized', { status: 401 });
   }
@@ -81,7 +81,7 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const session = await auth();
+  const session = await getSession();
   if (!session?.userId) {
     return new NextResponse('Unauthorized', { status: 401 });
   }

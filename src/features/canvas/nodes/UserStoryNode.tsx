@@ -15,29 +15,28 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
   const adjustHeight = useCallback(() => {
     const textarea = textareaRef.current;
     if (textarea) {
-      // Reset height to auto to get correct scrollHeight
-      textarea.style.height = 'auto';
+      // To get the correct scrollHeight when flex-1 is active, we must temporarily shrink it
+      // otherwise it takes the full container height, leading to a feedback loop
+      textarea.style.height = '1px';
       const newHeight = textarea.scrollHeight;
-      textarea.style.height = `${newHeight}px`;
+      
+      // Restore auto height to let flex take over
+      textarea.style.height = 'auto';
 
-      // Update node style height if needed
       setNodes((nodes) => nodes.map((node) => {
         if (node.id === id) {
           // Calculate total desired height: header (approx 40px) + padding (16px) + input (approx 24px) + textarea
-          const minTotalHeight = 40 + 16 + 24 + newHeight + 10; 
-          
-          // Only update if the current style height is insufficient or if we want to force grow
-          // We'll update the style to undefined to let it grow naturally, or set it to the new min height
-          // But NodeResizer sets a fixed height. We need to override it or update it.
+          // 40 (header) + 16 (padding) + 24 (input) + 10 (buffer) = 90
+          const minTotalHeight = 90 + newHeight; 
           
           const currentHeight = node.style?.height;
-          if (typeof currentHeight === 'number' && currentHeight < minTotalHeight) {
-             return { ...node, style: { ...node.style, height: minTotalHeight } };
-          }
-          // If user hasn't manually resized (no style.height), let it be auto (handled by CSS)
-          // But NodeResizer might initialize it. 
           
-          // Better strategy: Always update height to fit content if content expands
+          // Only update if the current height is LESS than what we need
+          // This prevents shrinking if the user manually resized it larger
+          if (typeof currentHeight === 'number' && currentHeight >= minTotalHeight) {
+             return node; 
+          }
+          
           return { ...node, style: { ...node.style, height: minTotalHeight } };
         }
         return node;

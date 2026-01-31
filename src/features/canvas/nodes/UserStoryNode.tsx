@@ -5,6 +5,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 type UserStoryData = {
   label: string;
   description?: string;
+  userName?: string;
 };
 
 export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryData>>) {

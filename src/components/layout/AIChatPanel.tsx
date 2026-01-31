@@ -14,7 +14,7 @@ type Message = {
 
 export function AIChatPanel() {
   const { limits, isLoading } = useSubscription();
-  const { addNode } = useCanvas();
+  const { addNode, userName } = useCanvas();
   
   const [messages, setMessages] = useState<Message[]>([
     { role: 'assistant', content: 'Hi! I can help you draft your Mobile App PRD. Try asking me to "Generate user stories for login".' }

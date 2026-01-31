@@ -32,6 +32,7 @@ interface CanvasContextType {
   setProjectId: (id: string) => void;
   saveCanvas: () => Promise<void>;
   isSaving: boolean;
+  userName?: string;
 }
 
 const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
@@ -41,6 +42,19 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [projectId, setProjectId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [userName, setUserName] = useState<string | undefined>(undefined);
+
+  // Fetch user info
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (data.user?.name) {
+            setUserName(data.user.name);
+        }
+      })
+      .catch(err => console.error('Failed to fetch user', err));
+  }, []);
 
   // Load canvas
   useEffect(() => {

@@ -66,55 +66,65 @@ export function VisualCanvas({ projectId, readOnly = false }: VisualCanvasProps)
   };
 
   return (
-    <div className="w-full h-full bg-cloud relative">
-      <div className="absolute top-4 right-4 z-10 flex gap-2">
-         {!readOnly && <ExportMenu projectId={projectId} />}
-         {!readOnly && (
-           <button 
-             onClick={saveCanvas} 
-             disabled={isSaving}
-             className="bg-white border border-border p-2 rounded-md shadow-sm hover:bg-gray-50 text-navy disabled:opacity-50 transition-colors"
-             title="Save Canvas"
-           >
-             <Save className={`w-4 h-4 ${isSaving ? 'animate-pulse' : ''}`} />
-           </button>
-         )}
-      </div>
+    <ReactFlowProvider>
+      <div className="w-full h-full bg-cloud relative">
+        <div className="absolute top-4 right-4 z-10 flex gap-2">
+           {!readOnly && <ExportMenu projectId={projectId} />}
+           {!readOnly && (
+             <button 
+               onClick={saveCanvas} 
+               disabled={isSaving}
+               className="bg-white border border-border p-2 rounded-md shadow-sm hover:bg-gray-50 text-navy disabled:opacity-50 transition-colors"
+               title="Save Canvas"
+             >
+               <Save className={`w-4 h-4 ${isSaving ? 'animate-pulse' : ''}`} />
+             </button>
+           )}
+        </div>
 
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={!readOnly ? onNodesChange : undefined}
-        onEdgesChange={!readOnly ? onEdgesChange : undefined}
-        onConnect={!readOnly ? onConnect : undefined}
-        nodesDraggable={!readOnly}
-        nodesConnectable={!readOnly}
-        elementsSelectable={!readOnly}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        defaultEdgeOptions={{ type: 'deletable' }}
-        fitView
-        className="bg-cloud"
-      >
-        <Background 
-            color="#cbd5e1" 
-            gap={16} 
-            size={1} 
-        />
-        <Controls className="bg-white border-border shadow-sm [&>button]:text-navy" />
-        
-        {/* Top Toolbar Panel */}
-        {!readOnly && (
-        <Panel position="top-center" className="bg-white border border-border p-2 rounded-full shadow-lg flex gap-2 mt-4">
-            <button onClick={() => onAddNode('userStory')} className="p-2 hover:bg-gray-100 rounded-full text-navy transition-colors" title="Add User Story">
-                <Plus className="w-5 h-5" />
-            </button>
-            <button onClick={() => onAddNode('screen')} className="p-2 hover:bg-gray-100 rounded-full text-navy transition-colors" title="Add Screen">
-                <Smartphone className="w-5 h-5" />
-            </button>
-        </Panel>
-        )}
-      </ReactFlow>
-    </div>
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={!readOnly ? onNodesChange : undefined}
+          onEdgesChange={!readOnly ? onEdgesChange : undefined}
+          onConnect={!readOnly ? onConnect : undefined}
+          nodesDraggable={!readOnly}
+          nodesConnectable={!readOnly}
+          elementsSelectable={!readOnly}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          defaultEdgeOptions={{ type: 'deletable' }}
+          fitView
+          className="bg-cloud"
+        >
+          <Background 
+              color="#cbd5e1" 
+              gap={20} 
+          />
+          {!readOnly && <Controls />}
+          
+          {/* Add Panel for floating controls if needed later */}
+          <Panel position="top-left" className="bg-white/80 p-2 rounded-lg backdrop-blur-sm border border-border">
+              <div className="flex flex-col gap-2">
+                  <p className="text-xs font-bold text-navy uppercase tracking-wider mb-1">Tools</p>
+                  <button 
+                      onClick={() => onAddNode('userStory')}
+                      className="flex items-center gap-2 px-3 py-1.5 bg-navy text-white rounded-md text-sm hover:bg-navy/90 transition-colors shadow-sm"
+                  >
+                      <Plus className="w-4 h-4" />
+                      User Story
+                  </button>
+                  <button 
+                      onClick={() => onAddNode('screen')}
+                      className="flex items-center gap-2 px-3 py-1.5 bg-white text-navy border border-border rounded-md text-sm hover:bg-gray-50 transition-colors shadow-sm"
+                  >
+                      <Smartphone className="w-4 h-4" />
+                      Screen
+                  </button>
+              </div>
+          </Panel>
+        </ReactFlow>
+      </div>
+    </ReactFlowProvider>
   );
 }

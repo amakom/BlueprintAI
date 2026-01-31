@@ -27,7 +27,7 @@ export async function GET() {
         amount: inv.amount,
         currency: inv.currency,
         status: inv.status,
-        teamName: inv.subscription.team.name,
+        teamName: inv.subscription?.team?.name || 'Unknown Team',
         date: inv.createdAt,
         ref: inv.flutterwaveRef
     }));

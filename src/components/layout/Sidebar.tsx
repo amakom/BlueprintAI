@@ -14,11 +14,13 @@ const navItems = [
 
 import { useState, useEffect } from 'react';
 import { useSubscription } from '@/hooks/use-subscription';
+import { UserRole } from '@/lib/permissions';
+import { ShieldAlert } from 'lucide-react';
 
 export function Sidebar() {
   const router = useRouter();
   const { plan, isLoading: isSubLoading } = useSubscription();
-  const [user, setUser] = useState<{name: string, email: string} | null>(null);
+  const [user, setUser] = useState<{name: string, email: string, role: string} | null>(null);
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -37,6 +39,9 @@ export function Sidebar() {
       console.error('Logout failed', error);
     }
   };
+
+  const isAdminOrOwner = user?.role === UserRole.ADMIN || user?.role === UserRole.OWNER;
+  const isOwner = user?.role === UserRole.OWNER;
 
   return (
     <aside className="w-60 bg-navy text-white flex flex-col h-screen border-r border-navy/20">
@@ -67,6 +72,18 @@ export function Sidebar() {
               {item.label}
             </Link>
           ))}
+          {isAdminOrOwner && (
+            <Link
+              href="/admin"
+              className={cn(
+                "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                "hover:bg-white/10 text-amber hover:text-white"
+              )}
+            >
+              <ShieldAlert className="w-4 h-4" />
+              Admin Panel
+            </Link>
+          )}
         </div>
 
         <div>
@@ -108,8 +125,10 @@ export function Sidebar() {
                 {user?.name ? user.name.charAt(0).toUpperCase() + user.name.slice(1) : 'User Name'}
               </p>
               <div className="flex items-center gap-2">
-                 <p className="text-xs text-gray-400">{isSubLoading ? 'Loading...' : `${plan} Plan`}</p>
-                 {plan === 'FREE' && (
+                 <p className="text-xs text-gray-400">
+                    {isSubLoading ? 'Loading...' : (isOwner ? 'Owner Access' : `${plan} Plan`)}
+                 </p>
+                 {plan === 'FREE' && !isOwner && (
                      <Link href="/pricing" className="text-[10px] bg-cyan text-navy px-1.5 py-0.5 rounded font-bold hover:bg-cyan/90">
                         UPGRADE
                      </Link>

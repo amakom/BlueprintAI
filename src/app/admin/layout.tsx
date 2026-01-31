@@ -28,13 +28,13 @@ export default async function AdminLayout({
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Admin Sidebar */}
-      <aside className="w-64 bg-slate-900 text-white flex flex-col">
-        <div className="p-6 border-b border-slate-800">
+      <aside className="w-64 bg-navy text-white flex flex-col">
+        <div className="p-6 border-b border-white/10">
             <h1 className="text-xl font-bold flex items-center gap-2">
-                <ShieldAlert className="text-red-500" />
+                <ShieldAlert className="text-amber" />
                 Admin Panel
             </h1>
-            <p className="text-xs text-slate-400 mt-1">God Mode Active</p>
+            <p className="text-xs text-cyan mt-1">System Owner</p>
         </div>
         
         <nav className="flex-1 p-4 space-y-2">
@@ -42,7 +42,7 @@ export default async function AdminLayout({
                 <Link 
                     key={item.href} 
                     href={item.href}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 transition-colors text-slate-300 hover:text-white"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors text-gray-300 hover:text-white"
                 >
                     <item.icon className="w-5 h-5" />
                     {item.label}
@@ -50,8 +50,8 @@ export default async function AdminLayout({
             ))}
         </nav>
 
-        <div className="p-4 border-t border-slate-800">
-            <Link href="/dashboard" className="block text-center py-2 text-sm text-slate-400 hover:text-white">
+        <div className="p-4 border-t border-white/10">
+            <Link href="/dashboard" className="block text-center py-2 text-sm text-gray-400 hover:text-white">
                 Exit to App
             </Link>
         </div>

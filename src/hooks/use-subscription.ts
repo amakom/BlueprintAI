@@ -23,6 +23,7 @@ export function useSubscription(initialTeamId?: string) {
     async function fetchSub() {
       try {
         let teamId = initialTeamId;
+        let role = '';
 
         // If no teamId provided, fetch from /api/auth/me
         if (!teamId) {
@@ -30,6 +31,7 @@ export function useSubscription(initialTeamId?: string) {
             if (meRes.ok) {
                 const meData = await meRes.json();
                 teamId = meData.teamId;
+                role = meData.user?.role;
             }
         }
 
@@ -46,10 +48,19 @@ export function useSubscription(initialTeamId?: string) {
           setState({
             plan,
             status: data.subscription.status,
-            limits: getPlanLimits(plan),
+            limits: getPlanLimits(plan, role),
             isLoading: false,
           });
         } else if (mounted) {
+            // Fallback if no subscription found
+             setState({
+                plan: PlanType.FREE,
+                status: 'active',
+                limits: getPlanLimits(PlanType.FREE, role),
+                isLoading: false,
+              });
+        }
+      } catch (error) { else if (mounted) {
            // Default to FREE if no sub found
            setState(s => ({ ...s, isLoading: false }));
         }

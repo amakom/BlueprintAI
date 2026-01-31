@@ -58,7 +58,7 @@ export default function AdminUsersPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900 mb-8">User Management</h1>
+      <h1 className="text-2xl font-bold text-navy mb-8">User Management</h1>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
@@ -77,7 +77,7 @@ export default function AdminUsersPage() {
                     {users.map((user) => (
                         <tr key={user.id} className="hover:bg-gray-50 transition-colors">
                             <td className="p-4">
-                                <div className="font-bold text-slate-900">{user.name}</div>
+                                <div className="font-bold text-navy">{user.name}</div>
                                 <div className="text-gray-500 text-xs">{user.email}</div>
                             </td>
                             <td className="p-4">
@@ -85,7 +85,7 @@ export default function AdminUsersPage() {
                                     value={user.role}
                                     onChange={(e) => handleRoleChange(user.id, e.target.value)}
                                     disabled={actionLoading === user.id}
-                                    className="bg-transparent font-medium text-slate-700 border-none focus:ring-0 cursor-pointer"
+                                    className="bg-transparent font-medium text-navy border-none focus:ring-0 cursor-pointer"
                                 >
                                     <option value="USER">User</option>
                                     <option value="ADMIN">Admin</option>

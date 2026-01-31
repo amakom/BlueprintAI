@@ -88,7 +88,7 @@ function StatCard({ title, value, icon: Icon, color }: any) {
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
             <div>
                 <p className="text-sm font-medium text-gray-500 mb-1">{title}</p>
-                <h3 className="text-2xl font-bold text-slate-900">{value}</h3>
+                <h3 className="text-2xl font-bold text-navy">{value}</h3>
             </div>
             <div className={`w-12 h-12 rounded-lg ${color} bg-opacity-10 flex items-center justify-center`}>
                 <Icon className={`w-6 h-6 ${color.replace('bg-', 'text-')}`} />

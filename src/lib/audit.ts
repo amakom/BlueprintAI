@@ -13,12 +13,16 @@ export type AuditAction =
   | 'subscribe'
   | 'cancel_subscription'
   | 'invoice_paid'
-  | 'invoice_failed';
+  | 'invoice_failed'
+  | 'block_ai'
+  | 'unblock_ai'
+  | 'reset_ai_usage'
+  | 'manual_plan_grant';
 
 interface LogAuditOptions {
   userId?: string;
   action: AuditAction;
-  resource: 'auth' | 'billing';
+  resource: 'auth' | 'billing' | 'admin_ai' | 'admin_billing';
   metadata?: any;
   ipAddress?: string;
   userAgent?: string;

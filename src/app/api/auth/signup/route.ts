@@ -4,12 +4,14 @@ import { hashPassword, setSession, signToken } from '@/lib/auth';
 import { sendEmail } from '@/lib/email';
 import { logAudit } from '@/lib/audit';
 import crypto from 'crypto';
+import { logSystem } from '@/lib/system-log';
 
 export async function POST(req: Request) {
   console.log('Signup request started');
   
   if (!process.env.DATABASE_URL) {
     console.error('Missing DATABASE_URL');
+    await logSystem('ERROR', 'SYSTEM', 'Missing DATABASE_URL configuration');
     return NextResponse.json({ error: 'Configuration Error: Missing DATABASE_URL' }, { status: 500 });
   }
 
@@ -170,6 +172,8 @@ export async function POST(req: Request) {
     });
     console.log('Transaction completed', result.user.id);
 
+    await logSystem('INFO', 'AUTH', 'New user signed up', { email, userId: result.user.id });
+
     // Create Session
     console.log('Signing token...');
     const token = await signToken({ 
@@ -184,6 +188,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, user: result.user, team: result.team });
   } catch (error: any) {
     console.error('Signup error full object:', error);
+    await logSystem('ERROR', 'AUTH', 'Signup failed', { error: error.message || 'Unknown' });
     const errorMessage = error?.message || 'Unknown error occurred';
     const errorStack = error?.stack || 'No stack trace';
     

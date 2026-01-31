@@ -275,6 +275,15 @@ model WebhookLog {
   createdAt DateTime @default(now())
 }
 
+model SystemLog {
+  id        String   @id @default(cuid())
+  level     String   // INFO, WARN, ERROR
+  category  String   // AUTH, API, DATABASE, SYSTEM
+  message   String
+  metadata  Json?
+  createdAt DateTime @default(now())
+}
+
 model AIUsageLog {
   id           String   @id @default(cuid())
   teamId       String

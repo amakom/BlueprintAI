@@ -11,7 +11,8 @@ export async function GET(req: Request) {
         totalUsers, 
         totalProjects, 
         totalRevenue, // This requires aggregation on invoices
-        recentSignups
+        recentSignups,
+        recentErrors
     ] = await Promise.all([
         prisma.user.count(),
         prisma.project.count(),
@@ -23,6 +24,14 @@ export async function GET(req: Request) {
             take: 5,
             orderBy: { createdAt: 'desc' },
             select: { id: true, name: true, email: true, createdAt: true }
+        }),
+        prisma.systemLog.count({
+            where: {
+                level: 'ERROR',
+                createdAt: {
+                    gte: new Date(Date.now() - 24 * 60 * 60 * 1000)
+                }
+            }
         })
     ]);
 
@@ -35,6 +44,7 @@ export async function GET(req: Request) {
         totalProjects,
         totalRevenue: totalRevenue._sum.amount || 0,
         totalAIRequests,
+        recentErrors,
         recentSignups
     });
   } catch (error) {

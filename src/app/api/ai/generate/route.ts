@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { getPlanLimits, PlanType } from '@/lib/permissions';
+import { logSystem } from '@/lib/system-log';
 
 export async function POST(req: Request) {
   try {
@@ -36,6 +37,7 @@ export async function POST(req: Request) {
     
     // Check if team is blocked from using AI
     if (team.aiBlocked) {
+      await logSystem('WARN', 'AI', 'Blocked team attempted generation', { teamId: team.id, userId: session.userId });
       return NextResponse.json({ error: 'AI generation has been temporarily disabled for your team. Please contact support.' }, { status: 403 });
     }
 
@@ -67,6 +69,7 @@ export async function POST(req: Request) {
     // It doesn't store userId. We should probably add userId to AIUsageLog for better tracking, 
     // but for now we'll rate limit the TEAM for abuse (which is also valid).
     if (recentUserRequests >= 20) { // 20 per minute per team
+        await logSystem('WARN', 'AI', 'Rate limit exceeded', { teamId: team.id });
         return NextResponse.json({ error: 'Rate limit exceeded. Please wait a moment.' }, { status: 429 });
     }
 
@@ -85,6 +88,7 @@ export async function POST(req: Request) {
     });
 
     if (monthlyUsage >= limits.maxAIGenerationsPerMonth) {
+      await logSystem('WARN', 'AI', 'Monthly quota exceeded', { teamId: team.id, plan });
       return NextResponse.json({ 
         error: `Monthly AI limit reached (${monthlyUsage}/${limits.maxAIGenerationsPerMonth}). Please upgrade your plan.` 
       }, { status: 403 });
@@ -122,6 +126,7 @@ Acceptance Criteria:
 
   } catch (error) {
     console.error('AI Generation error:', error);
+    await logSystem('ERROR', 'AI', 'Generation failed', { error: error instanceof Error ? error.message : 'Unknown' });
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

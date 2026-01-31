@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { PlanType, SubscriptionStatus } from '@prisma/client';
 import { logAudit } from '@/lib/audit';
+import { logSystem } from '@/lib/system-log';
 
 export async function POST(req: NextRequest) {
   const secretHash = process.env.FLUTTERWAVE_SECRET_HASH;
@@ -9,6 +10,7 @@ export async function POST(req: NextRequest) {
 
   // Verify signature if secret hash is configured
   if (secretHash && signature !== secretHash) {
+    await logSystem('WARN', 'BILLING', 'Invalid webhook signature', { signature });
     return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
   }
 
@@ -17,6 +19,7 @@ export async function POST(req: NextRequest) {
     const { event, data } = body;
 
     console.log('Flutterwave Webhook received:', event);
+    await logSystem('INFO', 'BILLING', `Webhook received: ${event}`, { eventType: event });
 
     if (event === 'charge.completed' && data.status === 'successful') {
       const { meta, customer, id, tx_ref } = data;
@@ -66,6 +69,7 @@ export async function POST(req: NextRequest) {
           metadata: { teamId, planId, amount: data.amount, tx_ref },
         });
 
+        await logSystem('INFO', 'BILLING', `Team upgraded via webhook`, { teamId, plan: planEnum, amount: data.amount });
         console.log(`Successfully upgraded team ${teamId} to ${planEnum}`);
       }
     }
@@ -73,6 +77,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ received: true });
   } catch (error) {
     console.error('Webhook error:', error);
+    await logSystem('ERROR', 'BILLING', 'Webhook processing failed', { error: error instanceof Error ? error.message : 'Unknown' });
     return NextResponse.json({ error: 'Webhook handler failed' }, { status: 500 });
   }
 }

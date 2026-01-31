@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Users, Folder, DollarSign, Activity, Loader2 } from 'lucide-react';
+import { Users, Folder, DollarSign, Activity, Loader2, AlertTriangle } from 'lucide-react';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<any>(null);
@@ -23,7 +23,7 @@ export default function AdminDashboard() {
     <div>
       <h1 className="text-2xl font-bold text-slate-900 mb-8">System Overview</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
         <StatCard 
             title="Total Users" 
             value={stats.totalUsers} 
@@ -47,6 +47,12 @@ export default function AdminDashboard() {
             value={stats.totalAIRequests} 
             icon={Activity} 
             color="bg-purple-500" 
+        />
+        <StatCard 
+            title="System Errors (24h)" 
+            value={stats.recentErrors} 
+            icon={AlertTriangle} 
+            color={stats.recentErrors > 0 ? "bg-red-500" : "bg-emerald-500"} 
         />
       </div>
 

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { comparePassword, setSession, signToken } from '@/lib/auth';
 import { logAudit } from '@/lib/audit';
+import { logSystem } from '@/lib/system-log';
 
 export async function POST(req: Request) {
   try {
@@ -19,6 +20,7 @@ export async function POST(req: Request) {
     });
 
     if (!user || !user.password) {
+      await logSystem('WARN', 'AUTH', 'Failed login attempt - User not found or no password', { email });
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
@@ -28,6 +30,7 @@ export async function POST(req: Request) {
     const isValid = await comparePassword(password, user.password);
 
     if (!isValid) {
+      await logSystem('WARN', 'AUTH', 'Failed login attempt - Invalid password', { email });
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
@@ -42,6 +45,7 @@ export async function POST(req: Request) {
         where: { id: user.id },
         data: { role: 'OWNER' }
       });
+      await logSystem('INFO', 'AUTH', 'User auto-promoted to OWNER', { email: user.email });
       role = 'OWNER' as any;
     }
 
@@ -60,9 +64,12 @@ export async function POST(req: Request) {
       resource: 'auth',
     });
 
+    await logSystem('INFO', 'AUTH', 'User logged in', { userId: user.id, email: user.email });
+
     return NextResponse.json({ success: true, user });
   } catch (error) {
     console.error('Login error:', error);
+    await logSystem('ERROR', 'AUTH', 'Login error', { error: error instanceof Error ? error.message : 'Unknown' });
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Internal server error' },
       { status: 500 }

@@ -17,6 +17,7 @@ import { DeletableEdge } from './edges/DeletableEdge';
 import { Plus, Save, Smartphone } from 'lucide-react';
 import { useCanvas } from './CanvasContext';
 import { useEffect } from 'react';
+import { ExportMenu } from './ExportMenu';
 
 const nodeTypes: NodeTypes = {
   userStory: UserStoryNode,
@@ -29,8 +30,9 @@ const edgeTypes: EdgeTypes = {
 
 interface VisualCanvasProps {
   projectId: string;
+  readOnly?: boolean;
 }
-export function VisualCanvas({ projectId }: VisualCanvasProps) {
+export function VisualCanvas({ projectId, readOnly = false }: VisualCanvasProps) {
   const { 
     nodes, 
     edges, 
@@ -66,22 +68,28 @@ export function VisualCanvas({ projectId }: VisualCanvasProps) {
   return (
     <div className="w-full h-full bg-cloud relative">
       <div className="absolute top-4 right-4 z-10 flex gap-2">
-         <button 
-           onClick={saveCanvas} 
-           disabled={isSaving}
-           className="bg-white border border-border p-2 rounded-md shadow-sm hover:bg-gray-50 text-navy disabled:opacity-50 transition-colors"
-           title="Save Canvas"
-         >
-           <Save className={`w-4 h-4 ${isSaving ? 'animate-pulse' : ''}`} />
-         </button>
+         {!readOnly && <ExportMenu projectId={projectId} />}
+         {!readOnly && (
+           <button 
+             onClick={saveCanvas} 
+             disabled={isSaving}
+             className="bg-white border border-border p-2 rounded-md shadow-sm hover:bg-gray-50 text-navy disabled:opacity-50 transition-colors"
+             title="Save Canvas"
+           >
+             <Save className={`w-4 h-4 ${isSaving ? 'animate-pulse' : ''}`} />
+           </button>
+         )}
       </div>
 
       <ReactFlow
         nodes={nodes}
         edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
+        onNodesChange={!readOnly ? onNodesChange : undefined}
+        onEdgesChange={!readOnly ? onEdgesChange : undefined}
+        onConnect={!readOnly ? onConnect : undefined}
+        nodesDraggable={!readOnly}
+        nodesConnectable={!readOnly}
+        elementsSelectable={!readOnly}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         defaultEdgeOptions={{ type: 'deletable' }}
@@ -96,15 +104,16 @@ export function VisualCanvas({ projectId }: VisualCanvasProps) {
         <Controls className="bg-white border-border shadow-sm [&>button]:text-navy" />
         
         {/* Top Toolbar Panel */}
+        {!readOnly && (
         <Panel position="top-center" className="bg-white border border-border p-2 rounded-full shadow-lg flex gap-2 mt-4">
             <button onClick={() => onAddNode('userStory')} className="p-2 hover:bg-gray-100 rounded-full text-navy transition-colors" title="Add User Story">
-                <Plus className="w-4 h-4" />
+                <Plus className="w-5 h-5" />
             </button>
-            <div className="w-px bg-gray-200 mx-1"></div>
             <button onClick={() => onAddNode('screen')} className="p-2 hover:bg-gray-100 rounded-full text-navy transition-colors" title="Add Screen">
-                <Smartphone className="w-4 h-4" />
+                <Smartphone className="w-5 h-5" />
             </button>
         </Panel>
+        )}
       </ReactFlow>
     </div>
   );

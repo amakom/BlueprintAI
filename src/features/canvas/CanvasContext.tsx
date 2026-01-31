@@ -37,15 +37,16 @@ interface CanvasContextType {
 
 const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
 
-export function CanvasProvider({ children }: { children: ReactNode }) {
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
+export function CanvasProvider({ children, initialData, readOnly = false }: { children: ReactNode, initialData?: { nodes: Node[], edges: Edge[] }, readOnly?: boolean }) {
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialData?.nodes || []);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialData?.edges || []);
   const [projectId, setProjectId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [userName, setUserName] = useState<string | undefined>(undefined);
 
   // Fetch user info
   useEffect(() => {
+    if (readOnly) return;
     fetch('/api/auth/me')
       .then(res => res.json())
       .then(data => {
@@ -59,7 +60,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
 
   // Load canvas
   useEffect(() => {
-    if (!projectId) return;
+    if (!projectId || readOnly) return;
 
     const loadCanvas = async () => {
       try {
@@ -85,7 +86,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
 
   // Save canvas
   const saveCanvas = async () => {
-    if (!projectId) return;
+    if (!projectId || readOnly) return;
     setIsSaving(true);
     try {
       await fetch(`/api/projects/${projectId}/canvas`, {

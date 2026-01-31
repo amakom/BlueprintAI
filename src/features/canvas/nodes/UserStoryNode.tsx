@@ -11,6 +11,7 @@ type UserStoryData = {
   label: string;
   description?: string;
   userName?: string;
+  history?: AIHistoryItem[];
 };
 
 export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryData>>) {

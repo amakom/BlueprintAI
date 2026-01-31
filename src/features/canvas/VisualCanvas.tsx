@@ -7,7 +7,8 @@ import {
   Panel,
   NodeTypes,
   EdgeTypes,
-  Node
+  Node,
+  ReactFlowProvider
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 

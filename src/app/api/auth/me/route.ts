@@ -22,6 +22,7 @@ export async function GET() {
   return NextResponse.json({
     user,
     teamId: member?.teamId,
-    teamName: member?.team?.name
+    teamName: member?.team?.name,
+    role: member?.role
   });
 }

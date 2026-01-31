@@ -91,6 +91,15 @@ export async function PUT(
       data: { name },
     });
 
+    await prisma.activityLog.create({
+      data: {
+        projectId: params.id,
+        userId: session.userId,
+        action: 'update_settings',
+        metadata: { field: 'name', newValue: name },
+      },
+    });
+
     return NextResponse.json({ success: true, project: updatedProject });
   } catch (error) {
     console.error('Update Project error:', error);

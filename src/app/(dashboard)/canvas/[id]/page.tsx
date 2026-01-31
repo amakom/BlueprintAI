@@ -1,6 +1,6 @@
 'use client';
 
-import { Play, Share2, Download, Lock, Check, X, Edit2, Trash2 } from 'lucide-react';
+import { Play, Share2, Download, Lock, Check, X, Edit2, Trash2, History } from 'lucide-react';
 import { useSubscription } from '@/hooks/use-subscription';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -8,6 +8,7 @@ import { useEffect, useState, useRef } from 'react';
 import { CanvasProvider } from '@/features/canvas/CanvasContext';
 import { VisualCanvas } from '@/features/canvas/VisualCanvas';
 import { AIChatPanel } from '@/components/layout/AIChatPanel';
+import { ActivityLogModal } from '@/features/team/ActivityLogModal';
 
 interface Project {
   id: string;
@@ -25,6 +26,9 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Activity Log state
+  const [isActivityOpen, setIsActivityOpen] = useState(false);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -193,6 +197,14 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
                       )
                   )}
 
+                  <button 
+                      onClick={() => setIsActivityOpen(true)}
+                      className="text-navy hover:bg-gray-100 p-2 rounded-md"
+                      title="Activity Log"
+                  >
+                      <History className="w-4 h-4" />
+                  </button>
+
                   <button className="text-navy hover:bg-gray-100 p-2 rounded-md">
                       <Play className="w-4 h-4" />
                   </button>
@@ -233,6 +245,11 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
         {/* Right AI Panel */}
         <AIChatPanel />
       </div>
+      <ActivityLogModal
+        isOpen={isActivityOpen}
+        onClose={() => setIsActivityOpen(false)}
+        projectId={params.id}
+      />
     </CanvasProvider>
   );
 }

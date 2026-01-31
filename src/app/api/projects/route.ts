@@ -124,6 +124,16 @@ export async function POST(req: Request) {
         },
       });
 
+      // Log activity
+      await tx.activityLog.create({
+        data: {
+          projectId: project.id,
+          userId: session.userId,
+          action: 'create_project',
+          metadata: { name, type },
+        },
+      });
+
       return project;
     });
 

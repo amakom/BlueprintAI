@@ -2,12 +2,13 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Home, Layers, Settings, FileText, PlusCircle, LogOut } from 'lucide-react';
+import { Home, Layers, Settings, FileText, PlusCircle, LogOut, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { label: 'Home', icon: Home, href: '/dashboard' },
   { label: 'Projects', icon: Layers, href: '/dashboard' },
+  { label: 'Team', icon: Users, href: '/team' },
   { label: 'Settings', icon: Settings, href: '/settings' },
 ];
 

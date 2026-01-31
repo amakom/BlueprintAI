@@ -34,7 +34,11 @@ export function DeletableEdge({
 
   return (
     <>
-      <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
+      <BaseEdge 
+        path={edgePath} 
+        markerEnd={markerEnd} 
+        style={{ stroke: '#2EE6D6', strokeWidth: 2, ...style }} 
+      />
       <EdgeLabelRenderer>
         <div
           style={{

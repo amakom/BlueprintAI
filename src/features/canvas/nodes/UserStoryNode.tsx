@@ -79,8 +79,8 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
   }, [id, deleteElements]);
 
   return (
-    <div className={`bg-white dark:bg-navy rounded-lg border-2 shadow-sm transition-all group/node min-w-[208px] h-full flex flex-col ${
-      selected ? 'border-cyan ring-2 ring-cyan/20' : 'border-border dark:border-gray-700'
+    <div className={`bg-white dark:bg-[#11253a] rounded-lg border-2 shadow-sm transition-all group/node min-w-[208px] h-full flex flex-col ${
+      selected ? 'border-cyan ring-2 ring-cyan/20' : 'border-border dark:border-[#1e3a5f]'
     }`}>
       <NodeResizer 
         isVisible={selected} 
@@ -91,12 +91,12 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
       />
       
       {/* Header */}
-      <div className="bg-cloud dark:bg-gray-800 p-2 rounded-t-md border-b border-border dark:border-gray-700 flex items-center justify-between transition-colors">
+      <div className="bg-cloud dark:bg-[#0B1F33] p-2 rounded-t-md border-b border-border dark:border-[#1e3a5f] flex items-center justify-between transition-colors">
         <div className="flex items-center gap-2">
             <div className="bg-amber/10 p-1 rounded">
             <User className="w-3 h-3 text-amber" />
             </div>
-            <span className="font-bold text-xs text-navy dark:text-white">User Story</span>
+            <span className="font-bold text-xs text-navy dark:text-gray-100">User Story</span>
         </div>
         <button 
             onClick={handleDelete}
@@ -126,10 +126,10 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
       </div>
 
       {/* Handles */}
-      <Handle type="target" position={Position.Top} id="top" className="w-3 h-3 bg-navy dark:bg-white border-2 border-white dark:border-navy" />
-      <Handle type="target" position={Position.Left} id="left" className="w-3 h-3 bg-navy dark:bg-white border-2 border-white dark:border-navy" />
-      <Handle type="source" position={Position.Right} id="right" className="w-3 h-3 bg-cyan border-2 border-white dark:border-navy" />
-      <Handle type="source" position={Position.Bottom} id="bottom" className="w-3 h-3 bg-cyan border-2 border-white dark:border-navy" />
+      <Handle type="target" position={Position.Top} id="top" className="w-3 h-3 bg-navy dark:bg-white border-2 border-white dark:border-[#11253a]" />
+      <Handle type="target" position={Position.Left} id="left" className="w-3 h-3 bg-navy dark:bg-white border-2 border-white dark:border-[#11253a]" />
+      <Handle type="source" position={Position.Right} id="right" className="w-3 h-3 bg-cyan border-2 border-white dark:border-[#11253a]" />
+      <Handle type="source" position={Position.Bottom} id="bottom" className="w-3 h-3 bg-cyan border-2 border-white dark:border-[#11253a]" />
     </div>
   );
 }

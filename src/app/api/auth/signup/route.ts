@@ -39,11 +39,15 @@ export async function POST(req: Request) {
         throw new Error('User already exists');
       }
 
+      const isOwner = email === process.env.OWNER_EMAIL;
+      const role = isOwner ? 'OWNER' : 'USER';
+
       const user = await tx.user.create({
         data: {
           name,
           email,
           password: hashedPassword,
+          role: role as any, // Cast to any or UserRole if imported
         },
       });
 
@@ -168,7 +172,11 @@ export async function POST(req: Request) {
 
     // Create Session
     console.log('Signing token...');
-    const token = await signToken({ userId: result.user.id, email: result.user.email });
+    const token = await signToken({ 
+      userId: result.user.id, 
+      email: result.user.email,
+      role: result.user.role
+    });
     console.log('Setting session...');
     await setSession(token);
     console.log('Session set');

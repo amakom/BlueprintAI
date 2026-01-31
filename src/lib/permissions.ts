@@ -5,6 +5,12 @@ export enum PlanType {
   ENTERPRISE = 'ENTERPRISE',
 }
 
+export enum UserRole {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+  OWNER = 'OWNER',
+}
+
 export interface PlanLimits {
   maxProjects: number;
   maxCollaborators: number;
@@ -49,6 +55,18 @@ export const PLAN_LIMITS: Record<PlanType, PlanLimits> = {
   },
 };
 
-export function getPlanLimits(plan: PlanType | undefined | null): PlanLimits {
+export const OWNER_LIMITS: PlanLimits = {
+  maxProjects: Infinity,
+  maxCollaborators: Infinity,
+  canExport: true,
+  canRealTimeEdit: true,
+  canGenerateAI: true,
+  canRemoveBranding: true,
+};
+
+export function getPlanLimits(plan: PlanType | undefined | null, role?: string): PlanLimits {
+  if (role === UserRole.OWNER) {
+    return OWNER_LIMITS;
+  }
   return PLAN_LIMITS[plan || PlanType.FREE];
 }

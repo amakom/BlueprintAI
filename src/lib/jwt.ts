@@ -7,6 +7,7 @@ const JWT_SECRET = new TextEncoder().encode(
 export interface SessionPayload {
   userId: string;
   email: string;
+  role?: string;
   [key: string]: unknown;
 }
 

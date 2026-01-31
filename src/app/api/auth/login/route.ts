@@ -35,7 +35,11 @@ export async function POST(req: Request) {
     }
 
     // Create Session
-    const token = await signToken({ userId: user.id, email: user.email });
+    const token = await signToken({ 
+      userId: user.id, 
+      email: user.email,
+      role: user.role 
+    });
     await setSession(token);
 
     // Log audit

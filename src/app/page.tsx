@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Testimonials } from '@/components/landing/Testimonials';
 
 export default function LandingPage() {
   return (
@@ -45,11 +46,14 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="container mx-auto mt-20 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full">
-            <span className="text-xs font-bold text-gray-300">Loved by builders</span>
+        <section className="mt-20 text-center overflow-hidden">
+          <div className="container mx-auto px-6 mb-10">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full">
+              <span className="text-xs font-bold text-gray-300">Loved by builders</span>
+            </div>
+            <p className="mt-4 text-gray-400 max-w-2xl mx-auto">BlueprintAI brings a responsive, refined experience that helps teams deliver with confidence.</p>
           </div>
-          <p className="mt-4 text-gray-400">BlueprintAI brings a responsive, refined experience that helps teams deliver with confidence.</p>
+          <Testimonials />
         </section>
       </main>
 

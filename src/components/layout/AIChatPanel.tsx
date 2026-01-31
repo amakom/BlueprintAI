@@ -1,6 +1,6 @@
 'use client';
 
-import { Send, Sparkles, Lock } from 'lucide-react';
+import { Send, Sparkles, Lock, Settings2 } from 'lucide-react';
 import { useSubscription } from '@/hooks/use-subscription';
 import Link from 'next/link';
 import { useCanvas } from '@/features/canvas/CanvasContext';
@@ -21,6 +21,7 @@ export function AIChatPanel() {
   ]);
   const [input, setInput] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   const handleSend = async () => {
     if (!input.trim() || isGenerating) return;

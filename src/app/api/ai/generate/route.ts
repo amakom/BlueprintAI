@@ -33,6 +33,12 @@ export async function POST(req: Request) {
     }
 
     const team = project.team;
+    
+    // Check if team is blocked from using AI
+    if (team.aiBlocked) {
+      return NextResponse.json({ error: 'AI generation has been temporarily disabled for your team. Please contact support.' }, { status: 403 });
+    }
+
     const plan = (team.subscription?.plan as PlanType) || PlanType.FREE;
     const limits = getPlanLimits(plan);
 

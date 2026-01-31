@@ -113,6 +113,9 @@ model Team {
   subscription  Subscription?
   aiUsageLogs   AIUsageLog[]
   invitations   TeamInvitation[]
+  
+  // AI Controls
+  aiBlocked     Boolean  @default(false)
 }
 
 enum TeamRole {
@@ -260,6 +263,16 @@ model Invoice {
   updatedAt       DateTime @updatedAt
   
   subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+}
+
+model WebhookLog {
+  id        String   @id @default(cuid())
+  provider  String
+  eventType String?
+  payload   Json
+  status    String
+  error     String?
+  createdAt DateTime @default(now())
 }
 
 model AIUsageLog {

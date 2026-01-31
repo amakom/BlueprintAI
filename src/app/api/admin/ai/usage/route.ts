@@ -50,7 +50,7 @@ export async function GET() {
     const teamIds = teamUsage.map(t => t.teamId);
     const teams = await prisma.team.findMany({
       where: { id: { in: teamIds } },
-      select: { id: true, name: true }
+      select: { id: true, name: true, aiBlocked: true }
     });
 
     const formattedTeamUsage = teamUsage.map(usage => {
@@ -58,6 +58,7 @@ export async function GET() {
       return {
         teamId: usage.teamId,
         teamName: team?.name || 'Unknown',
+        aiBlocked: team?.aiBlocked || false,
         requests: usage._count._all,
         totalTokens: (usage._sum.inputTokens || 0) + (usage._sum.outputTokens || 0)
       };

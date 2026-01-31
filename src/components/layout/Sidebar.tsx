@@ -103,7 +103,9 @@ export function Sidebar() {
               {user?.name?.[0]?.toUpperCase() || 'U'}
             </div>
             <div className="text-sm">
-              <p className="font-medium text-white">{user?.name || 'User Name'}</p>
+              <p className="font-medium text-white">
+                {user?.name ? user.name.charAt(0).toUpperCase() + user.name.slice(1) : 'User Name'}
+              </p>
               <div className="flex items-center gap-2">
                  <p className="text-xs text-gray-400">{isSubLoading ? 'Loading...' : `${plan} Plan`}</p>
                  {plan === 'FREE' && (

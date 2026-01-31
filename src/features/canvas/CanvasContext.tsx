@@ -50,7 +50,8 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
       .then(res => res.json())
       .then(data => {
         if (data.user?.name) {
-            setUserName(data.user.name);
+            const capitalized = data.user.name.charAt(0).toUpperCase() + data.user.name.slice(1);
+            setUserName(capitalized);
         }
       })
       .catch(err => console.error('Failed to fetch user', err));

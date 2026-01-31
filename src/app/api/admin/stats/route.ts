@@ -7,18 +7,38 @@ export async function GET(req: Request) {
   if (!session) return unauthorized();
 
   try {
+    const now = new Date();
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
     const [
         totalUsers, 
         totalProjects, 
-        totalRevenue, // This requires aggregation on invoices
+        revenueToday,
+        revenueMonth,
         recentSignups,
-        recentErrors
+        recentErrors,
+        activeUsers7d,
+        activeUsers30d,
+        aiCallsToday
     ] = await Promise.all([
         prisma.user.count(),
         prisma.project.count(),
         prisma.invoice.aggregate({
             _sum: { amount: true },
-            where: { status: 'successful' } // Assuming 'successful' is the status string from Flutterwave
+            where: { 
+                status: 'successful',
+                createdAt: { gte: startOfDay }
+            }
+        }),
+        prisma.invoice.aggregate({
+            _sum: { amount: true },
+            where: { 
+                status: 'successful',
+                createdAt: { gte: startOfMonth }
+            }
         }),
         prisma.user.findMany({
             take: 5,
@@ -32,18 +52,37 @@ export async function GET(req: Request) {
                     gte: new Date(Date.now() - 24 * 60 * 60 * 1000)
                 }
             }
+        }),
+        // Active users based on AuditLog activity
+        prisma.auditLog.groupBy({
+            by: ['userId'],
+            where: {
+                createdAt: { gte: sevenDaysAgo },
+                userId: { not: null }
+            }
+        }),
+        prisma.auditLog.groupBy({
+            by: ['userId'],
+            where: {
+                createdAt: { gte: thirtyDaysAgo },
+                userId: { not: null }
+            }
+        }),
+        prisma.aIUsageLog.count({
+            where: {
+                createdAt: { gte: startOfDay }
+            }
         })
     ]);
-
-    // AI Usage Stats (Mock or real aggregation)
-    // Since we don't have AIUsageLog populated yet, we'll just count rows if any
-    const totalAIRequests = await prisma.aIUsageLog.count();
 
     return NextResponse.json({
         totalUsers,
         totalProjects,
-        totalRevenue: totalRevenue._sum.amount || 0,
-        totalAIRequests,
+        revenueToday: revenueToday._sum.amount || 0,
+        revenueMonth: revenueMonth._sum.amount || 0,
+        aiCallsToday,
+        activeUsers7d: activeUsers7d.length,
+        activeUsers30d: activeUsers30d.length,
         recentErrors,
         recentSignups
     });

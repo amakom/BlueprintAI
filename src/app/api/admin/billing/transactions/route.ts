@@ -14,7 +14,12 @@ export async function GET() {
         subscription: {
             include: {
                 team: {
-                    select: { name: true }
+                    include: {
+                        members: {
+                            where: { role: 'OWNER' },
+                            include: { user: { select: { email: true } } }
+                        }
+                    }
                 }
             }
         }
@@ -28,11 +33,13 @@ export async function GET() {
         currency: inv.currency,
         status: inv.status,
         teamName: inv.subscription?.team?.name || 'Unknown Team',
+        userEmail: inv.subscription?.team?.members[0]?.user.email || 'Unknown',
+        plan: inv.subscription?.plan || 'UNKNOWN',
         date: inv.createdAt,
         ref: inv.flutterwaveRef
     }));
-
-    return NextResponse.json(formatted);
+    
+    return NextResponse.json({ invoices: formatted });
   } catch (error) {
     console.error('Transactions fetch error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

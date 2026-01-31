@@ -27,7 +27,13 @@ export async function GET(req: Request) {
             include: {
                 team: {
                     include: {
-                        subscription: true
+                        subscription: true,
+                        _count: {
+                            select: {
+                                projects: true,
+                                aiUsageLogs: true
+                            }
+                        }
                     }
                 }
             }
@@ -36,11 +42,16 @@ export async function GET(req: Request) {
     });
 
     // Flatten data for table
-    const formattedUsers = users.map(user => ({
-        ...user,
-        plan: user.teamMembers[0]?.team?.subscription?.plan || 'FREE',
-        subscriptionStatus: user.teamMembers[0]?.team?.subscription?.status || 'NONE',
-    }));
+    const formattedUsers = users.map(user => {
+        const primaryTeam = user.teamMembers[0]?.team;
+        return {
+            ...user,
+            plan: primaryTeam?.subscription?.plan || 'FREE',
+            subscriptionStatus: primaryTeam?.subscription?.status || 'NONE',
+            projectCount: primaryTeam?._count.projects || 0,
+            aiUsageCount: primaryTeam?._count.aiUsageLogs || 0,
+        };
+    });
 
     return NextResponse.json({ users: formattedUsers });
   } catch (error) {

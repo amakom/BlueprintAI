@@ -7,26 +7,25 @@ export async function GET(req: Request) {
   if (!session) return unauthorized();
 
   try {
-    const { searchParams } = new URL(req.url);
-    const type = searchParams.get('type') || 'all'; // 'auth', 'billing', 'all'
-    
-    let whereClause = {};
-    if (type !== 'all') {
-        whereClause = { resource: type };
-    }
+    const [systemLogs, webhookLogs, auditLogs] = await Promise.all([
+        prisma.systemLog.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: 100
+        }),
+        prisma.webhookLog.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: 50
+        }),
+        prisma.auditLog.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: 50,
+            include: {
+                user: { select: { email: true } }
+            }
+        })
+    ]);
 
-    const logs = await prisma.auditLog.findMany({
-      where: whereClause,
-      orderBy: { createdAt: 'desc' },
-      take: 100,
-      include: {
-        user: {
-            select: { email: true, name: true }
-        }
-      }
-    });
-
-    return NextResponse.json({ logs });
+    return NextResponse.json({ systemLogs, webhookLogs, auditLogs });
   } catch (error) {
     console.error('Admin logs error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

@@ -54,7 +54,7 @@ export default function AdminUsersPage() {
     }
   };
 
-  if (loading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin" /></div>;
+  if (loading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-navy" /></div>;
 
   return (
     <div>
@@ -65,11 +65,11 @@ export default function AdminUsersPage() {
             <table className="w-full text-left text-sm">
                 <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
-                        <th className="p-4 font-medium text-gray-500">User</th>
-                        <th className="p-4 font-medium text-gray-500">Role</th>
-                        <th className="p-4 font-medium text-gray-500">Status</th>
+                        <th className="p-4 font-medium text-gray-500">Email / User</th>
                         <th className="p-4 font-medium text-gray-500">Plan</th>
-                        <th className="p-4 font-medium text-gray-500">Joined</th>
+                        <th className="p-4 font-medium text-gray-500">Projects</th>
+                        <th className="p-4 font-medium text-gray-500">AI Usage</th>
+                        <th className="p-4 font-medium text-gray-500">Status</th>
                         <th className="p-4 font-medium text-gray-500">Actions</th>
                     </tr>
                 </thead>
@@ -77,20 +77,19 @@ export default function AdminUsersPage() {
                     {users.map((user) => (
                         <tr key={user.id} className="hover:bg-gray-50 transition-colors">
                             <td className="p-4">
-                                <div className="font-bold text-navy">{user.name}</div>
-                                <div className="text-gray-500 text-xs">{user.email}</div>
+                                <div className="font-bold text-navy">{user.email}</div>
+                                <div className="text-gray-500 text-xs">{user.name}</div>
                             </td>
                             <td className="p-4">
-                                <select 
-                                    value={user.role}
-                                    onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                                    disabled={actionLoading === user.id}
-                                    className="bg-transparent font-medium text-navy border-none focus:ring-0 cursor-pointer"
-                                >
-                                    <option value="USER">User</option>
-                                    <option value="ADMIN">Admin</option>
-                                    <option value="OWNER">Owner</option>
-                                </select>
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                    {user.plan}
+                                </span>
+                            </td>
+                            <td className="p-4 text-gray-600 font-medium">
+                                {user.projectCount}
+                            </td>
+                            <td className="p-4 text-gray-600 font-medium">
+                                {user.aiUsageCount}
                             </td>
                             <td className="p-4">
                                 <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-bold ${
@@ -99,36 +98,28 @@ export default function AdminUsersPage() {
                                     {user.status}
                                 </span>
                             </td>
-                            <td className="p-4">
-                                <span className="uppercase text-xs font-bold text-slate-600 bg-slate-100 px-2 py-1 rounded">
-                                    {user.plan}
-                                </span>
-                            </td>
-                            <td className="p-4 text-gray-400">
-                                {new Date(user.createdAt).toLocaleDateString()}
-                            </td>
-                            <td className="p-4">
-                                <div className="flex items-center gap-2">
-                                    {user.status === 'ACTIVE' ? (
-                                        <button 
-                                            onClick={() => handleStatusChange(user.id, 'SUSPENDED')}
-                                            disabled={actionLoading === user.id}
-                                            className="p-2 text-red-500 hover:bg-red-50 rounded"
-                                            title="Suspend User"
-                                        >
-                                            <Ban className="w-4 h-4" />
-                                        </button>
-                                    ) : (
-                                        <button 
-                                            onClick={() => handleStatusChange(user.id, 'ACTIVE')}
-                                            disabled={actionLoading === user.id}
-                                            className="p-2 text-green-500 hover:bg-green-50 rounded"
-                                            title="Activate User"
-                                        >
-                                            <CheckCircle className="w-4 h-4" />
-                                        </button>
-                                    )}
-                                </div>
+                            <td className="p-4 flex gap-2">
+                                <select 
+                                    value={user.role}
+                                    onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                                    disabled={actionLoading === user.id}
+                                    className="text-xs bg-white border border-gray-300 rounded px-2 py-1 focus:ring-cyan focus:border-cyan"
+                                >
+                                    <option value="USER">User</option>
+                                    <option value="ADMIN">Admin</option>
+                                    <option value="OWNER">Owner</option>
+                                </select>
+                                <button 
+                                    onClick={() => handleStatusChange(user.id, user.status === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE')}
+                                    disabled={actionLoading === user.id}
+                                    className={`text-xs px-2 py-1 rounded border ${
+                                        user.status === 'ACTIVE' 
+                                            ? 'border-red-200 text-red-600 hover:bg-red-50' 
+                                            : 'border-green-200 text-green-600 hover:bg-green-50'
+                                    }`}
+                                >
+                                    {user.status === 'ACTIVE' ? 'Disable' : 'Enable'}
+                                </button>
                             </td>
                         </tr>
                     ))}

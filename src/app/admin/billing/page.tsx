@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -11,7 +10,9 @@ interface Invoice {
   status: string;
   ref: string;
   teamName: string;
-  createdAt: string;
+  userEmail: string;
+  plan: string;
+  date: string;
 }
 
 interface WebhookLog {
@@ -47,13 +48,13 @@ export default function AdminBillingPage() {
         const res = await fetch('/api/admin/billing/transactions');
         if (res.ok) {
           const data = await res.json();
-          setInvoices(data.invoices);
+          setInvoices(data.invoices || []);
         }
       } else {
         const res = await fetch('/api/admin/billing/webhooks');
         if (res.ok) {
           const data = await res.json();
-          setWebhookLogs(data);
+          setWebhookLogs(data || []);
         }
       }
     } catch (error) {
@@ -93,30 +94,139 @@ export default function AdminBillingPage() {
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-navy flex items-center gap-2">
           <CreditCard className="w-6 h-6" />
-          Billing Oversight
+          Payments
         </h1>
         <div className="flex gap-2">
             <button
                 onClick={() => setShowGrantModal(true)}
-                className="px-4 py-2 bg-navy text-white text-sm rounded-lg hover:bg-navy/90 transition-colors"
+                className="bg-navy text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-navy/90"
             >
                 Grant Plan
             </button>
-            <button 
-                onClick={fetchData} 
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                title="Refresh"
-            >
-                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-            </button>
         </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex border-b border-gray-200">
+          <button
+              onClick={() => setActiveTab('transactions')}
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === 'transactions' 
+                      ? 'border-navy text-navy' 
+                      : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+          >
+              Transactions
+          </button>
+          <button
+              onClick={() => setActiveTab('webhooks')}
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === 'webhooks' 
+                      ? 'border-navy text-navy' 
+                      : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+          >
+              Webhook Logs
+          </button>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        {activeTab === 'transactions' ? (
+            <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                    <thead className="bg-gray-50 border-b border-gray-100">
+                        <tr>
+                            <th className="px-6 py-4 font-medium text-gray-500">User</th>
+                            <th className="px-6 py-4 font-medium text-gray-500">Amount</th>
+                            <th className="px-6 py-4 font-medium text-gray-500">Plan</th>
+                            <th className="px-6 py-4 font-medium text-gray-500">Date</th>
+                            <th className="px-6 py-4 font-medium text-gray-500">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                        {loading ? (
+                             <tr><td colSpan={5} className="p-6 text-center text-gray-500">Loading payments...</td></tr>
+                        ) : invoices.length === 0 ? (
+                             <tr><td colSpan={5} className="p-6 text-center text-gray-500">No payments found</td></tr>
+                        ) : (
+                            invoices.map((inv) => (
+                                <tr key={inv.id} className="hover:bg-gray-50 transition-colors">
+                                    <td className="px-6 py-4">
+                                        <div className="font-medium text-navy">{inv.userEmail}</div>
+                                        <div className="text-xs text-gray-400">{inv.teamName}</div>
+                                    </td>
+                                    <td className="px-6 py-4 font-mono font-medium text-gray-700">
+                                        {inv.currency} {inv.amount.toFixed(2)}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 uppercase">
+                                            {inv.plan}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 text-gray-500 text-xs">
+                                        {new Date(inv.date).toLocaleDateString()}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold ${
+                                            inv.status === 'successful' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                                        }`}>
+                                            {inv.status === 'successful' ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
+                                            {inv.status}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        ) : (
+            <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                    <thead className="bg-gray-50 border-b border-gray-100">
+                        <tr>
+                            <th className="px-6 py-4 font-medium text-gray-500">Timestamp</th>
+                            <th className="px-6 py-4 font-medium text-gray-500">Provider</th>
+                            <th className="px-6 py-4 font-medium text-gray-500">Status</th>
+                            <th className="px-6 py-4 font-medium text-gray-500">Event</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                         {loading ? (
+                             <tr><td colSpan={4} className="p-6 text-center text-gray-500">Loading logs...</td></tr>
+                        ) : webhookLogs.length === 0 ? (
+                             <tr><td colSpan={4} className="p-6 text-center text-gray-500">No logs found</td></tr>
+                        ) : (
+                            webhookLogs.map((log) => (
+                                <tr key={log.id} className="hover:bg-gray-50 transition-colors">
+                                    <td className="px-6 py-4 text-gray-500 font-mono text-xs">
+                                        {new Date(log.createdAt).toLocaleString()}
+                                    </td>
+                                    <td className="px-6 py-4 font-medium text-navy">{log.provider}</td>
+                                    <td className="px-6 py-4">
+                                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-bold ${
+                                            log.status === 'SUCCESS' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                                        }`}>
+                                            {log.status}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 text-gray-600 font-mono text-xs">
+                                        {log.eventType || 'N/A'}
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        )}
       </div>
 
       {/* Grant Plan Modal */}
       {showGrantModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
-                <h2 className="text-lg font-bold text-navy mb-4">Manually Grant Plan</h2>
+            <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl">
+                <h3 className="text-lg font-bold text-navy mb-4">Grant Plan Manually</h3>
                 <form onSubmit={handleGrantPlan} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Team ID</label>
@@ -125,7 +235,7 @@ export default function AdminBillingPage() {
                             required
                             value={grantTeamId}
                             onChange={(e) => setGrantTeamId(e.target.value)}
-                            className="w-full px-3 py-2 border rounded-md focus:ring-cyan focus:border-cyan"
+                            className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-navy/20 outline-none"
                             placeholder="cl..."
                         />
                     </div>
@@ -134,147 +244,35 @@ export default function AdminBillingPage() {
                         <select 
                             value={grantPlan}
                             onChange={(e) => setGrantPlan(e.target.value)}
-                            className="w-full px-3 py-2 border rounded-md focus:ring-cyan focus:border-cyan"
+                            className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-navy/20 outline-none"
                         >
-                            <option value="PRO">Pro</option>
-                            <option value="TEAM">Team</option>
-                            <option value="ENTERPRISE">Enterprise</option>
+                            <option value="PRO">PRO</option>
+                            <option value="TEAM">TEAM</option>
+                            <option value="ENTERPRISE">ENTERPRISE</option>
                         </select>
                     </div>
-                    
-                    {grantStatus === 'success' && <p className="text-green-600 text-sm">Plan granted successfully!</p>}
-                    {grantStatus === 'error' && <p className="text-red-600 text-sm">Failed to grant plan. Check Team ID.</p>}
-
                     <div className="flex justify-end gap-2 pt-2">
                         <button 
                             type="button"
                             onClick={() => setShowGrantModal(false)}
-                            className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md"
+                            className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
                         >
                             Cancel
                         </button>
                         <button 
                             type="submit"
                             disabled={grantStatus === 'loading'}
-                            className="px-4 py-2 bg-cyan text-navy font-medium rounded-md hover:bg-cyan/90 disabled:opacity-50"
+                            className="px-4 py-2 bg-navy text-white rounded-lg hover:bg-navy/90 disabled:opacity-50"
                         >
-                            {grantStatus === 'loading' ? 'Granting...' : 'Grant Access'}
+                            {grantStatus === 'loading' ? 'Granting...' : 'Grant Plan'}
                         </button>
                     </div>
+                    {grantStatus === 'success' && <p className="text-green-600 text-sm text-center">Plan granted successfully!</p>}
+                    {grantStatus === 'error' && <p className="text-red-600 text-sm text-center">Failed to grant plan.</p>}
                 </form>
             </div>
         </div>
       )}
-
-      {/* Tabs */}
-      <div className="flex border-b border-gray-200">
-        <button
-          onClick={() => setActiveTab('transactions')}
-          className={`px-4 py-2 font-medium text-sm transition-colors border-b-2 ${
-            activeTab === 'transactions' 
-              ? 'border-cyan text-cyan' 
-              : 'border-transparent text-gray-500 hover:text-navy'
-          }`}
-        >
-          Transactions
-        </button>
-        <button
-          onClick={() => setActiveTab('webhooks')}
-          className={`px-4 py-2 font-medium text-sm transition-colors border-b-2 ${
-            activeTab === 'webhooks' 
-              ? 'border-cyan text-cyan' 
-              : 'border-transparent text-gray-500 hover:text-navy'
-          }`}
-        >
-          Webhook Logs
-        </button>
-      </div>
-
-      {/* Content */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        {loading ? (
-            <div className="p-8 text-center text-gray-500">Loading data...</div>
-        ) : activeTab === 'transactions' ? (
-          <table className="w-full">
-            <thead className="bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              <tr>
-                <th className="px-6 py-3">Status</th>
-                <th className="px-6 py-3">Amount</th>
-                <th className="px-6 py-3">Team</th>
-                <th className="px-6 py-3">Reference</th>
-                <th className="px-6 py-3">Date</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {invoices.length === 0 ? (
-                <tr><td colSpan={5} className="px-6 py-4 text-center text-gray-500">No transactions found</td></tr>
-              ) : (
-                invoices.map((inv) => (
-                  <tr key={inv.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                        {inv.status === 'successful' || inv.status === 'paid' ? (
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                <CheckCircle className="w-3 h-3 mr-1" /> Paid
-                            </span>
-                        ) : (
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                {inv.status}
-                            </span>
-                        )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-navy">
-                        {inv.currency} {inv.amount.toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">{inv.teamName}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">{inv.ref}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-500 text-sm">
-                      {new Date(inv.createdAt).toLocaleDateString()}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        ) : (
-            <table className="w-full">
-            <thead className="bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              <tr>
-                <th className="px-6 py-3">Status</th>
-                <th className="px-6 py-3">Provider / Event</th>
-                <th className="px-6 py-3">Payload</th>
-                <th className="px-6 py-3">Time</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {webhookLogs.length === 0 ? (
-                <tr><td colSpan={4} className="px-6 py-4 text-center text-gray-500">No webhook logs found</td></tr>
-              ) : (
-                webhookLogs.map((log) => (
-                  <tr key={log.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            log.status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                        }`}>
-                            {log.status}
-                        </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-navy">{log.provider}</div>
-                        <div className="text-xs text-gray-500">{log.eventType || 'N/A'}</div>
-                    </td>
-                    <td className="px-6 py-4 text-gray-500 text-xs font-mono max-w-xs truncate" title={JSON.stringify(log.payload, null, 2)}>
-                        {JSON.stringify(log.payload)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-500 text-sm">
-                      {new Date(log.createdAt).toLocaleString()}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        )}
-      </div>
     </div>
   );
 }

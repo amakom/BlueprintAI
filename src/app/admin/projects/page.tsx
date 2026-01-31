@@ -1,8 +1,7 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Folder, Search } from 'lucide-react';
+import { Folder, Search, Trash2, Archive, Eye } from 'lucide-react';
 
 interface Project {
   id: string;
@@ -17,6 +16,7 @@ export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   useEffect(() => {
     fetchProjects();
@@ -33,6 +33,24 @@ export default function AdminProjectsPage() {
       console.error('Failed to fetch projects', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this project?')) return;
+    
+    setActionLoading(id);
+    try {
+        const res = await fetch(`/api/admin/projects/${id}`, {
+            method: 'DELETE',
+        });
+        if (res.ok) {
+            setProjects(projects.filter(p => p.id !== id));
+        }
+    } catch (error) {
+        console.error('Failed to delete project', error);
+    } finally {
+        setActionLoading(null);
     }
   };
 
@@ -61,18 +79,18 @@ export default function AdminProjectsPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <table className="w-full">
-          <thead className="bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <thead className="bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-100">
             <tr>
-              <th className="px-6 py-3">Project Name</th>
-              <th className="px-6 py-3">Team</th>
-              <th className="px-6 py-3">Owner</th>
-              <th className="px-6 py-3">Docs</th>
-              <th className="px-6 py-3">Created</th>
+              <th className="px-6 py-4">Project Name</th>
+              <th className="px-6 py-4">Owner</th>
+              <th className="px-6 py-4">Created At</th>
+              <th className="px-6 py-4">AI Outputs</th>
+              <th className="px-6 py-4">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-100">
             {loading ? (
               <tr>
                 <td colSpan={5} className="px-6 py-4 text-center text-gray-500">Loading projects...</td>
@@ -83,13 +101,38 @@ export default function AdminProjectsPage() {
               </tr>
             ) : (
               filteredProjects.map((project) => (
-                <tr key={project.id} className="hover:bg-gray-50">
+                <tr key={project.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap font-medium text-navy">{project.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-600">{project.teamName}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-500 text-sm">{project.ownerEmail}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-500">{project.documentCount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-500 text-sm">
+                    {project.ownerEmail}
+                    <div className="text-xs text-gray-400">{project.teamName}</div>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500 text-sm">
                     {new Date(project.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                    <button className="flex items-center gap-2 text-cyan hover:text-cyan/80 text-sm font-medium">
+                        <Eye className="w-4 h-4" />
+                        {project.documentCount} Outputs (View)
+                    </button>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                    <div className="flex items-center gap-2">
+                        <button 
+                            onClick={() => handleDelete(project.id)}
+                            disabled={actionLoading === project.id}
+                            className="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50"
+                            title="Delete"
+                        >
+                            <Trash2 className="w-4 h-4" />
+                        </button>
+                        <button 
+                            className="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100"
+                            title="Archive"
+                        >
+                            <Archive className="w-4 h-4" />
+                        </button>
+                    </div>
                   </td>
                 </tr>
               ))

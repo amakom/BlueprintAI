@@ -19,10 +19,8 @@ export default async function AdminLayout({
     { label: 'Overview', href: '/admin', icon: LayoutDashboard },
     { label: 'Users', href: '/admin/users', icon: Users },
     { label: 'Projects', href: '/admin/projects', icon: Folder },
-    { label: 'Billing', href: '/admin/billing', icon: CreditCard },
-    { label: 'AI Usage', href: '/admin/ai', icon: Activity },
-    { label: 'Audit Logs', href: '/admin/logs', icon: FileText },
-    { label: 'System Health', href: '/admin/system', icon: ShieldAlert },
+    { label: 'Payments', href: '/admin/billing', icon: CreditCard },
+    { label: 'Logs', href: '/admin/logs', icon: FileText },
   ];
 
   return (

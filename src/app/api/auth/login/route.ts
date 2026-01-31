@@ -34,11 +34,22 @@ export async function POST(req: Request) {
       );
     }
 
+    // Auto-promote to OWNER if email matches env var
+    let role = user.role;
+    if (process.env.OWNER_EMAIL && user.email === process.env.OWNER_EMAIL && role !== 'OWNER') {
+      console.log(`Auto-promoting ${user.email} to OWNER`);
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { role: 'OWNER' }
+      });
+      role = 'OWNER' as any;
+    }
+
     // Create Session
     const token = await signToken({ 
       userId: user.id, 
       email: user.email,
-      role: user.role 
+      role: role 
     });
     await setSession(token);
 

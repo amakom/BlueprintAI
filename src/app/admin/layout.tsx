@@ -2,7 +2,7 @@ import { getSession } from '@/lib/auth';
 import { UserRole } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { LayoutDashboard, Users, CreditCard, Activity, ShieldAlert } from 'lucide-react';
+import { LayoutDashboard, Users, CreditCard, Activity, ShieldAlert, Folder, FileText } from 'lucide-react';
 
 export default async function AdminLayout({
   children,
@@ -18,8 +18,10 @@ export default async function AdminLayout({
   const navItems = [
     { label: 'Overview', href: '/admin', icon: LayoutDashboard },
     { label: 'Users', href: '/admin/users', icon: Users },
-    { label: 'Billing & Logs', href: '/admin/billing', icon: CreditCard },
-    { label: 'AI Monitoring', href: '/admin/ai', icon: Activity },
+    { label: 'Projects', href: '/admin/projects', icon: Folder },
+    { label: 'Billing', href: '/admin/billing', icon: CreditCard },
+    { label: 'AI Usage', href: '/admin/ai', icon: Activity },
+    { label: 'System Logs', href: '/admin/logs', icon: FileText },
   ];
 
   return (

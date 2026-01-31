@@ -41,14 +41,8 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
           const effectiveContentHeight = Math.max(scrollHeight, 60);
           const minTotalHeight = 94 + effectiveContentHeight; 
           
-          const currentHeight = node.style?.height;
-          
-          // Only update if the current height is LESS than what we need
-          // This prevents shrinking if the user manually resized it larger
-          if (typeof currentHeight === 'number' && currentHeight >= minTotalHeight) {
-             return node; 
-          }
-          
+          // Always update height to fit content, allowing it to shrink or grow
+          // This satisfies "adjust automatically to fix fit the text"
           return { ...node, style: { ...node.style, height: minTotalHeight } };
         }
         return node;

@@ -1,6 +1,7 @@
 import { Handle, Position, NodeProps, Node, useReactFlow, NodeResizer } from '@xyflow/react';
 import { User, Trash2 } from 'lucide-react';
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { useCanvas } from '../CanvasContext';
 
 type UserStoryData = {
   label: string;
@@ -10,6 +11,7 @@ type UserStoryData = {
 
 export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryData>>) {
   const { setNodes, deleteElements } = useReactFlow();
+  const { userName } = useCanvas();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   
   // Auto-resize textarea and node height logic
@@ -97,7 +99,7 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
             <div className="bg-amber/10 p-1 rounded">
             <User className="w-3 h-3 text-amber" />
             </div>
-            <span className="font-bold text-xs text-navy">{data.userName ? `${data.userName} Story` : 'User Story'}</span>
+            <span className="font-bold text-xs text-navy">{(data.userName || userName) ? `${data.userName || userName} Story` : 'User Story'}</span>
         </div>
         <button 
             onClick={handleDelete}

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { comparePassword, setSession, signToken } from '@/lib/auth';
+import { logAudit } from '@/lib/audit';
 
 export async function POST(req: Request) {
   try {
@@ -36,6 +37,13 @@ export async function POST(req: Request) {
     // Create Session
     const token = await signToken({ userId: user.id, email: user.email });
     await setSession(token);
+
+    // Log audit
+    await logAudit({
+      userId: user.id,
+      action: 'login',
+      resource: 'auth',
+    });
 
     return NextResponse.json({ success: true, user });
   } catch (error) {

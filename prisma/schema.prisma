@@ -30,6 +30,20 @@ model User {
   createdDocs Document[]   @relation("CreatedDocs")
   invitationsSent TeamInvitation[]
   activityLogs    ActivityLog[]
+  auditLogs       AuditLog[]
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  resource  String?  // e.g., "auth", "billing"
+  metadata  Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  user      User?    @relation(fields: [userId], references: [id])
 }
 
 model Account {

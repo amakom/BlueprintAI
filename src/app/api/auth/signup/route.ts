@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { hashPassword, setSession, signToken } from '@/lib/auth';
+import { sendEmail } from '@/lib/email';
+import { logAudit } from '@/lib/audit';
+import crypto from 'crypto';
 
 export async function POST(req: Request) {
   console.log('Signup request started');
@@ -44,6 +47,36 @@ export async function POST(req: Request) {
         },
       });
 
+      // Create Verification Token
+      const token = crypto.randomBytes(32).toString('hex');
+      const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+      
+      await tx.verificationToken.create({
+        data: {
+          identifier: email,
+          token,
+          expires,
+        },
+      });
+
+      // Send Verification Email (Async, non-blocking for transaction speed ideally, but here we wait to ensure it works)
+      // Note: In production, consider moving this out of the transaction or using a queue
+      // For now, we'll construct the link. Assuming localhost:3000 if not set.
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+      const verifyLink = `${baseUrl}/verify?token=${token}&email=${encodeURIComponent(email)}`;
+
+      await sendEmail({
+        to: email,
+        subject: 'Verify your email for BlueprintAI',
+        text: `Welcome ${name}! Please verify your email by clicking here: ${verifyLink}`,
+        html: `
+          <h1>Welcome to BlueprintAI, ${name}!</h1>
+          <p>Please verify your email address to secure your account.</p>
+          <p><a href="${verifyLink}">Verify Email</a></p>
+          <p>Or copy this link: ${verifyLink}</p>
+        `,
+      });
+
       const teamName = `${name}'s Team`;
       const slug = `${name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Math.floor(Math.random() * 1000)}`;
       
@@ -70,6 +103,18 @@ export async function POST(req: Request) {
           teamId: team.id,
         },
       });
+
+      // Log audit
+      await tx.auditLog.create({
+        data: {
+          userId: user.id,
+          action: 'signup',
+          resource: 'auth',
+          metadata: { email },
+        },
+      });
+
+      // Seed with initial Canvas Document
 
       // Seed with initial Canvas Document
       const initialContent = {

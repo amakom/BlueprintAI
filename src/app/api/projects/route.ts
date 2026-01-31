@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { PLAN_LIMITS, PlanType } from '@/lib/permissions';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export async function POST(req: Request) {
   try {
@@ -14,6 +15,17 @@ export async function POST(req: Request) {
     }
 
     const { name = 'Untitled Project', description, type, aiPrompt } = await req.json();
+
+    // Rate Limit AI Requests
+    if (aiPrompt) {
+      const rateLimit = await checkRateLimit(`ai_gen_${session.userId}`, { limit: 5, window: 60 }); // 5 requests per minute
+      if (!rateLimit.success) {
+        return NextResponse.json(
+          { error: 'Rate limit exceeded for AI generation. Please try again later.' },
+          { status: 429 }
+        );
+      }
+    }
 
     // Find user's first team (for now)
     const membership = await prisma.teamMember.findFirst({

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import flw from '@/lib/flutterwave';
 import { SUBSCRIPTION_PLANS } from '@/lib/plans';
 import { prisma } from '@/lib/prisma';
+import { logAudit } from '@/lib/audit';
 
 export async function POST(req: NextRequest) {
   try {
@@ -55,6 +56,20 @@ export async function POST(req: NextRequest) {
     const response = await flw.Payment.standard(payload);
 
     if (response.status === 'success') {
+      // Audit log attempt
+      // Since we don't have userId here easily without lookup or passing it, we can skip userId or fetch it.
+      // Assuming we can rely on teamId/email.
+      // We'll leave userId undefined for now or try to find it.
+      // Let's find user by email to be thorough.
+      const user = await prisma.user.findUnique({ where: { email: userEmail } });
+
+      await logAudit({
+        userId: user?.id,
+        action: 'subscribe',
+        resource: 'billing',
+        metadata: { planId, teamId, tx_ref },
+      });
+
       return NextResponse.json({ link: response.data.link });
     } else {
         return NextResponse.json({ error: 'Failed to initiate payment', details: response }, { status: 500 });

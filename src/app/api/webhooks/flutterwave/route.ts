@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { PlanType, SubscriptionStatus } from '@prisma/client';
+import { logAudit } from '@/lib/audit';
 
 export async function POST(req: NextRequest) {
   const secretHash = process.env.FLUTTERWAVE_SECRET_HASH;
@@ -53,6 +54,16 @@ export async function POST(req: NextRequest) {
             currentPeriodStart: new Date(),
             currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
           }
+        });
+
+        // Audit Log
+        // Find user by email to associate log
+        const user = await prisma.user.findUnique({ where: { email: customer.email } });
+        await logAudit({
+          userId: user?.id,
+          action: 'invoice_paid',
+          resource: 'billing',
+          metadata: { teamId, planId, amount: data.amount, tx_ref },
         });
 
         console.log(`Successfully upgraded team ${teamId} to ${planEnum}`);

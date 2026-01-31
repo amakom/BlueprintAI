@@ -60,10 +60,6 @@ export function useSubscription(initialTeamId?: string) {
                 isLoading: false,
               });
         }
-      } catch (error) { else if (mounted) {
-           // Default to FREE if no sub found
-           setState(s => ({ ...s, isLoading: false }));
-        }
       } catch (error) {
         console.error('Failed to fetch subscription', error);
         if (mounted) setState(s => ({ ...s, isLoading: false }));

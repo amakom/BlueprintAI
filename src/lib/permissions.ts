@@ -14,6 +14,7 @@ export enum UserRole {
 export interface PlanLimits {
   maxProjects: number;
   maxCollaborators: number;
+  maxAIGenerationsPerMonth: number;
   canExport: boolean;
   canRealTimeEdit: boolean;
   canGenerateAI: boolean;
@@ -24,14 +25,16 @@ export const PLAN_LIMITS: Record<PlanType, PlanLimits> = {
   [PlanType.FREE]: {
     maxProjects: 1,
     maxCollaborators: 0,
+    maxAIGenerationsPerMonth: 5,
     canExport: false,
     canRealTimeEdit: false,
-    canGenerateAI: false,
+    canGenerateAI: false, // Technically false, but if we enable it, it's limited
     canRemoveBranding: false,
   },
   [PlanType.PRO]: {
     maxProjects: Infinity,
     maxCollaborators: 5,
+    maxAIGenerationsPerMonth: 100,
     canExport: true,
     canRealTimeEdit: false,
     canGenerateAI: true,
@@ -40,6 +43,7 @@ export const PLAN_LIMITS: Record<PlanType, PlanLimits> = {
   [PlanType.TEAM]: {
     maxProjects: Infinity,
     maxCollaborators: Infinity,
+    maxAIGenerationsPerMonth: 1000,
     canExport: true,
     canRealTimeEdit: true,
     canGenerateAI: true,
@@ -48,6 +52,7 @@ export const PLAN_LIMITS: Record<PlanType, PlanLimits> = {
   [PlanType.ENTERPRISE]: {
     maxProjects: Infinity,
     maxCollaborators: Infinity,
+    maxAIGenerationsPerMonth: Infinity,
     canExport: true,
     canRealTimeEdit: true,
     canGenerateAI: true,
@@ -58,6 +63,7 @@ export const PLAN_LIMITS: Record<PlanType, PlanLimits> = {
 export const OWNER_LIMITS: PlanLimits = {
   maxProjects: Infinity,
   maxCollaborators: Infinity,
+  maxAIGenerationsPerMonth: Infinity,
   canExport: true,
   canRealTimeEdit: true,
   canGenerateAI: true,

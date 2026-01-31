@@ -16,7 +16,7 @@ type UserStoryData = {
 
 export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryData>>) {
   const { setNodes, deleteElements } = useReactFlow();
-  const { userName, aiSettings } = useCanvas();
+  const { userName, aiSettings, projectId } = useCanvas();
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -89,10 +89,32 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
   }, [id, deleteElements]);
 
   const handleRegenerate = useCallback(async () => {
+    if (!projectId) {
+      alert('Project context missing. Please refresh.');
+      return;
+    }
+
     setIsRegenerating(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const res = await fetch('/api/ai/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          projectId,
+          label: data.label,
+          currentDescription: data.description,
+          productType: aiSettings.productType,
+          tone: aiSettings.tone,
+        }),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.error || 'Generation failed');
+      }
+
       const currentDescription = data.description || '';
       const newHistoryItem: AIHistoryItem = {
         id: generateId(),
@@ -102,7 +124,7 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
         productType: 'Unknown'
       };
 
-      const newDescription = `[${aiSettings.productType} - ${aiSettings.tone}] Regenerated description for ${data.label}. This feature includes robust error handling and analytics tracking.`;
+      const newDescription = result.content;
 
       setNodes((nodes) => nodes.map((node) => {
         if (node.id === id) {
@@ -118,10 +140,15 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
         }
         return node;
       }));
-      setIsRegenerating(false);
       adjustHeight();
-    }, 1000);
-  }, [id, data.description, data.label, aiSettings, setNodes, adjustHeight]);
+
+    } catch (error: any) {
+      console.error(error);
+      alert(error.message);
+    } finally {
+      setIsRegenerating(false);
+    }
+  }, [id, data.description, data.label, aiSettings, setNodes, adjustHeight, projectId]);
 
   const handleRestore = useCallback((item: AIHistoryItem) => {
     const currentDescription = data.description || '';

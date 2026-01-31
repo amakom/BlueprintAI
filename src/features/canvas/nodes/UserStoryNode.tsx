@@ -79,8 +79,8 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
   }, [id, deleteElements]);
 
   return (
-    <div className={`bg-white rounded-lg border-2 shadow-sm transition-all group/node min-w-[208px] h-full flex flex-col ${
-      selected ? 'border-cyan ring-2 ring-cyan/20' : 'border-border'
+    <div className={`bg-white dark:bg-navy rounded-lg border-2 shadow-sm transition-all group/node min-w-[208px] h-full flex flex-col ${
+      selected ? 'border-cyan ring-2 ring-cyan/20' : 'border-border dark:border-gray-700'
     }`}>
       <NodeResizer 
         isVisible={selected} 
@@ -91,12 +91,12 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
       />
       
       {/* Header */}
-      <div className="bg-cloud p-2 rounded-t-md border-b border-border flex items-center justify-between">
+      <div className="bg-cloud dark:bg-gray-800 p-2 rounded-t-md border-b border-border dark:border-gray-700 flex items-center justify-between transition-colors">
         <div className="flex items-center gap-2">
             <div className="bg-amber/10 p-1 rounded">
             <User className="w-3 h-3 text-amber" />
             </div>
-            <span className="font-bold text-xs text-navy">User Story</span>
+            <span className="font-bold text-xs text-navy dark:text-white">User Story</span>
         </div>
         <button 
             onClick={handleDelete}
@@ -110,14 +110,14 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
       {/* Content */}
       <div className="p-2 flex-1 flex flex-col">
         <input
-            className="text-sm font-medium text-navy mb-1 w-full bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-cyan/50 rounded px-1"
+            className="text-sm font-medium text-navy dark:text-white mb-1 w-full bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-cyan/50 rounded px-1 transition-colors"
             value={data.label}
             onChange={updateLabel}
             placeholder="User Story Title"
         />
         <textarea
             ref={textareaRef}
-            className="text-[10px] text-gray-500 w-full bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-cyan/50 rounded px-1 resize-none overflow-hidden flex-1 min-h-[60px]"
+            className="text-[10px] text-gray-500 dark:text-gray-300 w-full bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-cyan/50 rounded px-1 resize-none overflow-hidden flex-1 min-h-[60px] transition-colors"
             value={data.description || ''}
             onChange={updateDescription}
             placeholder="As a user, I want to..."
@@ -126,10 +126,10 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
       </div>
 
       {/* Handles */}
-      <Handle type="target" position={Position.Top} id="top" className="w-3 h-3 bg-navy border-2 border-white" />
-      <Handle type="target" position={Position.Left} id="left" className="w-3 h-3 bg-navy border-2 border-white" />
-      <Handle type="source" position={Position.Right} id="right" className="w-3 h-3 bg-cyan border-2 border-white" />
-      <Handle type="source" position={Position.Bottom} id="bottom" className="w-3 h-3 bg-cyan border-2 border-white" />
+      <Handle type="target" position={Position.Top} id="top" className="w-3 h-3 bg-navy dark:bg-white border-2 border-white dark:border-navy" />
+      <Handle type="target" position={Position.Left} id="left" className="w-3 h-3 bg-navy dark:bg-white border-2 border-white dark:border-navy" />
+      <Handle type="source" position={Position.Right} id="right" className="w-3 h-3 bg-cyan border-2 border-white dark:border-navy" />
+      <Handle type="source" position={Position.Bottom} id="bottom" className="w-3 h-3 bg-cyan border-2 border-white dark:border-navy" />
     </div>
   );
 }

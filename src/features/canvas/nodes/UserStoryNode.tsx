@@ -81,6 +81,9 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
     deleteElements({ nodes: [{ id }] });
   }, [id, deleteElements]);
 
+  const rawName = data.userName || userName;
+  const displayName = rawName ? rawName.charAt(0).toUpperCase() + rawName.slice(1) : undefined;
+
   return (
     <div className={`bg-white rounded-lg border-2 shadow-sm transition-all group/node min-w-[208px] h-full flex flex-col ${
       selected ? 'border-cyan ring-2 ring-cyan/20' : 'border-border'
@@ -99,10 +102,10 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
             <div className="bg-amber/10 p-1 rounded">
             <User className="w-3 h-3 text-amber" />
             </div>
-            <span className="font-bold text-xs text-navy">{(data.userName || userName) ? `${data.userName || userName} Story` : 'User Story'}</span>
+            <span className="font-bold text-xs text-navy">{displayName ? `${displayName} Story` : 'User Story'}</span>
         </div>
         <button 
-            onClick={handleDelete}
+          onClick={handleDelete}
             className="text-gray-400 hover:text-red-500 opacity-0 group-hover/node:opacity-100 transition-opacity"
             title="Delete Node"
         >

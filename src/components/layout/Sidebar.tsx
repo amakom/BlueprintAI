@@ -11,8 +11,22 @@ const navItems = [
   { label: 'Settings', icon: Settings, href: '/settings' },
 ];
 
+import { useState, useEffect } from 'react';
+import { useSubscription } from '@/hooks/use-subscription';
+
 export function Sidebar() {
   const router = useRouter();
+  const { plan, isLoading: isSubLoading } = useSubscription();
+  const [user, setUser] = useState<{name: string, email: string} | null>(null);
+
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) setUser(data.user);
+      })
+      .catch(err => console.error(err));
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -86,11 +100,18 @@ export function Sidebar() {
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-cyan text-navy flex items-center justify-center font-bold">
-              U
+              {user?.name?.[0]?.toUpperCase() || 'U'}
             </div>
             <div className="text-sm">
-              <p className="font-medium text-white">User Name</p>
-              <p className="text-xs text-gray-400">Pro Plan</p>
+              <p className="font-medium text-white">{user?.name || 'User Name'}</p>
+              <div className="flex items-center gap-2">
+                 <p className="text-xs text-gray-400">{isSubLoading ? 'Loading...' : `${plan} Plan`}</p>
+                 {plan === 'FREE' && (
+                     <Link href="/pricing" className="text-[10px] bg-cyan text-navy px-1.5 py-0.5 rounded font-bold hover:bg-cyan/90">
+                        UPGRADE
+                     </Link>
+                 )}
+              </div>
             </div>
           </div>
           <button 

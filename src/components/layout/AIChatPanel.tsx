@@ -25,6 +25,14 @@ export function AIChatPanel() {
   const handleSend = async () => {
     if (!input.trim() || isGenerating) return;
 
+    if (!limits.canGenerateAI) {
+        setMessages(prev => [...prev, { 
+            role: 'assistant', 
+            content: 'Upgrade to Pro or Team plan to use AI generation features.' 
+        }]);
+        return;
+    }
+
     const userMsg = input;
     setInput('');
     setMessages(prev => [...prev, { role: 'user', content: userMsg }]);

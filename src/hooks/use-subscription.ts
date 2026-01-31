@@ -9,7 +9,7 @@ export interface SubscriptionState {
 }
 
 // In a real app, this would use SWR or React Query and Context
-export function useSubscription(teamId: string = 'cm6jdemo') {
+export function useSubscription(initialTeamId?: string) {
   const [state, setState] = useState<SubscriptionState>({
     plan: PlanType.FREE,
     status: 'active',
@@ -22,6 +22,22 @@ export function useSubscription(teamId: string = 'cm6jdemo') {
 
     async function fetchSub() {
       try {
+        let teamId = initialTeamId;
+
+        // If no teamId provided, fetch from /api/auth/me
+        if (!teamId) {
+            const meRes = await fetch('/api/auth/me');
+            if (meRes.ok) {
+                const meData = await meRes.json();
+                teamId = meData.teamId;
+            }
+        }
+
+        if (!teamId) {
+            if (mounted) setState(s => ({ ...s, isLoading: false }));
+            return;
+        }
+
         const res = await fetch(`/api/billing/status?teamId=${teamId}`);
         const data = await res.json();
         
@@ -46,7 +62,7 @@ export function useSubscription(teamId: string = 'cm6jdemo') {
     fetchSub();
 
     return () => { mounted = false; };
-  }, [teamId]);
+  }, [initialTeamId]);
 
   return state;
 }

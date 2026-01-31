@@ -35,6 +35,21 @@ export function useSubscription(initialTeamId?: string) {
             }
         }
 
+        // 1. SYSTEM OWNER OVERRIDE
+        // If user is an OWNER, they get Enterprise limits automatically,
+        // bypassing the billing check.
+        if (role === 'OWNER') {
+             if (mounted) {
+                 setState({
+                    plan: PlanType.ENTERPRISE,
+                    status: 'active',
+                    limits: getPlanLimits(PlanType.ENTERPRISE, 'OWNER'),
+                    isLoading: false,
+                 });
+             }
+             return;
+        }
+
         if (!teamId) {
             if (mounted) setState(s => ({ ...s, isLoading: false }));
             return;

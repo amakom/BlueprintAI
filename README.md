@@ -35,6 +35,7 @@ BlueprintAI is an AI-augmented visual PRD and product design platform. It combin
 
 ## Features
 - **Visual Canvas**: Interactive user flow diagramming with drag-and-drop component library.
+  - **Design Tools**: Figma-like interface with Frames (Mobile, Web), Image Uploads, and Custom Styling.
 - **Strategy Dashboard**: Track OKRs, Personas, and Competitors with AI generation.
 - **Engineering Specs**: AI-generated technical specifications based on your visual flows.
 - **Role-Based Access**: Granular permissions for Owners, Team Members, and Viewers.

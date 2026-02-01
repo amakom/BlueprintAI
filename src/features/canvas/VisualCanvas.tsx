@@ -18,7 +18,8 @@ import { UserStoryNode } from './nodes/UserStoryNode';
 import { ScreenNode } from './nodes/ScreenNode';
 import { CommentNode } from './nodes/CommentNode';
 import { DeletableEdge } from './edges/DeletableEdge';
-import { Plus, Save, Smartphone, Sparkles, MessageSquare, History, Play, MousePointer, X } from 'lucide-react';
+import { Plus, Save, Smartphone, Sparkles, MessageSquare, History, Play, MousePointer, X, Layout, Monitor } from 'lucide-react';
+import { PropertiesPanel } from './PropertiesPanel';
 import { useCanvas } from './CanvasContext';
 import { useEffect, useState, useCallback } from 'react';
 import { ExportMenu } from './ExportMenu';
@@ -210,8 +211,11 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
     }
   };
 
-  const onDragStart = (event: React.DragEvent, nodeType: string) => {
+  const onDragStart = (event: React.DragEvent, nodeType: string, initialData?: any) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
+    if (initialData) {
+        event.dataTransfer.setData('application/reactflow/data', JSON.stringify(initialData));
+    }
     event.dataTransfer.effectAllowed = 'move';
   };
 
@@ -229,6 +233,9 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
         return;
       }
 
+      const dataStr = event.dataTransfer.getData('application/reactflow/data');
+      const initialData = dataStr ? JSON.parse(dataStr) : {};
+
       const position = screenToFlowPosition({
         x: event.clientX,
         y: event.clientY,
@@ -239,10 +246,12 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
         type,
         position,
         data: { 
-            label: `New ${type}`, 
+            ...initialData,
+            label: initialData.label || `New ${type}`, 
             description: type === 'userStory' ? 'Edit this description...' : undefined,
             userName: userName 
-        }
+        },
+        style: initialData.style
       };
 
       addNode(newNode);
@@ -271,42 +280,78 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
     <div className="w-full h-full bg-cloud relative flex">
         {/* Component Library Sidebar */}
         {!readOnly && !isPlayMode && (
-           <div className="w-48 lg:w-56 bg-white border-r border-slate-200 p-4 flex flex-col gap-4 z-10 shadow-sm shrink-0">
+           <div className="w-48 lg:w-56 bg-white border-r border-slate-200 p-4 flex flex-col gap-4 z-10 shadow-sm shrink-0 overflow-y-auto">
               <div className="mb-2">
                  <h3 className="font-bold text-navy text-sm uppercase tracking-wider">Library</h3>
                  <p className="text-xs text-slate-500">Drag to canvas</p>
               </div>
               
               <div className="space-y-3">
-                 <div 
-                    className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group"
-                    onDragStart={(event) => onDragStart(event, 'userStory')}
-                    draggable
-                 >
-                    <div className="flex items-center gap-2 mb-1">
-                       <div className="p-1 bg-navy text-white rounded group-hover:bg-amber transition-colors"><Plus size={12}/></div>
-                       <span className="font-bold text-navy text-sm">User Story</span>
+                 <div className="mb-4">
+                    <h4 className="text-xs font-semibold text-slate-400 uppercase mb-2">Nodes</h4>
+                    <div 
+                        className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group mb-2"
+                        onDragStart={(event) => onDragStart(event, 'userStory')}
+                        draggable
+                    >
+                        <div className="flex items-center gap-2 mb-1">
+                        <div className="p-1 bg-navy text-white rounded group-hover:bg-amber transition-colors"><Plus size={12}/></div>
+                        <span className="font-bold text-navy text-sm">User Story</span>
+                        </div>
+                        <p className="text-xs text-slate-500">Define requirements</p>
                     </div>
-                    <p className="text-xs text-slate-500">Define requirements</p>
+
+                    <div 
+                        className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group"
+                        onDragStart={(event) => onDragStart(event, 'screen')}
+                        draggable
+                    >
+                        <div className="flex items-center gap-2 mb-1">
+                        <div className="p-1 bg-white border border-slate-200 text-navy rounded group-hover:border-cyan group-hover:text-cyan transition-colors"><Smartphone size={12}/></div>
+                        <span className="font-bold text-navy text-sm">Screen</span>
+                        </div>
+                        <p className="text-xs text-slate-500">Generic Screen</p>
+                    </div>
                  </div>
 
-                 <div 
-                    className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group"
-                    onDragStart={(event) => onDragStart(event, 'screen')}
-                    draggable
-                 >
-                    <div className="flex items-center gap-2 mb-1">
-                       <div className="p-1 bg-white border border-slate-200 text-navy rounded group-hover:border-cyan group-hover:text-cyan transition-colors"><Smartphone size={12}/></div>
-                       <span className="font-bold text-navy text-sm">Screen</span>
+                 <div className="mb-4">
+                    <h4 className="text-xs font-semibold text-slate-400 uppercase mb-2">Frames</h4>
+                    <div 
+                        className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group mb-2"
+                        onDragStart={(event) => onDragStart(event, 'screen', { label: 'iPhone 14', style: { width: 390, height: 844 } })}
+                        draggable
+                    >
+                        <div className="flex items-center gap-2 mb-1">
+                        <div className="p-1 bg-slate-100 text-slate-600 rounded"><Smartphone size={12}/></div>
+                        <span className="font-bold text-navy text-sm">Mobile App</span>
+                        </div>
+                        <p className="text-xs text-slate-500">390 x 844</p>
                     </div>
-                    <p className="text-xs text-slate-500">UI View / Page</p>
-                 </div>
-              </div>
 
-              <div className="mt-auto pt-4 border-t border-slate-100">
-                  <p className="text-xs text-slate-400 text-center">
-                    More components coming soon
-                  </p>
+                    <div 
+                        className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group mb-2"
+                        onDragStart={(event) => onDragStart(event, 'screen', { label: 'Web Desktop', style: { width: 1440, height: 900 } })}
+                        draggable
+                    >
+                        <div className="flex items-center gap-2 mb-1">
+                        <div className="p-1 bg-slate-100 text-slate-600 rounded"><Monitor size={12}/></div>
+                        <span className="font-bold text-navy text-sm">Web App</span>
+                        </div>
+                        <p className="text-xs text-slate-500">1440 x 900</p>
+                    </div>
+
+                     <div 
+                        className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group"
+                        onDragStart={(event) => onDragStart(event, 'screen', { label: 'Social Post', style: { width: 1080, height: 1080 } })}
+                        draggable
+                    >
+                        <div className="flex items-center gap-2 mb-1">
+                        <div className="p-1 bg-slate-100 text-slate-600 rounded"><Layout size={12}/></div>
+                        <span className="font-bold text-navy text-sm">Social Post</span>
+                        </div>
+                        <p className="text-xs text-slate-500">1080 x 1080</p>
+                    </div>
+                 </div>
               </div>
            </div>
         )}
@@ -438,6 +483,11 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
             {!readOnly && !isPlayMode && <Controls />}
             </ReactFlow>
         </div>
+
+        {/* Properties Panel (Right Sidebar) */}
+        {!readOnly && !isPlayMode && (
+            <PropertiesPanel />
+        )}
     </div>
   );
 }

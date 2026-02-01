@@ -43,11 +43,17 @@ This guide provides step-by-step instructions to test all implemented features o
 
 ### A. Drag & Drop Library (NEW)
 1.  On the Canvas page, look for the **"Library"** sidebar on the left.
-2.  **User Story Node**: Drag a "User Story" card from the library onto the canvas.
-3.  **Screen Node**: Drag a "Screen" card from the library onto the canvas.
-4.  Verify nodes appear where you dropped them.
+2.  **Nodes**: Drag a "User Story" or "Screen" node.
+3.  **Frames**: Drag a "Mobile App", "Web App", or "Social Post" frame to create a screen with preset dimensions.
 
-### B. Connecting Nodes
+### B. Design Properties (NEW)
+1.  Select a **Screen Node** on the canvas.
+2.  Look at the **Properties Panel** on the right.
+3.  **Dimensions**: Click "iPhone" or "Desktop" buttons to resize instantly.
+4.  **Color**: Use the color picker to change the background color.
+5.  **Image**: Click the upload box to add an image (e.g., a UI design screenshot) to the screen.
+
+### C. Connecting Nodes
 1.  Hover over the handle (dot) on the right side of a node.
 2.  Click and drag to another node's handle (left side).
 3.  Verify a connection line (edge) is drawn.

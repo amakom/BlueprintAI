@@ -258,7 +258,7 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
           </header>
           
           {/* Actual Canvas Implementation */}
-          <div className="flex-1 relative">
+          <div className="flex-1 relative overflow-hidden">
               {mode === 'canvas' ? (
                 <VisualCanvas projectId={project.id} />
               ) : (

@@ -15,9 +15,9 @@ import '@xyflow/react/dist/style.css';
 import { UserStoryNode } from './nodes/UserStoryNode';
 import { ScreenNode } from './nodes/ScreenNode';
 import { DeletableEdge } from './edges/DeletableEdge';
-import { Plus, Save, Smartphone } from 'lucide-react';
+import { Plus, Save, Smartphone, Sparkles } from 'lucide-react';
 import { useCanvas } from './CanvasContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ExportMenu } from './ExportMenu';
 import { CollaborativeCursors } from '@/components/canvas/CollaborativeCursors';
 
@@ -42,11 +42,15 @@ export function VisualCanvas({ projectId, readOnly = false }: VisualCanvasProps)
     onEdgesChange, 
     onConnect, 
     addNode, 
+    setNodes,
+    setEdges,
     setProjectId, 
     saveCanvas, 
     isSaving,
     userName
   } = useCanvas();
+
+  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     setProjectId(projectId);
@@ -67,11 +71,51 @@ export function VisualCanvas({ projectId, readOnly = false }: VisualCanvasProps)
     addNode(newNode);
   };
 
+  const handleGenerateFlow = async () => {
+    if (readOnly || isGenerating) return;
+    setIsGenerating(true);
+    try {
+      const res = await fetch('/api/ai/generate-user-flow', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projectId })
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        if (data.nodes && data.edges) {
+          // If canvas is empty, replace. If not, maybe append? 
+          // For now, let's append but offset them if needed.
+          // Actually, let's just add them.
+          setNodes((nds) => [...nds, ...data.nodes]);
+          setEdges((eds) => [...eds, ...data.edges]);
+        }
+      } else {
+        console.error('Failed to generate flow');
+      }
+    } catch (error) {
+      console.error('Error generating flow:', error);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   return (
     <ReactFlowProvider>
       <div className="w-full h-full bg-cloud relative">
         <CollaborativeCursors projectId={projectId} />
         <div className="absolute top-4 right-4 z-10 flex gap-2">
+           {!readOnly && (
+             <button 
+                onClick={handleGenerateFlow}
+                disabled={isGenerating}
+                className="bg-white border border-border p-2 rounded-md shadow-sm hover:bg-purple-50 text-purple-600 disabled:opacity-50 transition-colors flex items-center gap-2"
+                title="Generate AI User Flow"
+             >
+               <Sparkles className={`w-4 h-4 ${isGenerating ? 'animate-spin' : ''}`} />
+               <span className="text-xs font-bold hidden sm:inline">AI Generate</span>
+             </button>
+           )}
            {!readOnly && <ExportMenu projectId={projectId} />}
            {!readOnly && (
              <button 

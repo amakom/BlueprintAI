@@ -78,6 +78,7 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
   const [showHistory, setShowHistory] = useState(false);
   const [isLibraryCollapsed, setIsLibraryCollapsed] = useState(false);
   const [isPropertiesCollapsed, setIsPropertiesCollapsed] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   
   // Comment Input State
   const [tempCommentPos, setTempCommentPos] = useState<{x: number, y: number} | null>(null);

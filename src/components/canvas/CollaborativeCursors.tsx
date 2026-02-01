@@ -77,7 +77,7 @@ export const CollaborativeCursors = ({ projectId }: { projectId: string }) => {
     if (!socket) return;
 
     const onCursorMove = (data: CursorData) => {
-      if (data.userId === session?.user?.id) return;
+      if (data.userId === user?.id) return;
       
       setCursors(prev => ({
         ...prev,
@@ -90,7 +90,7 @@ export const CollaborativeCursors = ({ projectId }: { projectId: string }) => {
     return () => {
       socket.off('cursor-move', onCursorMove);
     };
-  }, [socket, session]);
+  }, [socket, user]);
 
   return (
     <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden">

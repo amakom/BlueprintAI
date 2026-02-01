@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
-import { SessionProvider } from 'next-auth/react';
+import { AuthProvider } from '@/components/providers/auth-provider';
 import { SocketProvider } from '@/components/providers/socket-provider';
 import "./globals.css";
 
@@ -29,11 +29,11 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${robotoMono.variable} antialiased`}
       >
-        <SessionProvider>
+        <AuthProvider>
           <SocketProvider>
             {children}
           </SocketProvider>
-        </SessionProvider>
+        </AuthProvider>
       </body>
     </html>
   );

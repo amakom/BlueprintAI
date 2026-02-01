@@ -106,6 +106,39 @@ export function VisualCanvas({ projectId, readOnly = false }: VisualCanvasProps)
     <ReactFlowProvider>
       <div className="w-full h-full bg-cloud relative">
         <CollaborativeCursors projectId={projectId} />
+
+        {/* Empty State Overlay */}
+        {nodes.length === 0 && !readOnly && (
+          <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+            <div className="bg-white/90 backdrop-blur p-8 rounded-2xl border border-border shadow-xl text-center pointer-events-auto max-w-md">
+              <div className="w-16 h-16 bg-cyan/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Sparkles className="w-8 h-8 text-cyan" />
+              </div>
+              <h3 className="text-xl font-bold text-navy mb-2">Start Building Your Flow</h3>
+              <p className="text-gray-500 mb-8">
+                Your canvas is empty. Add your first user story manually or let AI generate a flow for you.
+              </p>
+              <div className="flex gap-4 justify-center">
+                 <button 
+                    onClick={() => onAddNode('userStory')}
+                    className="px-4 py-2 bg-navy text-white rounded-lg font-bold hover:bg-navy/90 transition-colors flex items-center gap-2 shadow-lg shadow-navy/20"
+                 >
+                    <Plus className="w-4 h-4" />
+                    Add Story
+                 </button>
+                 <button 
+                    onClick={handleGenerateFlow}
+                    disabled={isGenerating}
+                    className="px-4 py-2 bg-white text-navy border border-border rounded-lg font-bold hover:bg-gray-50 transition-colors flex items-center gap-2 shadow-sm"
+                 >
+                    <Sparkles className="w-4 h-4 text-purple-600" />
+                    Generate with AI
+                 </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="absolute top-4 right-4 z-10 flex gap-2">
            {!readOnly && (
              <button 

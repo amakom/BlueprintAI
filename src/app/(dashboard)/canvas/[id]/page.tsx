@@ -10,6 +10,7 @@ import { VisualCanvas } from '@/features/canvas/VisualCanvas';
 import { StrategyView } from '@/components/strategy/StrategyView';
 import { AIChatPanel } from '@/components/layout/AIChatPanel';
 import { ActivityLogModal } from '@/features/team/ActivityLogModal';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 interface Project {
   id: string;
@@ -105,8 +106,41 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
 
   if (loading) {
     return (
-      <div className="flex h-full items-center justify-center bg-cloud text-navy">
-        Loading...
+      <div className="flex h-full">
+        <div className="flex-1 relative bg-cloud flex flex-col">
+          {/* Header Skeleton */}
+          <header className="h-14 bg-white border-b border-border flex items-center justify-between px-4 z-10">
+            <div className="flex items-center gap-4">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-6 w-32" />
+            </div>
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-8 w-24 rounded-lg" />
+              <Skeleton className="h-8 w-8 rounded-full" />
+            </div>
+          </header>
+          
+          {/* Canvas Area Skeleton */}
+          <div className="flex-1 relative p-4">
+            <div className="absolute top-4 left-4 space-y-2">
+              <Skeleton className="h-10 w-32 rounded-lg" />
+              <Skeleton className="h-10 w-32 rounded-lg" />
+            </div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <div className="flex gap-8">
+                 <Skeleton className="h-32 w-48 rounded-xl" />
+                 <Skeleton className="h-32 w-48 rounded-xl" />
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Right Panel Skeleton */}
+        <div className="w-[300px] border-l border-border bg-white h-full p-4 space-y-4">
+          <Skeleton className="h-8 w-full" />
+          <Skeleton className="h-20 w-full" />
+          <Skeleton className="h-20 w-full" />
+          <Skeleton className="h-10 w-full mt-auto" />
+        </div>
       </div>
     );
   }

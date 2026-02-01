@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CreateProjectModal } from '@/components/dashboard/CreateProjectModal';
 import { ProjectCard } from '@/components/dashboard/ProjectCard';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 interface Project {
   id: string;
@@ -26,6 +27,8 @@ export default function DashboardPage() {
 
   const fetchProjects = async () => {
     try {
+      // Simulate network delay for skeleton demo
+      // await new Promise(resolve => setTimeout(resolve, 1000));
       const res = await fetch('/api/projects');
       if (res.ok) {
         const data = await res.json();
@@ -101,8 +104,29 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex h-[calc(100vh-4rem)] items-center justify-center">
-        <div className="w-8 h-8 border-4 border-cyan border-t-transparent rounded-full animate-spin" />
+      <div className="container mx-auto px-6 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <Skeleton className="h-8 w-32 mb-2" />
+            <Skeleton className="h-4 w-64" />
+          </div>
+          <Skeleton className="h-10 w-32 rounded-lg" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="bg-white rounded-xl border border-border p-6 h-[200px] flex flex-col justify-between">
+              <div className="space-y-3">
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-1/2" />
+              </div>
+              <div className="flex justify-between items-center">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-8 w-8 rounded-full" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

@@ -8,8 +8,8 @@ import Link from 'next/link';
 
 function ResetPasswordContent() {
   const searchParams = useSearchParams();
-  const token = searchParams.get('token');
-  const email = searchParams.get('email');
+  const token = searchParams?.get('token');
+  const email = searchParams?.get('email');
   
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

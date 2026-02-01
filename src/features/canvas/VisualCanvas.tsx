@@ -19,6 +19,7 @@ import { Plus, Save, Smartphone } from 'lucide-react';
 import { useCanvas } from './CanvasContext';
 import { useEffect } from 'react';
 import { ExportMenu } from './ExportMenu';
+import { CollaborativeCursors } from '@/components/canvas/CollaborativeCursors';
 
 const nodeTypes: NodeTypes = {
   userStory: UserStoryNode,

@@ -502,7 +502,7 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
            <div className={`bg-white border-l border-slate-200 z-10 shadow-sm shrink-0 flex flex-col transition-all duration-300 relative ${isPropertiesCollapsed ? 'w-0 border-none' : 'w-64'}`}>
               <button 
             onClick={() => setIsPropertiesCollapsed(!isPropertiesCollapsed)}
-            className={`absolute top-3 bg-white border border-slate-200 rounded-full p-1 shadow-sm hover:bg-slate-50 z-50 flex items-center justify-center w-6 h-6 transition-all duration-300 ${isPropertiesCollapsed ? '-left-8' : '-left-3'}`}
+            className={`absolute top-20 bg-white border border-slate-200 rounded-full p-1 shadow-sm hover:bg-slate-50 z-50 flex items-center justify-center w-6 h-6 transition-all duration-300 ${isPropertiesCollapsed ? '-left-8' : '-left-3'}`}
             title={isPropertiesCollapsed ? "Expand Properties" : "Collapse Properties"}
           >
             {isPropertiesCollapsed ? <ChevronLeft size={14} className="text-slate-600" /> : <ChevronRight size={14} className="text-slate-600" />}

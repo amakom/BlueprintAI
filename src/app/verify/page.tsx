@@ -9,8 +9,8 @@ import Link from 'next/link';
 function VerifyContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const token = searchParams.get('token');
-  const email = searchParams.get('email');
+  const token = searchParams?.get('token');
+  const email = searchParams?.get('email');
 
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState('');

@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { CanvasProvider } from '@/features/canvas/CanvasContext';
 import { VisualCanvas } from '@/features/canvas/VisualCanvas';
+import { StrategyView } from '@/components/strategy/StrategyView';
 import { AIChatPanel } from '@/components/layout/AIChatPanel';
 import { ActivityLogModal } from '@/features/team/ActivityLogModal';
 
@@ -239,7 +240,11 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
           
           {/* Actual Canvas Implementation */}
           <div className="flex-1 relative">
-              <VisualCanvas projectId={project.id} />
+              {mode === 'canvas' ? (
+                <VisualCanvas projectId={project.id} />
+              ) : (
+                <StrategyView projectId={project.id} />
+              )}
           </div>
         </div>
         {/* Right AI Panel */}

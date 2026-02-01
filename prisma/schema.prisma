@@ -152,6 +152,10 @@ model Project {
   documents Document[]
   shareLink ShareLink?
   activityLogs ActivityLog[]
+
+  okrs        OKR[]
+  personas    Persona[]
+  strategyDocs StrategyDoc[]
 }
 
 model ShareLink {
@@ -325,3 +329,42 @@ model ActivityLog {
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id])
 }
+
+model OKR {
+  id        String   @id @default(cuid())
+  projectId String
+  objective String
+  keyResults Json
+  status    String   @default("DRAFT")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Persona {
+  id           String   @id @default(cuid())
+  projectId    String
+  name         String
+  role         String
+  goals        String[]
+  frustrations String[]
+  bio          String?
+  imageUrl     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model StrategyDoc {
+  id        String   @id @default(cuid())
+  projectId String
+  title     String
+  content   Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+

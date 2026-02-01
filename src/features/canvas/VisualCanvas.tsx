@@ -69,6 +69,7 @@ export function VisualCanvas({ projectId, readOnly = false }: VisualCanvasProps)
   return (
     <ReactFlowProvider>
       <div className="w-full h-full bg-cloud relative">
+        <CollaborativeCursors projectId={projectId} />
         <div className="absolute top-4 right-4 z-10 flex gap-2">
            {!readOnly && <ExportMenu projectId={projectId} />}
            {!readOnly && (

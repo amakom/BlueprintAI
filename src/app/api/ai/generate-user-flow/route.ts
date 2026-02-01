@@ -11,6 +11,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Fetch user to get global role (for God Mode access)
+    const user = await prisma.user.findUnique({ where: { id: session.userId } });
+    const userRole = user?.role;
+
     const { projectId, prompt } = await req.json();
 
     if (!projectId) {
@@ -41,7 +45,7 @@ export async function POST(req: Request) {
     }
 
     const plan = (team.subscription?.plan as PlanType) || PlanType.FREE;
-    const limits = getPlanLimits(plan);
+    const limits = getPlanLimits(plan, userRole);
 
     // 2. Check Feature Access
     if (!limits.canGenerateAI && plan !== PlanType.FREE) {

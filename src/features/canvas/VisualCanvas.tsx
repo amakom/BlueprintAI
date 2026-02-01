@@ -422,6 +422,14 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
             {!readOnly && (
                 <>
                 <button
+                  onClick={() => setIsDarkMode(!isDarkMode)}
+                  className={`border p-2 rounded-md shadow-sm transition-colors flex items-center gap-2 ${isDarkMode ? 'bg-navy border-slate-700 text-white hover:bg-slate-800' : 'bg-white border-border hover:bg-gray-50 text-navy'}`}
+                  title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                >
+                  {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                </button>
+
+                <button
                     onClick={() => { setPlayMode(!isPlayMode); setCommentMode(false); }}
                     className={`border p-2 rounded-md shadow-sm transition-colors flex items-center gap-2 ${isPlayMode ? 'bg-cyan-50 border-cyan text-cyan-600' : 'bg-white border-border hover:bg-gray-50 text-navy'}`}
                     title={isPlayMode ? "Exit Prototyping Mode" : "Prototyping Mode"}

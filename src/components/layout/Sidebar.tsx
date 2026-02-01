@@ -46,12 +46,14 @@ export function Sidebar() {
   return (
     <aside className="w-60 bg-navy text-white flex flex-col h-screen border-r border-navy/20">
       <div className="p-6">
-        <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-          <div className="w-8 h-8 bg-cyan rounded-md flex items-center justify-center text-navy">
-            B
-          </div>
-          BlueprintAI
-        </h1>
+        <Link href="/" className="block">
+          <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2 hover:opacity-90 transition-opacity">
+            <div className="w-8 h-8 bg-cyan rounded-md flex items-center justify-center text-navy">
+              B
+            </div>
+            BlueprintAI
+          </h1>
+        </Link>
       </div>
 
       <nav className="flex-1 px-4 space-y-2">

@@ -285,12 +285,12 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
         {!readOnly && !isPlayMode && (
            <div className={`bg-white border-r border-slate-200 z-10 shadow-sm shrink-0 flex flex-col transition-all duration-300 relative ${isLibraryCollapsed ? 'w-0 border-none' : 'w-48'}`}>
               <button 
-                onClick={() => setIsLibraryCollapsed(!isLibraryCollapsed)}
-                className="absolute -right-3 top-3 bg-white border border-slate-200 rounded-full p-1 shadow-sm hover:bg-slate-50 z-50 flex items-center justify-center w-6 h-6"
-                title={isLibraryCollapsed ? "Expand Library" : "Collapse Library"}
-              >
-                {isLibraryCollapsed ? <ChevronRight size={14} className="text-slate-600" /> : <ChevronLeft size={14} className="text-slate-600" />}
-              </button>
+            onClick={() => setIsLibraryCollapsed(!isLibraryCollapsed)}
+            className={`absolute top-3 bg-white border border-slate-200 rounded-full p-1 shadow-sm hover:bg-slate-50 z-50 flex items-center justify-center w-6 h-6 transition-all duration-300 ${isLibraryCollapsed ? '-right-8' : '-right-3'}`}
+            title={isLibraryCollapsed ? "Expand Library" : "Collapse Library"}
+          >
+            {isLibraryCollapsed ? <ChevronRight size={14} className="text-slate-600" /> : <ChevronLeft size={14} className="text-slate-600" />}
+          </button>
               
               <div className={`p-4 overflow-y-auto h-full ${isLibraryCollapsed ? 'hidden' : 'block'}`}>
                 <div className="mb-2">
@@ -501,12 +501,12 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
         {!readOnly && !isPlayMode && (
            <div className={`bg-white border-l border-slate-200 z-10 shadow-sm shrink-0 flex flex-col transition-all duration-300 relative ${isPropertiesCollapsed ? 'w-0 border-none' : 'w-64'}`}>
               <button 
-                onClick={() => setIsPropertiesCollapsed(!isPropertiesCollapsed)}
-                className="absolute -left-3 top-3 bg-white border border-slate-200 rounded-full p-1 shadow-sm hover:bg-slate-50 z-50 flex items-center justify-center w-6 h-6"
-                title={isPropertiesCollapsed ? "Expand Properties" : "Collapse Properties"}
-              >
-                {isPropertiesCollapsed ? <ChevronLeft size={14} className="text-slate-600" /> : <ChevronRight size={14} className="text-slate-600" />}
-              </button>
+            onClick={() => setIsPropertiesCollapsed(!isPropertiesCollapsed)}
+            className={`absolute top-3 bg-white border border-slate-200 rounded-full p-1 shadow-sm hover:bg-slate-50 z-50 flex items-center justify-center w-6 h-6 transition-all duration-300 ${isPropertiesCollapsed ? '-left-8' : '-left-3'}`}
+            title={isPropertiesCollapsed ? "Expand Properties" : "Collapse Properties"}
+          >
+            {isPropertiesCollapsed ? <ChevronLeft size={14} className="text-slate-600" /> : <ChevronRight size={14} className="text-slate-600" />}
+          </button>
               
               <div className={`h-full w-full ${isPropertiesCollapsed ? 'hidden' : 'block'}`}>
                   <PropertiesPanel />

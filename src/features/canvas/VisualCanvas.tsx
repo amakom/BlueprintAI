@@ -18,7 +18,7 @@ import { UserStoryNode } from './nodes/UserStoryNode';
 import { ScreenNode } from './nodes/ScreenNode';
 import { CommentNode } from './nodes/CommentNode';
 import { DeletableEdge } from './edges/DeletableEdge';
-import { Plus, Save, Smartphone, Sparkles, MessageSquare, History, Play, MousePointer, X, Layout, Monitor, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Save, Smartphone, Sparkles, MessageSquare, History, Play, MousePointer, X, Layout, Monitor, ChevronLeft, ChevronRight, Moon, Sun } from 'lucide-react';
 import { PropertiesPanel } from './PropertiesPanel';
 import { useCanvas } from './CanvasContext';
 import { useEffect, useState, useCallback } from 'react';
@@ -487,13 +487,13 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
             edgeTypes={edgeTypes}
             defaultEdgeOptions={{ type: 'deletable' }}
             fitView
-            className={`bg-cloud ${isCommentMode ? 'cursor-crosshair' : ''}`}
+            className={`${isDarkMode ? 'bg-[#0b1f33]' : 'bg-white'} ${isCommentMode ? 'cursor-crosshair' : ''}`}
             >
             <Background 
-                color="#cbd5e1" 
+                color={isDarkMode ? "#334155" : "#cbd5e1"} 
                 gap={20} 
             />
-            {!readOnly && !isPlayMode && <Controls />}
+            {!readOnly && !isPlayMode && <Controls className={isDarkMode ? 'bg-white/10 text-white border-white/20' : ''} />}
             </ReactFlow>
         </div>
 

@@ -10,7 +10,7 @@ function BillingContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
-  const status = searchParams.get('status');
+  const status = searchParams?.get('status');
 
   useEffect(() => {
     async function fetchData() {

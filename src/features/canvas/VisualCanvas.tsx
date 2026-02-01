@@ -281,7 +281,7 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
   const inputScreenPos = tempCommentPos ? flowToScreenPosition(tempCommentPos) : null;
 
   return (
-    <div className="w-full h-full bg-cloud relative flex">
+    <div className={`w-full h-full relative flex transition-colors duration-300 ${isDarkMode ? 'bg-[#0b1f33]' : 'bg-white'}`}>
         {/* Component Library Sidebar */}
         {!readOnly && !isPlayMode && (
            <div className={`bg-white border-r border-slate-200 z-10 shadow-sm shrink-0 flex flex-col transition-all duration-300 relative ${isLibraryCollapsed ? 'w-0 border-none' : 'w-48'}`}>

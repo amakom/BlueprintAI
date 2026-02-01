@@ -28,7 +28,7 @@ export const PLAN_LIMITS: Record<PlanType, PlanLimits> = {
     maxAIGenerationsPerMonth: 5,
     canExport: false,
     canRealTimeEdit: false,
-    canGenerateAI: false, // Technically false, but if we enable it, it's limited
+    canGenerateAI: true, // Enabled but limited to 5/month
     canRemoveBranding: false,
   },
   [PlanType.PRO]: {

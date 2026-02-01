@@ -81,20 +81,22 @@ export function VisualCanvas({ projectId, readOnly = false }: VisualCanvasProps)
         body: JSON.stringify({ projectId })
       });
       
-      if (res.ok) {
-        const data = await res.json();
-        if (data.nodes && data.edges) {
-          // If canvas is empty, replace. If not, maybe append? 
-          // For now, let's append but offset them if needed.
-          // Actually, let's just add them.
-          setNodes((nds) => [...nds, ...data.nodes]);
-          setEdges((eds) => [...eds, ...data.edges]);
-        }
-      } else {
-        console.error('Failed to generate flow');
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to generate flow');
+      }
+
+      if (data.nodes && data.edges) {
+        // If canvas is empty, replace. If not, maybe append? 
+        // For now, let's append but offset them if needed.
+        // Actually, let's just add them.
+        setNodes((nds) => [...nds, ...data.nodes]);
+        setEdges((eds) => [...eds, ...data.edges]);
       }
     } catch (error) {
       console.error('Error generating flow:', error);
+      alert(error instanceof Error ? error.message : "Failed to generate flow");
     } finally {
       setIsGenerating(false);
     }

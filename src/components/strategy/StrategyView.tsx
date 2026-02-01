@@ -86,12 +86,18 @@ function OKRSection({ projectId }: { projectId: string }) {
         body: JSON.stringify({ projectId }) 
       });
       const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to generate OKRs');
+      }
+      
       if (data.okrs) {
         // Append generated OKRs (they won't have IDs yet)
         setOkrs(prev => [...prev, ...data.okrs]);
       }
     } catch (e) {
       console.error("Failed to generate OKRs:", e);
+      alert(e instanceof Error ? e.message : "Failed to generate OKRs");
     } finally {
       setIsGenerating(false);
     }
@@ -205,11 +211,17 @@ function PersonaSection({ projectId }: { projectId: string }) {
         body: JSON.stringify({ projectId }) 
       });
       const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to generate Personas');
+      }
+
       if (data.personas) {
         setPersonas(prev => [...prev, ...data.personas]);
       }
     } catch (e) {
       console.error("Failed to generate Personas:", e);
+      alert(e instanceof Error ? e.message : "Failed to generate Personas");
     } finally {
       setIsGenerating(false);
     }

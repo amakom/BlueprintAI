@@ -16,9 +16,12 @@ import {
   useNodesState, 
   useEdgesState, 
   addEdge, 
-  Connection 
+  Connection,
+  NodeChange,
+  EdgeChange
 } from '@xyflow/react';
 import { AISettings, DEFAULT_AI_SETTINGS } from '@/lib/ai-config';
+import { useSocket } from '@/components/providers/socket-provider';
 
 interface CanvasContextType {
   nodes: Node[];
@@ -41,15 +44,90 @@ interface CanvasContextType {
 const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
 
 export function CanvasProvider({ children, initialData, readOnly = false }: { children: ReactNode, initialData?: { nodes: Node[], edges: Edge[] }, readOnly?: boolean }) {
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialData?.nodes || []);
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialData?.edges || []);
+  const [nodes, setNodes, onNodesChangeInternal] = useNodesState<Node>(initialData?.nodes || []);
+  const [edges, setEdges, onEdgesChangeInternal] = useEdgesState<Edge>(initialData?.edges || []);
   const [projectId, setProjectId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [userName, setUserName] = useState<string | undefined>(undefined);
   const [aiSettings, setAiSettings] = useState<AISettings>(DEFAULT_AI_SETTINGS);
+  const { socket } = useSocket();
 
-  // Fetch user info
+  // Socket: Broadcast changes
+  const onNodesChange: OnNodesChange = useCallback((changes) => {
+    onNodesChangeInternal(changes);
+    if (socket && projectId && !readOnly) {
+      socket.emit('node-change', { projectId, changes });
+    }
+  }, [onNodesChangeInternal, socket, projectId, readOnly]);
+
+  const onEdgesChange: OnEdgesChange = useCallback((changes) => {
+    onEdgesChangeInternal(changes);
+    if (socket && projectId && !readOnly) {
+      socket.emit('edge-change', { projectId, changes });
+    }
+  }, [onEdgesChangeInternal, socket, projectId, readOnly]);
+
+  const addNode = useCallback((node: Node) => {
+    setNodes((nds) => [...nds, node]);
+    if (socket && projectId && !readOnly) {
+      socket.emit('node-add', { projectId, node });
+    }
+  }, [setNodes, socket, projectId, readOnly]);
+
+  const onConnect = useCallback((params: Connection) => {
+    const edge = { ...params, type: 'deletable', animated: true, style: { stroke: 'var(--cyan)' } };
+    setEdges((eds) => addEdge(edge, eds));
+    if (socket && projectId && !readOnly) {
+      socket.emit('edge-add', { projectId, connection: params }); // Emit params or the full edge? 
+      // If we emit params, the other side needs to know how to style it.
+      // Better to emit the full edge object if possible, but addEdge handles creation.
+      // Let's emit params and let the receiver apply the same style? 
+      // Or better: ensure consistency.
+      // If I emit params, the receiver's `handleEdgeAdd` calls `addEdge(data.connection, eds)`.
+      // It doesn't apply the style!
+      // So I should emit the FULL edge configuration or update handleEdgeAdd to apply style.
+      // Let's update handleEdgeAdd to apply style too.
+    }
+  }, [setEdges, socket, projectId, readOnly]);
+
+  // Socket: Listen for changes
   useEffect(() => {
+    if (!socket || !projectId || readOnly) return;
+
+    const handleNodeChange = (data: { changes: NodeChange[] }) => {
+      onNodesChangeInternal(data.changes);
+    };
+
+    const handleEdgeChange = (data: { changes: EdgeChange[] }) => {
+      onEdgesChangeInternal(data.changes);
+    };
+
+    const handleNodeAdd = (data: { node: Node }) => {
+      setNodes((nds) => {
+        // Avoid duplicates if possible, though ID should be unique
+        if (nds.some(n => n.id === data.node.id)) return nds;
+        return [...nds, data.node];
+      });
+    };
+
+    const handleEdgeAdd = (data: { connection: Connection }) => {
+      const edge = { ...data.connection, type: 'deletable', animated: true, style: { stroke: 'var(--cyan)' } };
+      setEdges((eds) => addEdge(edge, eds));
+    };
+
+    socket.on('node-change', handleNodeChange);
+    socket.on('edge-change', handleEdgeChange);
+    socket.on('node-add', handleNodeAdd);
+    socket.on('edge-add', handleEdgeAdd);
+
+    return () => {
+      socket.off('node-change', handleNodeChange);
+      socket.off('edge-change', handleEdgeChange);
+      socket.off('node-add', handleNodeAdd);
+      socket.off('edge-add', handleEdgeAdd);
+    };
+  }, [socket, projectId, readOnly, onNodesChangeInternal, onEdgesChangeInternal, setNodes, setEdges]);
+
     if (readOnly) return;
     fetch('/api/auth/me')
       .then(res => res.json())
@@ -104,15 +182,6 @@ export function CanvasProvider({ children, initialData, readOnly = false }: { ch
       setIsSaving(false);
     }
   };
-
-  const onConnect = useCallback(
-    (params: Connection) => setEdges((eds) => addEdge({ ...params, type: 'deletable', animated: true, style: { stroke: 'var(--cyan)' } }, eds)),
-    [setEdges]
-  );
-
-  const addNode = useCallback((node: Node) => {
-    setNodes((nds) => [...nds, node]);
-  }, [setNodes]);
 
   return (
     <CanvasContext.Provider value={{

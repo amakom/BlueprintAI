@@ -33,8 +33,11 @@ BlueprintAI is an AI-augmented visual PRD and product design platform. It combin
    npm run dev
    ```
 
-## Features (Planned)
-- Visual PRD Editor
-- Interactive User Flows
-- AI Spec Generation
-- Real-time Collaboration
+## Features
+- **Visual Canvas**: Interactive user flow diagramming with drag-and-drop component library.
+- **Strategy Dashboard**: Track OKRs, Personas, and Competitors with AI generation.
+- **Engineering Specs**: AI-generated technical specifications based on your visual flows.
+- **Role-Based Access**: Granular permissions for Owners, Team Members, and Viewers.
+- **Billing System**: Integrated subscription management (Free, Pro, Team) via Flutterwave.
+- **Admin System**: Comprehensive dashboard for system monitoring and user management.
+

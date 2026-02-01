@@ -7,6 +7,8 @@ type ScreenNodeData = {
 };
 
 export function ScreenNode({ id, data, selected }: NodeProps<Node<ScreenNodeData>>) {
+  // Debug log to verify component update
+  // console.log('ScreenNode rendering', id, data);
   const { setNodes, deleteElements } = useReactFlow();
 
   const updateLabel = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {

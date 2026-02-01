@@ -44,6 +44,7 @@ interface VisualCanvasProps {
 }
 
 export function VisualCanvas(props: VisualCanvasProps) {
+    console.log('VisualCanvas mounting with props:', props);
     return (
         <ReactFlowProvider>
             <VisualCanvasContent {...props} />

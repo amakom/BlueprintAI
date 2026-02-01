@@ -13,7 +13,8 @@ export function StrategyView({ projectId }: StrategyViewProps) {
 
   return (
     <div className="flex flex-col h-full bg-cloud p-6 overflow-y-auto">
-      <div className="flex items-center space-x-4 mb-6 border-b border-slate-200 overflow-x-auto">
+      <div className="mb-6 border-b border-slate-200">
+        <div className="flex items-center space-x-4 -mb-px overflow-x-auto">
         <button
           onClick={() => setActiveTab('okrs')}
           className={`px-4 py-2 font-medium transition-colors whitespace-nowrap ${

@@ -4,7 +4,7 @@ import { getSession } from '@/lib/auth';
 
 export async function POST(
   req: Request,
-  { params }: { params: { projectId: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getSession();
@@ -12,7 +12,8 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { projectId } = params;
+    const { id } = params;
+    const projectId = id;
     const { okrs } = await req.json();
 
     if (!okrs || !Array.isArray(okrs)) {
@@ -31,7 +32,7 @@ export async function POST(
 
     // Check if user is member of the team
     const isMember = project.team.members.some(m => m.userId === session.userId);
-    if (!isMember && session.role !== 'ADMIN' && session.role !== 'OWNER') { // Basic check, better to use permission lib
+    if (!isMember && session.role !== 'ADMIN' && session.role !== 'OWNER') {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -58,7 +59,7 @@ export async function POST(
 
 export async function GET(
   req: Request,
-  { params }: { params: { projectId: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getSession();
@@ -66,7 +67,8 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { projectId } = params;
+    const { id } = params;
+    const projectId = id;
 
     const okrs = await prisma.oKR.findMany({
       where: { projectId },

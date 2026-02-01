@@ -173,6 +173,7 @@ enum DocType {
   PRD
   FLOW
   CANVAS
+  SPEC
 }
 
 model Document {

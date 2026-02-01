@@ -1,6 +1,6 @@
-# BlueprintAI Testing Guide
+# BlueprintAI Comprehensive Testing Guide
 
-This guide provides step-by-step instructions to test the implemented features of BlueprintAI, including Strategy Dashboard, Visual Canvas AI, and Billing.
+This guide provides step-by-step instructions to test all implemented features of BlueprintAI, including the new Engineering Spec Generator and Visual Canvas enhancements.
 
 ## Prerequisites
 
@@ -11,71 +11,123 @@ This guide provides step-by-step instructions to test the implemented features o
 
 ---
 
-## 1. Strategy Dashboard (AI Generation)
+## 1. Authentication & Onboarding
+
+### A. Sign Up & Login
+1.  Navigate to `/signup`.
+2.  Create a new account.
+3.  Verify you are redirected to the dashboard.
+4.  Log out and log back in via `/login`.
+
+### B. Workspace Setup
+1.  Verify a default team is created for you.
+2.  Navigate to `/settings` to see your profile and team details.
+
+---
+
+## 2. Project Management
+
+### A. Create Project
+1.  On the Dashboard, click **"New Project"**.
+2.  Enter a name (e.g., "Mobile App MVP").
+3.  Verify the project card appears on the dashboard.
+
+### B. Project Navigation
+1.  Click on a project card.
+2.  Verify you land on the **Canvas** view by default.
+3.  Check the top navigation bar for project title and "Share" button.
+
+---
+
+## 3. Visual Canvas & Flow Building
+
+### A. Drag & Drop Library (NEW)
+1.  On the Canvas page, look for the **"Library"** sidebar on the left.
+2.  **User Story Node**: Drag a "User Story" card from the library onto the canvas.
+3.  **Screen Node**: Drag a "Screen" card from the library onto the canvas.
+4.  Verify nodes appear where you dropped them.
+
+### B. Connecting Nodes
+1.  Hover over the handle (dot) on the right side of a node.
+2.  Click and drag to another node's handle (left side).
+3.  Verify a connection line (edge) is drawn.
+
+### C. AI User Flow Generation
+1.  Click the **"AI Generate"** button (Sparkles icon) in the top toolbar.
+2.  Select **"User Flow"**.
+3.  Enter a prompt (e.g., "Checkout flow for an e-commerce app").
+4.  Click **"Generate"**.
+5.  Verify a sequence of nodes (User Story -> Screen -> Actions) appears.
+
+---
+
+## 4. Engineering Specs (NEW)
+
+### A. Access Specs
+1.  In the Project view, look for the View Toggle (top right).
+2.  Switch from **"Canvas"** or **"Strategy"** to **"Specs"**.
+3.  Verify you see the Specification Editor.
+
+### B. Generate Specs with AI
+1.  Ensure you have some content on your Canvas (nodes/edges).
+2.  Click the **"Generate Spec"** button (Sparkles icon).
+3.  Wait for the AI to analyze your canvas and generate a Markdown specification.
+4.  Verify the editor populates with sections like "Overview," "User Flows," and "Data Models."
+
+### C. Edit & Save
+1.  Manually edit the generated text.
+2.  Click **"Save Changes"**.
+3.  Refresh the page to verify persistence.
+
+### D. Export
+1.  Click the **"Download"** button.
+2.  Verify a `.md` file is downloaded to your machine.
+
+---
+
+## 5. Strategy Dashboard
 
 ### A. AI OKR Generation
-1.  Navigate to a Project.
-2.  Click on the **"Strategy"** tab (toggle at the top right if needed).
-3.  Select the **"OKRs"** sub-tab.
-4.  Click the **"Generate with AI"** button (Sparkles icon).
-5.  Wait for the AI to generate Objectives and Key Results.
-6.  Verify that new cards appear.
-7.  **Scroll Test**: Verify you can scroll up and down if many OKRs are generated.
-8.  **Persistence**: Refresh the page. The generated OKRs should remain.
+1.  Switch the View Toggle to **"Strategy"**.
+2.  Select the **"OKRs"** sub-tab.
+3.  Click **"Generate with AI"**.
+4.  Verify new Objectives and Key Results cards appear.
 
 ### B. AI Persona Generation
-1.  In the **"Strategy"** tab, select the **"Personas"** sub-tab.
+1.  Select the **"Personas"** sub-tab.
 2.  Click **"Generate Personas"**.
-3.  Wait for 2-3 mock personas to appear with avatars (Dicebear).
-4.  **Persistence**: Refresh the page. The personas should remain.
+3.  Verify 2-3 mock personas appear with avatars.
 
 ---
 
-## 2. Visual Canvas (AI User Flow)
-
-1.  Navigate to the **"Canvas"** tab of a project.
-2.  Click the **"AI Generate"** button (Sparkles icon) in the top toolbar.
-3.  Select **"User Flow"**.
-4.  Enter a prompt (e.g., "Login flow for a mobile app").
-5.  Click **"Generate"**.
-6.  Verify that a sequence of nodes (User Story -> Screen -> Actions) appears on the canvas.
-7.  **Drag & Drop**: Move the nodes around to verify they are interactive.
-
----
-
-## 3. Billing & Subscription
+## 6. Billing & Subscription
 
 ### A. View Billing Settings
-1.  Click your avatar in the top right -> **Settings**.
-2.  Navigate to **Billing**.
-3.  Verify it shows your current plan (likely "Free").
+1.  Click your avatar -> **Settings** -> **Billing**.
+2.  Verify current plan is "Free".
 
-### B. Upgrade Flow
-1.  Click **"Upgrade Now"** or **"View Plans"**.
-2.  Select the **"Pro"** or **"Team"** plan.
-3.  **Note**: This requires valid Flutterwave keys in `.env`.
-    *   If keys are present, it will redirect to Flutterwave payment page.
-    *   After payment, it redirects back to `/settings/billing?status=success`.
-4.  Verify the success message appears and the plan updates (mock update in dev if using test cards).
+### B. Upgrade Flow (Requires Keys)
+1.  Click **"Upgrade Now"**.
+2.  Select **"Pro"** or **"Team"**.
+3.  Complete the Flutterwave payment (test mode).
+4.  Verify redirection to success page and plan update.
 
 ---
 
-## 4. Role-Based Limits (Owner Bypass)
+## 7. Admin & System
 
-### A. Verify Owner Privileges
-1.  Log in as the **Owner** (the user created during setup).
-2.  Navigate to **Strategy** or **Canvas**.
-3.  Generate AI content repeatedly (more than 5 times).
-4.  Verify you **do NOT** see a "Monthly limit reached" error. Owners have unlimited access.
+### A. Access Admin Panel
+1.  Navigate to `/admin` (requires OWNER role).
+2.  Verify you see the Admin Dashboard with system stats.
 
-### B. Verify Team Limits (Optional)
-1.  Create a new user (or use a different browser).
-2.  As a "Free" plan user, generate content 5 times.
-3.  On the 6th attempt, verify you see the limit reached error.
+### B. Check Logs
+1.  Navigate to `/admin/logs`.
+2.  Verify you see recent system events (e.g., Auth, AI Usage).
 
 ---
 
 ## Troubleshooting
 
--   **"Monthly limit reached" for Owner**: Ensure the `reset-limits.ts` script was run or the API changes are applied. The system now checks `user.role === 'OWNER'` to bypass limits.
--   **Billing Error**: "Failed to initiate payment" usually means missing Flutterwave keys. Check your server console for warnings.
+-   **"Monthly limit reached"**: As an OWNER, you should bypass limits. If testing as a regular user, check the database `AIUsageLog` table.
+-   **Empty Spec Generation**: Ensure you have nodes on the canvas before generating a spec. The AI needs context to write the document.
+-   **Drag & Drop Not Working**: Ensure you are dragging from the sidebar directly onto the grid area.

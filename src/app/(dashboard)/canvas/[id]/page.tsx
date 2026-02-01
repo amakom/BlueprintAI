@@ -8,6 +8,7 @@ import { useEffect, useState, useRef } from 'react';
 import { CanvasProvider } from '@/features/canvas/CanvasContext';
 import { VisualCanvas } from '@/features/canvas/VisualCanvas';
 import { StrategyView } from '@/components/strategy/StrategyView';
+import { SpecView } from '@/components/spec/SpecView';
 import { AIChatPanel } from '@/components/layout/AIChatPanel';
 import { ActivityLogModal } from '@/features/team/ActivityLogModal';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -33,7 +34,7 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
   const [isActivityOpen, setIsActivityOpen] = useState(false);
 
   // View Mode state
-  const [mode, setMode] = useState<'canvas' | 'strategy'>('canvas');
+  const [mode, setMode] = useState<'canvas' | 'strategy' | 'spec'>('canvas');
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -229,6 +230,12 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
                     >
                       Strategy
                     </button>
+                    <button
+                      onClick={() => setMode('spec')}
+                      className={`px-3 py-1 text-sm font-medium rounded-md transition-all ${mode === 'spec' ? 'bg-white shadow-sm text-navy' : 'text-slate-500 hover:text-navy'}`}
+                    >
+                      Specs
+                    </button>
                   </div>
               </div>
               <div className="flex items-center gap-2">
@@ -295,8 +302,10 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
           <div className="flex-1 relative overflow-hidden">
               {mode === 'canvas' ? (
                 <VisualCanvas projectId={project.id} />
-              ) : (
+              ) : mode === 'strategy' ? (
                 <StrategyView projectId={project.id} />
+              ) : (
+                <SpecView projectId={project.id} />
               )}
           </div>
         </div>

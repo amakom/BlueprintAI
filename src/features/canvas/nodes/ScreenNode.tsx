@@ -4,6 +4,8 @@ import { useCallback } from 'react';
 
 type ScreenNodeData = {
   label: string;
+  image?: string | null;
+  backgroundColor?: string;
 };
 
 export function ScreenNode({ id, data, selected }: NodeProps<Node<ScreenNodeData>>) {

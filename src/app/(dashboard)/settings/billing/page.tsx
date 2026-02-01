@@ -1,30 +1,86 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { FileText, AlertTriangle, CheckCircle, Download } from 'lucide-react';
+import { useEffect, useState, Suspense } from 'react';
+import { FileText, AlertTriangle, CheckCircle, Download, CreditCard } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
-export default function BillingSettingsPage() {
+function BillingContent() {
   const [subscription, setSubscription] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const mockTeamId = 'cm6jdemo';
+  const [error, setError] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const status = searchParams.get('status');
 
   useEffect(() => {
-    fetch(`/api/billing/status?teamId=${mockTeamId}`)
-      .then(res => res.json())
-      .then(data => {
-        setSubscription(data.subscription);
+    async function fetchData() {
+      try {
+        // 1. Get current user's team
+        const authRes = await fetch('/api/auth/me');
+        if (!authRes.ok) throw new Error('Failed to fetch auth info');
+        const authData = await authRes.json();
+        const teamId = authData.teamId;
+
+        if (!teamId) {
+          setError('No team found for this user');
+          setLoading(false);
+          return;
+        }
+
+        // 2. Get billing info
+        const billRes = await fetch(`/api/billing/status?teamId=${teamId}`);
+        if (!billRes.ok) throw new Error('Failed to fetch billing info');
+        const billData = await billRes.json();
+        
+        setSubscription(billData.subscription);
+      } catch (err) {
+        console.error(err);
+        setError('Failed to load billing information');
+      } finally {
         setLoading(false);
-      });
+      }
+    }
+
+    fetchData();
   }, []);
 
-  if (loading) return <div className="p-8 text-navy">Loading billing info...</div>;
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-[400px]">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-navy"></div>
+    </div>
+  );
+
+  if (error) return (
+    <div className="p-8 text-red-500 bg-red-50 rounded-xl border border-red-100">
+      <AlertTriangle className="w-6 h-6 mb-2" />
+      {error}
+    </div>
+  );
 
   const isProOrTeam = subscription && subscription.status === 'ACTIVE' && subscription.plan !== 'FREE';
 
   return (
     <div className="max-w-4xl mx-auto p-8">
-      <h1 className="text-2xl font-bold text-navy mb-8">Billing & Subscription</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-bold text-navy">Billing & Subscription</h1>
+        <Link 
+          href="/pricing" 
+          className="px-4 py-2 bg-navy text-white rounded-lg text-sm font-bold hover:bg-navy/90 flex items-center gap-2"
+        >
+          <CreditCard className="w-4 h-4" />
+          View Plans
+        </Link>
+      </div>
+
+      {status === 'success' && (
+        <div className="mb-8 p-4 bg-green-50 text-green-700 rounded-lg border border-green-200 flex items-center gap-3">
+          <CheckCircle className="w-5 h-5" />
+          <div>
+            <p className="font-bold">Payment Successful!</p>
+            <p className="text-sm">Your subscription has been updated. It may take a few moments to reflect.</p>
+          </div>
+        </div>
+      )}
 
       {/* Current Plan Card */}
       <div className="bg-white rounded-xl border border-border p-6 mb-8 shadow-sm">
@@ -53,10 +109,10 @@ export default function BillingSettingsPage() {
              </Link>
            </div>
         ) : (
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div className="p-4 bg-cloud rounded-lg">
                     <span className="text-xs text-gray-500 block mb-1">Billing Period</span>
-                    <span className="text-navy font-bold">Monthly</span>
+                    <span className="text-navy font-bold capitalize">{subscription?.interval || 'Monthly'}</span>
                 </div>
                 <div className="p-4 bg-cloud rounded-lg">
                     <span className="text-xs text-gray-500 block mb-1">Next Payment</span>
@@ -102,5 +158,13 @@ export default function BillingSettingsPage() {
           </div>
       )}
     </div>
+  );
+}
+
+export default function BillingSettingsPage() {
+  return (
+    <Suspense fallback={<div className="p-8">Loading...</div>}>
+      <BillingContent />
+    </Suspense>
   );
 }

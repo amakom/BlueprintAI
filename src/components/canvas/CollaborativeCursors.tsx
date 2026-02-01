@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useSocket } from '@/components/providers/socket-provider';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/components/providers/auth-provider';
 
 type CursorData = {
   userId: string;
@@ -27,11 +27,11 @@ const getRandomColor = (id: string) => {
 
 export const CollaborativeCursors = ({ projectId }: { projectId: string }) => {
   const { socket, isConnected } = useSocket();
-  const { data: session } = useSession();
+  const { user } = useAuth();
   const [cursors, setCursors] = useState<Record<string, CursorData>>({});
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!socket || !isConnected || !session?.user) return;
+    if (!socket || !isConnected || !user) return;
 
     // Convert screen coordinates to canvas-relative if possible
     // For now, we use viewport coordinates, but ideally this should be relative to the canvas pane
@@ -48,13 +48,13 @@ export const CollaborativeCursors = ({ projectId }: { projectId: string }) => {
     
     socket.emit('cursor-move', {
       projectId,
-      userId: session.user.id,
-      userName: session.user.name || 'Anonymous',
+      userId: user.id,
+      userName: user.name || 'Anonymous',
       x: e.clientX,
       y: e.clientY,
-      color: getRandomColor(session.user.id),
+      color: getRandomColor(user.id),
     });
-  }, [socket, isConnected, projectId, session]);
+  }, [socket, isConnected, projectId, user]);
 
   // Throttle
   useEffect(() => {

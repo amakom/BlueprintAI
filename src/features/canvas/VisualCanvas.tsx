@@ -18,7 +18,7 @@ import { UserStoryNode } from './nodes/UserStoryNode';
 import { ScreenNode } from './nodes/ScreenNode';
 import { CommentNode } from './nodes/CommentNode';
 import { DeletableEdge } from './edges/DeletableEdge';
-import { Plus, Save, Smartphone, Sparkles, MessageSquare, History, Play, MousePointer, X, Layout, Monitor } from 'lucide-react';
+import { Plus, Save, Smartphone, Sparkles, MessageSquare, History, Play, MousePointer, X, Layout, Monitor, ChevronLeft, ChevronRight } from 'lucide-react';
 import { PropertiesPanel } from './PropertiesPanel';
 import { useCanvas } from './CanvasContext';
 import { useEffect, useState, useCallback } from 'react';
@@ -76,6 +76,8 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
   const [isCommentMode, setCommentMode] = useState(false);
   const [isPlayMode, setPlayMode] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [isLibraryCollapsed, setIsLibraryCollapsed] = useState(false);
+  const [isPropertiesCollapsed, setIsPropertiesCollapsed] = useState(false);
   
   // Comment Input State
   const [tempCommentPos, setTempCommentPos] = useState<{x: number, y: number} | null>(null);
@@ -281,78 +283,88 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
     <div className="w-full h-full bg-cloud relative flex">
         {/* Component Library Sidebar */}
         {!readOnly && !isPlayMode && (
-           <div className="w-48 lg:w-56 bg-white border-r border-slate-200 p-4 flex flex-col gap-4 z-10 shadow-sm shrink-0 overflow-y-auto">
-              <div className="mb-2">
-                 <h3 className="font-bold text-navy text-sm uppercase tracking-wider">Library</h3>
-                 <p className="text-xs text-slate-500">Drag to canvas</p>
-              </div>
+           <div className={`bg-white border-r border-slate-200 z-10 shadow-sm shrink-0 flex flex-col transition-all duration-300 relative ${isLibraryCollapsed ? 'w-0 border-none' : 'w-48'}`}>
+              <button 
+                onClick={() => setIsLibraryCollapsed(!isLibraryCollapsed)}
+                className="absolute -right-3 top-3 bg-white border border-slate-200 rounded-full p-1 shadow-sm hover:bg-slate-50 z-50 flex items-center justify-center w-6 h-6"
+                title={isLibraryCollapsed ? "Expand Library" : "Collapse Library"}
+              >
+                {isLibraryCollapsed ? <ChevronRight size={14} className="text-slate-600" /> : <ChevronLeft size={14} className="text-slate-600" />}
+              </button>
               
-              <div className="space-y-3">
-                 <div className="mb-4">
-                    <h4 className="text-xs font-semibold text-slate-400 uppercase mb-2">Nodes</h4>
-                    <div 
-                        className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group mb-2"
-                        onDragStart={(event) => onDragStart(event, 'userStory')}
-                        draggable
-                    >
-                        <div className="flex items-center gap-2 mb-1">
-                        <div className="p-1 bg-navy text-white rounded group-hover:bg-amber transition-colors"><Plus size={12}/></div>
-                        <span className="font-bold text-navy text-sm">User Story</span>
-                        </div>
-                        <p className="text-xs text-slate-500">Define requirements</p>
-                    </div>
+              <div className={`p-4 overflow-y-auto h-full ${isLibraryCollapsed ? 'hidden' : 'block'}`}>
+                <div className="mb-2">
+                   <h3 className="font-bold text-navy text-sm uppercase tracking-wider">Library</h3>
+                   <p className="text-xs text-slate-500">Drag to canvas</p>
+                </div>
+                
+                <div className="space-y-3">
+                   <div className="mb-4">
+                      <h4 className="text-xs font-semibold text-slate-400 uppercase mb-2">Nodes</h4>
+                      <div 
+                          className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group mb-2"
+                          onDragStart={(event) => onDragStart(event, 'userStory')}
+                          draggable
+                      >
+                          <div className="flex items-center gap-2 mb-1">
+                          <div className="p-1 bg-navy text-white rounded group-hover:bg-amber transition-colors"><Plus size={12}/></div>
+                          <span className="font-bold text-navy text-sm">User Story</span>
+                          </div>
+                          <p className="text-xs text-slate-500">Define requirements</p>
+                      </div>
 
-                    <div 
-                        className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group"
-                        onDragStart={(event) => onDragStart(event, 'screen')}
-                        draggable
-                    >
-                        <div className="flex items-center gap-2 mb-1">
-                        <div className="p-1 bg-white border border-slate-200 text-navy rounded group-hover:border-cyan group-hover:text-cyan transition-colors"><Smartphone size={12}/></div>
-                        <span className="font-bold text-navy text-sm">Screen</span>
-                        </div>
-                        <p className="text-xs text-slate-500">Generic Screen</p>
-                    </div>
-                 </div>
+                      <div 
+                          className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group"
+                          onDragStart={(event) => onDragStart(event, 'screen')}
+                          draggable
+                      >
+                          <div className="flex items-center gap-2 mb-1">
+                          <div className="p-1 bg-white border border-slate-200 text-navy rounded group-hover:border-cyan group-hover:text-cyan transition-colors"><Smartphone size={12}/></div>
+                          <span className="font-bold text-navy text-sm">Screen</span>
+                          </div>
+                          <p className="text-xs text-slate-500">Generic Screen</p>
+                      </div>
+                   </div>
 
-                 <div className="mb-4">
-                    <h4 className="text-xs font-semibold text-slate-400 uppercase mb-2">Frames</h4>
-                    <div 
-                        className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group mb-2"
-                        onDragStart={(event) => onDragStart(event, 'screen', { label: 'iPhone 14', style: { width: 390, height: 844 } })}
-                        draggable
-                    >
-                        <div className="flex items-center gap-2 mb-1">
-                        <div className="p-1 bg-slate-100 text-slate-600 rounded"><Smartphone size={12}/></div>
-                        <span className="font-bold text-navy text-sm">Mobile App</span>
-                        </div>
-                        <p className="text-xs text-slate-500">390 x 844</p>
-                    </div>
+                   <div className="mb-4">
+                      <h4 className="text-xs font-semibold text-slate-400 uppercase mb-2">Frames</h4>
+                      <div 
+                          className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group mb-2"
+                          onDragStart={(event) => onDragStart(event, 'screen', { label: 'iPhone 14', style: { width: 390, height: 844 } })}
+                          draggable
+                      >
+                          <div className="flex items-center gap-2 mb-1">
+                          <div className="p-1 bg-slate-100 text-slate-600 rounded"><Smartphone size={12}/></div>
+                          <span className="font-bold text-navy text-sm">Mobile App</span>
+                          </div>
+                          <p className="text-xs text-slate-500">390 x 844</p>
+                      </div>
 
-                    <div 
-                        className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group mb-2"
-                        onDragStart={(event) => onDragStart(event, 'screen', { label: 'Web Desktop', style: { width: 1440, height: 900 } })}
-                        draggable
-                    >
-                        <div className="flex items-center gap-2 mb-1">
-                        <div className="p-1 bg-slate-100 text-slate-600 rounded"><Monitor size={12}/></div>
-                        <span className="font-bold text-navy text-sm">Web App</span>
-                        </div>
-                        <p className="text-xs text-slate-500">1440 x 900</p>
-                    </div>
+                      <div 
+                          className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group mb-2"
+                          onDragStart={(event) => onDragStart(event, 'screen', { label: 'Web Desktop', style: { width: 1440, height: 900 } })}
+                          draggable
+                      >
+                          <div className="flex items-center gap-2 mb-1">
+                          <div className="p-1 bg-slate-100 text-slate-600 rounded"><Monitor size={12}/></div>
+                          <span className="font-bold text-navy text-sm">Web App</span>
+                          </div>
+                          <p className="text-xs text-slate-500">1440 x 900</p>
+                      </div>
 
-                     <div 
-                        className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group"
-                        onDragStart={(event) => onDragStart(event, 'screen', { label: 'Social Post', style: { width: 1080, height: 1080 } })}
-                        draggable
-                    >
-                        <div className="flex items-center gap-2 mb-1">
-                        <div className="p-1 bg-slate-100 text-slate-600 rounded"><Layout size={12}/></div>
-                        <span className="font-bold text-navy text-sm">Social Post</span>
-                        </div>
-                        <p className="text-xs text-slate-500">1080 x 1080</p>
-                    </div>
-                 </div>
+                       <div 
+                          className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group"
+                          onDragStart={(event) => onDragStart(event, 'screen', { label: 'Social Post', style: { width: 1080, height: 1080 } })}
+                          draggable
+                      >
+                          <div className="flex items-center gap-2 mb-1">
+                          <div className="p-1 bg-slate-100 text-slate-600 rounded"><Layout size={12}/></div>
+                          <span className="font-bold text-navy text-sm">Social Post</span>
+                          </div>
+                          <p className="text-xs text-slate-500">1080 x 1080</p>
+                      </div>
+                   </div>
+                </div>
               </div>
            </div>
         )}
@@ -487,7 +499,19 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
 
         {/* Properties Panel (Right Sidebar) */}
         {!readOnly && !isPlayMode && (
-            <PropertiesPanel />
+           <div className={`bg-white border-l border-slate-200 z-10 shadow-sm shrink-0 flex flex-col transition-all duration-300 relative ${isPropertiesCollapsed ? 'w-0 border-none' : 'w-64'}`}>
+              <button 
+                onClick={() => setIsPropertiesCollapsed(!isPropertiesCollapsed)}
+                className="absolute -left-3 top-3 bg-white border border-slate-200 rounded-full p-1 shadow-sm hover:bg-slate-50 z-50 flex items-center justify-center w-6 h-6"
+                title={isPropertiesCollapsed ? "Expand Properties" : "Collapse Properties"}
+              >
+                {isPropertiesCollapsed ? <ChevronLeft size={14} className="text-slate-600" /> : <ChevronRight size={14} className="text-slate-600" />}
+              </button>
+              
+              <div className={`h-full w-full ${isPropertiesCollapsed ? 'hidden' : 'block'}`}>
+                  <PropertiesPanel />
+              </div>
+           </div>
         )}
     </div>
   );

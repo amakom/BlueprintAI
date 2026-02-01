@@ -29,7 +29,7 @@ export function PropertiesPanel() {
 
   if (!selectedNode) {
     return (
-      <div className="w-64 bg-white border-l border-slate-200 p-4 flex flex-col gap-4 shrink-0 h-full">
+      <div className="w-full bg-white p-4 flex flex-col gap-4 shrink-0 h-full">
         <div className="text-sm font-medium text-slate-400 text-center mt-10">
           Select an element to edit properties
         </div>
@@ -71,7 +71,7 @@ export function PropertiesPanel() {
   const isScreen = selectedNode.type === 'screen';
 
   return (
-    <div className="w-64 bg-white border-l border-slate-200 flex flex-col h-full overflow-y-auto">
+    <div className="w-full bg-white flex flex-col h-full overflow-y-auto">
       <div className="p-4 border-b border-slate-100 flex items-center justify-between">
         <h3 className="font-bold text-navy text-sm uppercase tracking-wider">Properties</h3>
         <button onClick={() => setSelectedNode(null)} className="text-slate-400 hover:text-navy">

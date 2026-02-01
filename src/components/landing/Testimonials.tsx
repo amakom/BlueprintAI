@@ -97,7 +97,7 @@ function TestimonialCard({ name, role, image, content }: { name: string, role: s
         </div>
         <div>
           <div className="font-bold text-white text-sm">{name}</div>
-          <div className="text-xs text-gray-400">{role}</div>
+          <div className="text-xs text-cyan">{role}</div>
         </div>
       </div>
       <p className="text-gray-300 text-sm leading-relaxed">

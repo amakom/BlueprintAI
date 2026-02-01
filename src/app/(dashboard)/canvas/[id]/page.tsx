@@ -31,6 +31,9 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
   // Activity Log state
   const [isActivityOpen, setIsActivityOpen] = useState(false);
 
+  // View Mode state
+  const [mode, setMode] = useState<'canvas' | 'strategy'>('canvas');
+
   useEffect(() => {
     const fetchProject = async () => {
       try {
@@ -177,6 +180,22 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
                   )}
                   
                   <span className="px-2 py-0.5 bg-gray-100 text-gray-500 text-xs rounded-full">Draft</span>
+                  
+                  {/* View Mode Toggle */}
+                  <div className="flex bg-slate-100 rounded-lg p-1 mx-4">
+                    <button
+                      onClick={() => setMode('canvas')}
+                      className={`px-3 py-1 text-sm font-medium rounded-md transition-all ${mode === 'canvas' ? 'bg-white shadow-sm text-navy' : 'text-slate-500 hover:text-navy'}`}
+                    >
+                      Canvas
+                    </button>
+                    <button
+                      onClick={() => setMode('strategy')}
+                      className={`px-3 py-1 text-sm font-medium rounded-md transition-all ${mode === 'strategy' ? 'bg-white shadow-sm text-navy' : 'text-slate-500 hover:text-navy'}`}
+                    >
+                      Strategy
+                    </button>
+                  </div>
               </div>
               <div className="flex items-center gap-2">
                   <div className="flex -space-x-2 mr-2">

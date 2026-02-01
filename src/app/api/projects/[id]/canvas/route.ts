@@ -47,7 +47,7 @@ export async function GET(
       });
     }
 
-    return NextResponse.json({ success: true, content: document.content });
+    return NextResponse.json({ success: true, documentId: document.id, content: document.content });
   } catch (error) {
     console.error('Get Canvas error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -85,10 +85,20 @@ export async function POST(
     });
 
     if (document) {
-      await prisma.document.update({
-        where: { id: document.id },
-        data: { content: { nodes, edges } },
-      });
+      // Update document and create version
+      await prisma.$transaction([
+        prisma.document.update({
+          where: { id: document.id },
+          data: { content: { nodes, edges } },
+        }),
+        prisma.version.create({
+          data: {
+            documentId: document.id,
+            content: { nodes, edges },
+            commitMsg: `Saved by user on ${new Date().toLocaleString()}`,
+          },
+        }),
+      ]);
     } else {
        await prisma.document.create({
         data: {

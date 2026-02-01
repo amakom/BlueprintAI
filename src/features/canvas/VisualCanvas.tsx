@@ -8,22 +8,29 @@ import {
   NodeTypes,
   EdgeTypes,
   Node,
-  ReactFlowProvider
+  ReactFlowProvider,
+  useReactFlow,
+  useStoreApi
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
 import { UserStoryNode } from './nodes/UserStoryNode';
 import { ScreenNode } from './nodes/ScreenNode';
+import { CommentNode } from './nodes/CommentNode';
 import { DeletableEdge } from './edges/DeletableEdge';
-import { Plus, Save, Smartphone, Sparkles } from 'lucide-react';
+import { Plus, Save, Smartphone, Sparkles, MessageSquare, History, Play, MousePointer, X } from 'lucide-react';
 import { useCanvas } from './CanvasContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { ExportMenu } from './ExportMenu';
 import { CollaborativeCursors } from '@/components/canvas/CollaborativeCursors';
+import { CommentInput } from './CommentsOverlay';
+import { VersionHistory } from './VersionHistory';
+import { useSocket } from '@/components/providers/socket-provider';
 
 const nodeTypes: NodeTypes = {
   userStory: UserStoryNode,
   screen: ScreenNode,
+  comment: CommentNode,
 };
 
 const edgeTypes: EdgeTypes = {
@@ -34,7 +41,16 @@ interface VisualCanvasProps {
   projectId: string;
   readOnly?: boolean;
 }
-export function VisualCanvas({ projectId, readOnly = false }: VisualCanvasProps) {
+
+export function VisualCanvas(props: VisualCanvasProps) {
+    return (
+        <ReactFlowProvider>
+            <VisualCanvasContent {...props} />
+        </ReactFlowProvider>
+    );
+}
+
+function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps) {
   const { 
     nodes, 
     edges, 
@@ -47,21 +63,76 @@ export function VisualCanvas({ projectId, readOnly = false }: VisualCanvasProps)
     setProjectId, 
     saveCanvas, 
     isSaving,
-    userName
+    userName,
+    documentId
   } = useCanvas();
 
+  const { socket } = useSocket();
+  const { screenToFlowPosition, flowToScreenPosition, fitView } = useReactFlow();
+
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isCommentMode, setCommentMode] = useState(false);
+  const [isPlayMode, setPlayMode] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  
+  // Comment Input State
+  const [tempCommentPos, setTempCommentPos] = useState<{x: number, y: number} | null>(null);
 
   useEffect(() => {
     setProjectId(projectId);
   }, [projectId, setProjectId]);
+
+  // Fetch comments and merge into nodes
+  useEffect(() => {
+    if (!documentId) return;
+    fetch(`/api/comments?documentId=${documentId}`)
+      .then(res => res.json())
+      .then(data => {
+          if (Array.isArray(data)) {
+              const commentNodes = data.map((c: any) => ({
+                  id: `comment-${c.id}`,
+                  type: 'comment',
+                  position: { x: c.x, y: c.y },
+                  data: { label: c.content, userName: c.user.name, date: new Date(c.createdAt).toLocaleDateString() },
+                  draggable: true 
+              }));
+              setNodes(nds => {
+                  const existingIds = new Set(nds.map(n => n.id));
+                  const newComments = commentNodes.filter((n: any) => !existingIds.has(n.id));
+                  return [...nds, ...newComments];
+              });
+          }
+      });
+  }, [documentId, setNodes]);
+
+  // Handle Socket Comment Add
+  useEffect(() => {
+    if (!socket) return;
+    const onCommentAdd = (data: any) => {
+        if (data.projectId === projectId) {
+            const newNode: Node = {
+                id: `comment-${data.id}`,
+                type: 'comment',
+                position: { x: data.x, y: data.y },
+                data: { label: data.content, userName: data.user.name, date: new Date().toLocaleDateString() },
+                draggable: true
+            };
+            setNodes(nds => {
+                if (nds.some(n => n.id === newNode.id)) return nds;
+                return [...nds, newNode];
+            });
+        }
+    };
+    socket.on('comment-add', onCommentAdd);
+    return () => { socket.off('comment-add', onCommentAdd); };
+  }, [socket, projectId, setNodes]);
 
   const onAddNode = (type: string) => {
     const id = Math.random().toString(36).substr(2, 9);
     const newNode: Node = {
         id,
         type,
-        position: { x: Math.random() * 400, y: Math.random() * 400 },
+        position: { x: Math.random() * 400 + 100, y: Math.random() * 400 + 100 },
         data: { 
             label: `New ${type}`, 
             description: 'Edit this description...',
@@ -80,17 +151,9 @@ export function VisualCanvas({ projectId, readOnly = false }: VisualCanvasProps)
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ projectId })
       });
-      
       const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to generate flow');
-      }
-
+      if (!res.ok) throw new Error(data.error || 'Failed to generate flow');
       if (data.nodes && data.edges) {
-        // If canvas is empty, replace. If not, maybe append? 
-        // For now, let's append but offset them if needed.
-        // Actually, let's just add them.
         setNodes((nds) => [...nds, ...data.nodes]);
         setEdges((eds) => [...eds, ...data.edges]);
       }
@@ -102,10 +165,91 @@ export function VisualCanvas({ projectId, readOnly = false }: VisualCanvasProps)
     }
   };
 
+  // Click handler for Adding Comment
+  const onPaneClick = useCallback((event: React.MouseEvent) => {
+    if (isCommentMode) {
+        const position = screenToFlowPosition({ x: event.clientX, y: event.clientY });
+        setTempCommentPos(position);
+    }
+  }, [isCommentMode, screenToFlowPosition]);
+
+  const submitComment = async (text: string) => {
+    if (!tempCommentPos || !documentId) return;
+    try {
+        const res = await fetch('/api/comments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                content: text,
+                documentId,
+                x: tempCommentPos.x,
+                y: tempCommentPos.y
+            })
+        });
+        const savedComment = await res.json();
+        
+        // Add locally
+        const newNode: Node = {
+            id: `comment-${savedComment.id}`,
+            type: 'comment',
+            position: { x: savedComment.x, y: savedComment.y },
+            data: { label: savedComment.content, userName: savedComment.user.name, date: new Date().toLocaleDateString() },
+            draggable: true
+        };
+        setNodes(prev => [...prev, newNode]);
+
+        // Socket broadcast
+        if (socket && projectId) {
+            socket.emit('comment-add', { projectId, ...savedComment });
+        }
+
+        setTempCommentPos(null);
+        setCommentMode(false);
+    } catch (err) {
+        console.error(err);
+    }
+  };
+
+  // Play Mode Click Handler
+  const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
+      if (isPlayMode && !readOnly) {
+          const outgoing = edges.filter(e => e.source === node.id);
+          if (outgoing.length > 0) {
+              const targetId = outgoing[0].target;
+              const targetNode = nodes.find(n => n.id === targetId);
+              if (targetNode) {
+                  fitView({ nodes: [targetNode], duration: 800, padding: 0.5 });
+              }
+          }
+      }
+  }, [isPlayMode, readOnly, edges, nodes, fitView]);
+
+  // Calculate screen position for Input Box
+  const inputScreenPos = tempCommentPos ? flowToScreenPosition(tempCommentPos) : null;
+
   return (
-    <ReactFlowProvider>
-      <div className="w-full h-full bg-cloud relative">
+    <div className="w-full h-full bg-cloud relative">
         <CollaborativeCursors projectId={projectId} />
+
+        {/* Overlays */}
+        {inputScreenPos && (
+            <CommentInput 
+                x={inputScreenPos.x} 
+                y={inputScreenPos.y} 
+                onSubmit={submitComment} 
+                onCancel={() => setTempCommentPos(null)} 
+            />
+        )}
+        
+        {showHistory && <VersionHistory onClose={() => setShowHistory(false)} />}
+
+        {/* Comment Mode Indicator overlay to capture clicks is NOT needed because we use onPaneClick */}
+        {isCommentMode && (
+            <div className="absolute top-20 left-1/2 -translate-x-1/2 bg-amber-100 text-amber-800 px-4 py-1 rounded-full text-xs font-bold shadow-md z-10 border border-amber-200 animate-in slide-in-from-top">
+                Click anywhere to comment
+                <button onClick={() => setCommentMode(false)} className="ml-2 hover:text-amber-950"><X size={12}/></button>
+            </div>
+        )}
 
         {/* Empty State Overlay */}
         {nodes.length === 0 && !readOnly && (
@@ -141,15 +285,43 @@ export function VisualCanvas({ projectId, readOnly = false }: VisualCanvasProps)
 
         <div className="absolute top-4 right-4 z-10 flex gap-2">
            {!readOnly && (
-             <button 
-                onClick={handleGenerateFlow}
-                disabled={isGenerating}
-                className="bg-white border border-border p-2 rounded-md shadow-sm hover:bg-purple-50 text-purple-600 disabled:opacity-50 transition-colors flex items-center gap-2"
-                title="Generate AI User Flow"
-             >
-               <Sparkles className={`w-4 h-4 ${isGenerating ? 'animate-spin' : ''}`} />
-               <span className="text-xs font-bold hidden sm:inline">AI Generate</span>
-             </button>
+             <>
+               <button
+                  onClick={() => { setPlayMode(!isPlayMode); setCommentMode(false); }}
+                  className={`border p-2 rounded-md shadow-sm transition-colors flex items-center gap-2 ${isPlayMode ? 'bg-cyan-50 border-cyan text-cyan-600' : 'bg-white border-border hover:bg-gray-50 text-navy'}`}
+                  title={isPlayMode ? "Exit Prototyping Mode" : "Prototyping Mode"}
+               >
+                  {isPlayMode ? <MousePointer className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+               </button>
+
+               <button
+                  onClick={() => { setCommentMode(!isCommentMode); setPlayMode(false); }}
+                  className={`border p-2 rounded-md shadow-sm transition-colors flex items-center gap-2 ${isCommentMode ? 'bg-amber-50 border-amber-400 text-amber-600' : 'bg-white border-border hover:bg-gray-50 text-navy'}`}
+                  title="Comments"
+               >
+                  <MessageSquare className="w-4 h-4" />
+               </button>
+
+               <button
+                  onClick={() => setShowHistory(!showHistory)}
+                  className={`border p-2 rounded-md shadow-sm transition-colors flex items-center gap-2 ${showHistory ? 'bg-navy text-white border-navy' : 'bg-white border-border hover:bg-gray-50 text-navy'}`}
+                  title="Version History"
+               >
+                  <History className="w-4 h-4" />
+               </button>
+
+               <div className="w-px h-8 bg-gray-300 mx-1"></div>
+
+               <button 
+                  onClick={handleGenerateFlow}
+                  disabled={isGenerating}
+                  className="bg-white border border-border p-2 rounded-md shadow-sm hover:bg-purple-50 text-purple-600 disabled:opacity-50 transition-colors flex items-center gap-2"
+                  title="Generate AI User Flow"
+               >
+                 <Sparkles className={`w-4 h-4 ${isGenerating ? 'animate-spin' : ''}`} />
+                 <span className="text-xs font-bold hidden sm:inline">AI Generate</span>
+               </button>
+             </>
            )}
            {!readOnly && <ExportMenu projectId={projectId} />}
            {!readOnly && (
@@ -169,36 +341,39 @@ export function VisualCanvas({ projectId, readOnly = false }: VisualCanvasProps)
           edges={edges}
           onNodesChange={!readOnly ? onNodesChange : undefined}
           onEdgesChange={!readOnly ? onEdgesChange : undefined}
-          onConnect={!readOnly ? onConnect : undefined}
-          nodesDraggable={!readOnly}
-          nodesConnectable={!readOnly}
-          elementsSelectable={!readOnly}
+          onConnect={!readOnly && !isPlayMode ? onConnect : undefined}
+          onPaneClick={!readOnly ? onPaneClick : undefined}
+          onNodeClick={onNodeClick}
+          nodesDraggable={!readOnly && !isPlayMode}
+          nodesConnectable={!readOnly && !isPlayMode}
+          elementsSelectable={!readOnly && !isPlayMode}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           defaultEdgeOptions={{ type: 'deletable' }}
           fitView
-          className="bg-cloud"
+          className={`bg-cloud ${isCommentMode ? 'cursor-crosshair' : ''}`}
         >
           <Background 
               color="#cbd5e1" 
               gap={20} 
           />
-          {!readOnly && <Controls />}
+          {!readOnly && !isPlayMode && <Controls />}
           
-          {/* Add Panel for floating controls if needed later */}
           <Panel position="top-left" className="bg-white/80 p-2 rounded-lg backdrop-blur-sm border border-border">
               <div className="flex flex-col gap-2">
                   <p className="text-xs font-bold text-navy uppercase tracking-wider mb-1">Tools</p>
                   <button 
                       onClick={() => onAddNode('userStory')}
-                      className="flex items-center gap-2 px-3 py-1.5 bg-navy text-white rounded-md text-sm hover:bg-navy/90 transition-colors shadow-sm"
+                      disabled={isPlayMode}
+                      className="flex items-center gap-2 px-3 py-1.5 bg-navy text-white rounded-md text-sm hover:bg-navy/90 transition-colors shadow-sm disabled:opacity-50"
                   >
                       <Plus className="w-4 h-4" />
                       User Story
                   </button>
                   <button 
                       onClick={() => onAddNode('screen')}
-                      className="flex items-center gap-2 px-3 py-1.5 bg-white text-navy border border-border rounded-md text-sm hover:bg-gray-50 transition-colors shadow-sm"
+                      disabled={isPlayMode}
+                      className="flex items-center gap-2 px-3 py-1.5 bg-white text-navy border border-border rounded-md text-sm hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50"
                   >
                       <Smartphone className="w-4 h-4" />
                       Screen
@@ -206,7 +381,6 @@ export function VisualCanvas({ projectId, readOnly = false }: VisualCanvasProps)
               </div>
           </Panel>
         </ReactFlow>
-      </div>
-    </ReactFlowProvider>
+    </div>
   );
 }

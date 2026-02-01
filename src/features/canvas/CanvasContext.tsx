@@ -34,6 +34,7 @@ interface CanvasContextType {
   setEdges: (edges: Edge[] | ((eds: Edge[]) => Edge[])) => void;
   projectId: string | null;
   setProjectId: (id: string) => void;
+  documentId: string | null;
   saveCanvas: () => Promise<void>;
   isSaving: boolean;
   userName?: string;
@@ -47,6 +48,7 @@ export function CanvasProvider({ children, initialData, readOnly = false }: { ch
   const [nodes, setNodes, onNodesChangeInternal] = useNodesState<Node>(initialData?.nodes || []);
   const [edges, setEdges, onEdgesChangeInternal] = useEdgesState<Edge>(initialData?.edges || []);
   const [projectId, setProjectId] = useState<string | null>(null);
+  const [documentId, setDocumentId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [userName, setUserName] = useState<string | undefined>(undefined);
   const [aiSettings, setAiSettings] = useState<AISettings>(DEFAULT_AI_SETTINGS);
@@ -128,16 +130,24 @@ export function CanvasProvider({ children, initialData, readOnly = false }: { ch
     };
   }, [socket, projectId, readOnly, onNodesChangeInternal, onEdgesChangeInternal, setNodes, setEdges]);
 
+  // Fetch User Name
+  useEffect(() => {
     if (readOnly) return;
-    fetch('/api/auth/me')
-      .then(res => res.json())
-      .then(data => {
+
+    const fetchUser = async () => {
+      try {
+        const res = await fetch('/api/auth/me');
+        const data = await res.json();
         if (data.user?.name) {
-            const capitalized = data.user.name.charAt(0).toUpperCase() + data.user.name.slice(1);
-            setUserName(capitalized);
+          const capitalized = data.user.name.charAt(0).toUpperCase() + data.user.name.slice(1);
+          setUserName(capitalized);
         }
-      })
-      .catch(err => console.error('Failed to fetch user', err));
+      } catch (err) {
+        console.error('Failed to fetch user', err);
+      }
+    };
+
+    fetchUser();
   }, []);
 
   // Load canvas
@@ -149,6 +159,9 @@ export function CanvasProvider({ children, initialData, readOnly = false }: { ch
         const res = await fetch(`/api/projects/${projectId}/canvas`);
         if (res.ok) {
           const data = await res.json();
+          if (data.documentId) {
+            setDocumentId(data.documentId);
+          }
           if (data.content && data.content.nodes) {
             setNodes(data.content.nodes);
             // Ensure all loaded edges are deletable
@@ -171,10 +184,13 @@ export function CanvasProvider({ children, initialData, readOnly = false }: { ch
     if (!projectId || readOnly) return;
     setIsSaving(true);
     try {
+      // Filter out comment nodes before saving
+      const nodesToSave = nodes.filter(n => n.type !== 'comment');
+      
       await fetch(`/api/projects/${projectId}/canvas`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nodes, edges }),
+        body: JSON.stringify({ nodes: nodesToSave, edges }),
       });
     } catch (error) {
       console.error('Failed to save canvas:', error);
@@ -195,6 +211,7 @@ export function CanvasProvider({ children, initialData, readOnly = false }: { ch
       setEdges,
       projectId,
       setProjectId,
+      documentId,
       saveCanvas,
       isSaving,
       userName,

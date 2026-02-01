@@ -46,6 +46,10 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
         socket.to(data.projectId).emit('edge-add', data);
       });
 
+      socket.on('comment-add', (data) => {
+        socket.to(data.projectId).emit('comment-add', data);
+      });
+
       socket.on('disconnect', () => {
         console.log('Socket disconnected:', socket.id);
       });

@@ -33,7 +33,7 @@ export default function LandingPage() {
       </nav>
 
       <main className="px-6 relative z-10">
-        <section className="container mx-auto pt-20 pb-24 text-center">
+        <section className="container mx-auto pt-20 pb-12 text-center">
           <p className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-white/10 border border-white/20">Collaborate with Intelligence</p>
           <h1 className="mt-6 text-5xl md:text-7xl font-extrabold leading-tight">
             Ship Faster with <span className="text-cyan">BlueprintAI</span>
@@ -44,23 +44,8 @@ export default function LandingPage() {
             <Link href="/pricing" className="border border-white/20 text-white px-8 py-4 rounded-full font-bold text-lg hover:border-white transition-all">See Plans</Link>
           </div>
         </section>
-        <section className="container mx-auto">
-          <HeroAnimation />
-        </section>
-        <section className="container mx-auto mt-16">
-          <StrategyThinkingAnimation />
-        </section>
-        <section className="container mx-auto mt-16">
-          <CanvasFlowAnimation />
-        </section>
-        <section className="container mx-auto mt-16">
-          <SpecConversionAnimation />
-        </section>
-        <section className="container mx-auto mt-24">
-          <FinalCTAAnimation />
-        </section>
 
-        <section className="container mx-auto grid md:grid-cols-3 gap-6">
+        <section className="container mx-auto mb-16 grid md:grid-cols-3 gap-6">
           <div className="bg-white/5 p-8 rounded-2xl border border-white/10">
             <div className="text-cyan text-sm font-bold">From Canvas to Specs</div>
             <h3 className="mt-2 text-2xl font-bold">Visual-first PRDs</h3>
@@ -76,6 +61,22 @@ export default function LandingPage() {
             <h3 className="mt-2 text-2xl font-bold">Real-time collaboration</h3>
             <p className="mt-3 text-gray-400">Work with your team live, review changes, and ship faster with shared context.</p>
           </div>
+        </section>
+
+        <section className="container mx-auto">
+          <HeroAnimation />
+        </section>
+        <section className="container mx-auto mt-16">
+          <StrategyThinkingAnimation />
+        </section>
+        <section className="container mx-auto mt-16">
+          <CanvasFlowAnimation />
+        </section>
+        <section className="container mx-auto mt-16">
+          <SpecConversionAnimation />
+        </section>
+        <section className="container mx-auto mt-24">
+          <FinalCTAAnimation />
         </section>
 
         {/* Video Player Section */}

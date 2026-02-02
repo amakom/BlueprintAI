@@ -70,10 +70,19 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
     }
   }, [id, setNodes]);
 
-  // Adjust height on initial render and when value changes
+  // Adjust height on initial render and when local description changes
+  // We do NOT call setNodes here to avoid re-rendering loop while typing
+  // Instead we just adjust the textarea height visually
   useEffect(() => {
-    adjustHeight();
-  }, [localDescription, adjustHeight]);
+    const textarea = textareaRef.current;
+    if (textarea) {
+        textarea.style.height = '1px';
+        textarea.style.minHeight = '0px';
+        const scrollHeight = textarea.scrollHeight;
+        textarea.style.height = `${Math.max(scrollHeight, 60)}px`;
+        textarea.style.minHeight = '60px';
+    }
+  }, [localDescription]);
 
   const onLabelChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setLocalLabel(evt.target.value);
@@ -84,12 +93,32 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
   };
 
   const commitChanges = useCallback(() => {
+    // 1. Calculate new height based on content
+    const textarea = textareaRef.current;
+    let newHeightStyle = undefined;
+    
+    if (textarea) {
+         const scrollHeight = textarea.scrollHeight;
+         const effectiveContentHeight = Math.max(scrollHeight, 60);
+         const minTotalHeight = 94 + effectiveContentHeight; 
+         newHeightStyle = { height: minTotalHeight };
+    }
+
+    // 2. Update React Flow State (Data + Height)
     setNodes((nodes) => nodes.map((node) => {
       if (node.id === id) {
-        if (node.data.label === localLabel && node.data.description === localDescription) {
+        const needsDataUpdate = node.data.label !== localLabel || node.data.description !== localDescription;
+        const needsHeightUpdate = newHeightStyle && node.style?.height !== newHeightStyle.height;
+
+        if (!needsDataUpdate && !needsHeightUpdate) {
             return node;
         }
-        return { ...node, data: { ...node.data, label: localLabel, description: localDescription } };
+        
+        return { 
+            ...node, 
+            data: { ...node.data, label: localLabel, description: localDescription },
+            style: { ...node.style, ...(newHeightStyle || {}) }
+        };
       }
       return node;
     }));

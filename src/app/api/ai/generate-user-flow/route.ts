@@ -131,7 +131,7 @@ Request: ${prompt}
 Generate a detailed user flow including key screens and user actions.`;
 
         const completion = await openai.chat.completions.create({
-          model: "gpt-4-turbo-preview",
+          model: "gpt-4o",
           response_format: { type: "json_object" },
           messages: [
             { role: "system", content: systemPrompt },

@@ -141,7 +141,7 @@ To become the leading platform in the industry, empowering users to achieve more
 
     // Real AI Generation
     const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview", 
+      model: "gpt-4o", 
       response_format: { type: "json_object" },
       messages: [
         {

@@ -13,6 +13,8 @@ type Message = {
   content: string;
 };
 
+import { AlertModal } from '../ui/AlertModal';
+
 export function AIChatPanel() {
   const { limits, isLoading } = useSubscription();
   const { addNode, setNodes, setEdges, projectId, userName, aiSettings, setAiSettings } = useCanvas();
@@ -24,6 +26,9 @@ export function AIChatPanel() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  
+  // Alert State
+  const [errorAlert, setErrorAlert] = useState<{ isOpen: boolean; message: string }>({ isOpen: false, message: '' });
 
   const handleSend = async () => {
     if (!input.trim() || isGenerating) return;
@@ -60,7 +65,7 @@ export function AIChatPanel() {
         }
 
         if (data.warning) {
-            setMessages(prev => [...prev, { 
+             setMessages(prev => [...prev, { 
                 role: 'assistant', 
                 content: `⚠️ ${data.warning}` 
             }]);
@@ -84,6 +89,13 @@ export function AIChatPanel() {
 
     } catch (error) {
         console.error('AI Generation Error:', error);
+        // Show centered alert instead of just chat message
+        setErrorAlert({ 
+            isOpen: true, 
+            message: error instanceof Error ? error.message : 'Something went wrong during AI generation.' 
+        });
+        
+        // Also add to chat history for record
         setMessages(prev => [...prev, { 
             role: 'assistant', 
             content: `Error: ${error instanceof Error ? error.message : 'Something went wrong'}` 
@@ -95,6 +107,12 @@ export function AIChatPanel() {
 
   const ChatContent = () => (
     <div className="flex flex-col h-full bg-white shadow-lg w-full">
+      <AlertModal 
+        isOpen={errorAlert.isOpen} 
+        onClose={() => setErrorAlert({ ...errorAlert, isOpen: false })} 
+        message={errorAlert.message} 
+        title="AI Generation Failed"
+      />
       <div className="p-4 border-b border-border bg-cloud/50">
         <div className="flex items-center justify-between">
           <h2 className="font-bold text-navy flex items-center gap-2">

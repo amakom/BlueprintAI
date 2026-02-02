@@ -629,6 +629,7 @@ function StrategyDocSection({ projectId }: { projectId: string }) {
   const [content, setContent] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     const fetchDoc = async () => {
@@ -638,7 +639,6 @@ function StrategyDocSection({ projectId }: { projectId: string }) {
           const data = await res.json();
           if (data.doc) {
             setDoc(data.doc);
-            // Assume content is { text: "..." }
             setContent(data.doc.content?.text || '');
           }
         }
@@ -648,6 +648,38 @@ function StrategyDocSection({ projectId }: { projectId: string }) {
     };
     fetchDoc();
   }, [projectId]);
+
+  const handleGenerate = async () => {
+    if (content && !confirm("This will overwrite your current strategy document. Are you sure?")) {
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const res = await fetch('/api/ai/generate-strategy-doc', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projectId }) 
+      });
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to generate Strategy Doc');
+      }
+
+      if (data.doc && data.doc.text) {
+        setContent(data.doc.text);
+        // Automatically save or let user save? 
+        // Let's enter edit mode so they can review/save.
+        setIsEditing(true);
+      }
+    } catch (e) {
+      console.error("Failed to generate Strategy Doc:", e);
+      alert(e instanceof Error ? e.message : "Failed to generate Strategy Doc");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -694,12 +726,21 @@ function StrategyDocSection({ projectId }: { projectId: string }) {
             </button>
           </div>
         ) : (
-          <button 
-            onClick={() => setIsEditing(true)}
-            className="bg-navy text-white px-4 py-2 rounded-lg hover:bg-opacity-90"
-          >
-            Edit
-          </button>
+          <div className="flex gap-2">
+            <button 
+              onClick={handleGenerate}
+              disabled={isGenerating}
+              className="bg-navy text-white px-4 py-2 rounded-lg hover:bg-opacity-90 disabled:opacity-50 flex items-center gap-2"
+            >
+              {isGenerating ? 'Generating...' : 'Generate with AI'}
+            </button>
+            <button 
+              onClick={() => setIsEditing(true)}
+              className="bg-white text-navy border border-navy px-4 py-2 rounded-lg hover:bg-slate-50"
+            >
+              Edit
+            </button>
+          </div>
         )}
       </div>
       

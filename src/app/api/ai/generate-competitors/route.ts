@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { getPlanLimits, PlanType } from '@/lib/permissions';
 import { logSystem } from '@/lib/system-log';
+import { openai, isAIConfigured } from '@/lib/openai';
 
 export async function POST(req: Request) {
   try {
@@ -92,52 +93,66 @@ export async function POST(req: Request) {
       }, { status: 403 });
     }
 
-    // 5. "Generate" Competitors (Mock)
+    // 5. Generate Competitors using Real AI
     const contextDescription = description || project.description || "A new innovative product";
 
-    const mockCompetitors = [
-      { 
-        name: "Legacy Corp", 
-        website: "https://legacy.example.com", 
-        strengths: ["Established market share", "Deep pockets"], 
-        weaknesses: ["Slow innovation", "Outdated UI"] 
-      },
-      { 
-        name: "Startup X", 
-        website: "https://startupx.example.com", 
-        strengths: ["Modern tech stack", "Agile team"], 
-        weaknesses: ["Limited feature set", "Unproven reliability"] 
-      },
-      {
-        name: "Enterprise Solutions Ltd",
-        website: "https://enterprise-sol.example.com",
-        strengths: ["Comprehensive suite", "Strong sales force"],
-        weaknesses: ["High cost", "Complex implementation"]
-      }
-    ];
+    if (!isAIConfigured()) {
+       console.warn('OpenAI API Key missing, falling back to mock data');
+       const mockCompetitors = [
+        { 
+          name: "Legacy Corp (Mock)", 
+          website: "https://legacy-example.com", 
+          strengths: ["Established market share", "Deep pockets"], 
+          weaknesses: ["Slow innovation", "Outdated UI"] 
+        }
+       ];
+       return NextResponse.json({ competitors: mockCompetitors });
+    }
 
-    // 6. Log Usage
-    await prisma.aIUsageLog.create({
-      data: {
-        teamId: team.id,
-        action: 'generate_competitors',
-        inputTokens: 100,
-        outputTokens: 300,
-        model: 'gpt-mock-competitor',
-      },
-    });
+    try {
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4-turbo-preview", 
+        response_format: { type: "json_object" },
+        messages: [
+          {
+            role: "system",
+            content: "You are a Market Analyst. Identify 3-5 potential competitors for the product described by the user. Return a JSON object with a single key 'competitors' containing an array of objects. Each object must have 'name', 'website' (can be example.com if unknown), 'strengths' (array of strings), and 'weaknesses' (array of strings)."
+          },
+          {
+            role: "user",
+            content: `Product Description: ${contextDescription}`
+          }
+        ]
+      });
 
-    return NextResponse.json({ 
-      competitors: mockCompetitors,
-      usage: {
-        used: monthlyUsage + 1,
-        limit: limits.maxAIGenerationsPerMonth
+      const content = completion.choices[0].message.content;
+      if (!content) {
+        throw new Error("No content received from AI");
       }
-    });
+
+      const result = JSON.parse(content);
+
+      // Log usage
+      await prisma.aIUsageLog.create({
+        data: {
+          teamId: team.id,
+          action: 'GENERATE_COMPETITORS',
+          model: 'gpt-4-turbo-preview',
+          inputTokens: completion.usage?.prompt_tokens || 0,
+          outputTokens: completion.usage?.completion_tokens || 0,
+        }
+      });
+
+      return NextResponse.json(result);
+
+    } catch (error) {
+      console.error('AI Generation Error:', error);
+      await logSystem('ERROR', 'AI', 'Failed to generate Competitors', { error: String(error) });
+      return NextResponse.json({ error: 'Failed to generate Competitors. Please try again later.' }, { status: 500 });
+    }
 
   } catch (error) {
-    console.error('AI Competitor Generation error:', error);
-    await logSystem('ERROR', 'AI', 'Competitor Generation failed', { error: error instanceof Error ? error.message : 'Unknown' });
+    console.error('Request Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

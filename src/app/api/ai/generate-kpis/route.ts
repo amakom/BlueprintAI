@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { getPlanLimits, PlanType } from '@/lib/permissions';
 import { logSystem } from '@/lib/system-log';
+import { openai, isAIConfigured } from '@/lib/openai';
 
 export async function POST(req: Request) {
   try {
@@ -92,38 +93,62 @@ export async function POST(req: Request) {
       }, { status: 403 });
     }
 
-    // 5. "Generate" KPIs (Mock)
+    // 5. Generate KPIs using Real AI
     const contextDescription = description || project.description || "A new innovative product";
 
-    const mockKPIs = [
-      { name: "Monthly Recurring Revenue (MRR)", target: "$10,000", status: "ON_TRACK" },
-      { name: "Daily Active Users (DAU)", target: "5,000", status: "AT_RISK" },
-      { name: "Customer Acquisition Cost (CAC)", target: "< $50", status: "ON_TRACK" },
-      { name: "Churn Rate", target: "< 2%", status: "OFF_TRACK" }
-    ];
+    if (!isAIConfigured()) {
+       console.warn('OpenAI API Key missing, falling back to mock data');
+       const mockKPIs = [
+        { name: "Monthly Recurring Revenue (MRR) (Mock)", target: "$10,000", status: "ON_TRACK" },
+        { name: "Daily Active Users (DAU) (Mock)", target: "5,000", status: "AT_RISK" },
+       ];
+       return NextResponse.json({ kpis: mockKPIs });
+    }
 
-    // 6. Log Usage
-    await prisma.aIUsageLog.create({
-      data: {
-        teamId: team.id,
-        action: 'generate_kpis',
-        inputTokens: 100,
-        outputTokens: 200,
-        model: 'gpt-mock-kpi',
-      },
-    });
+    try {
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4-turbo-preview", 
+        response_format: { type: "json_object" },
+        messages: [
+          {
+            role: "system",
+            content: "You are an expert Product Manager. Generate 5-8 KPIs (Key Performance Indicators) for the product described by the user. Return a JSON object with a single key 'kpis' containing an array of objects. Each object must have 'name' (string), 'target' (string, e.g., '10k users', '$50k MRR'), and 'status' (string, strictly one of: 'ON_TRACK', 'AT_RISK', 'OFF_TRACK'). Choose realistic initial targets and random statuses to simulate a live dashboard."
+          },
+          {
+            role: "user",
+            content: `Product Description: ${contextDescription}`
+          }
+        ]
+      });
 
-    return NextResponse.json({ 
-      kpis: mockKPIs,
-      usage: {
-        used: monthlyUsage + 1,
-        limit: limits.maxAIGenerationsPerMonth
+      const content = completion.choices[0].message.content;
+      if (!content) {
+        throw new Error("No content received from AI");
       }
-    });
+
+      const result = JSON.parse(content);
+
+      // Log usage
+      await prisma.aIUsageLog.create({
+        data: {
+          teamId: team.id,
+          action: 'GENERATE_KPIS',
+          model: 'gpt-4-turbo-preview',
+          inputTokens: completion.usage?.prompt_tokens || 0,
+          outputTokens: completion.usage?.completion_tokens || 0,
+        }
+      });
+
+      return NextResponse.json(result);
+
+    } catch (error) {
+      console.error('AI Generation Error:', error);
+      await logSystem('ERROR', 'AI', 'Failed to generate KPIs', { error: String(error) });
+      return NextResponse.json({ error: 'Failed to generate KPIs. Please try again later.' }, { status: 500 });
+    }
 
   } catch (error) {
-    console.error('AI KPI Generation error:', error);
-    await logSystem('ERROR', 'AI', 'KPI Generation failed', { error: error instanceof Error ? error.message : 'Unknown' });
+    console.error('Request Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

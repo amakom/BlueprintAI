@@ -99,10 +99,26 @@ This guide provides step-by-step instructions to test all implemented features o
 3.  Click **"Generate with AI"**.
 4.  Verify new Objectives and Key Results cards appear.
 
-### B. AI Persona Generation
+### B. AI KPI Generation
+1.  Select the **"KPIs"** sub-tab.
+2.  Click **"Generate with AI"**.
+3.  Verify key performance indicators (e.g., ARR, Churn) appear with targets.
+
+### C. AI Persona Generation
 1.  Select the **"Personas"** sub-tab.
-2.  Click **"Generate Personas"**.
-3.  Verify 2-3 mock personas appear with avatars.
+2.  Click **"Generate with AI"**.
+3.  Verify detailed personas appear with bios, goals, and frustrations.
+
+### D. AI Competitor Analysis
+1.  Select the **"Competitors"** sub-tab.
+2.  Click **"Generate with AI"**.
+3.  Verify competitor cards appear with strengths and weaknesses analysis.
+
+### E. AI Strategy Document
+1.  Select the **"Strategy Doc"** sub-tab.
+2.  Click **"Generate with AI"**.
+3.  Verify a comprehensive strategy document (Executive Summary, Vision, etc.) populates the editor.
+4.  Click **"Save"** to persist the document.
 
 ---
 

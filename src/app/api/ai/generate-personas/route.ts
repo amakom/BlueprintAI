@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { getPlanLimits, PlanType } from '@/lib/permissions';
 import { logSystem } from '@/lib/system-log';
+import { openai, isAIConfigured } from '@/lib/openai';
 
 export async function POST(req: Request) {
   try {
@@ -15,7 +16,7 @@ export async function POST(req: Request) {
     const user = await prisma.user.findUnique({ where: { id: session.userId } });
     const userRole = user?.role;
 
-    const { projectId } = await req.json();
+    const { projectId, description } = await req.json();
 
     if (!projectId) {
       return NextResponse.json({ error: 'Project ID is required' }, { status: 400 });
@@ -55,7 +56,7 @@ export async function POST(req: Request) {
         }
     }
 
-    // 3. Rate Limiting
+    // 3. Rate Limiting (Abuse Prevention - Short Term)
     const oneMinuteAgo = new Date(Date.now() - 60 * 1000);
     const recentUserRequests = await prisma.aIUsageLog.count({
       where: {
@@ -71,7 +72,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'Rate limit exceeded. Please wait a moment.' }, { status: 429 });
     }
 
-    // 4. Quota Enforcement
+    // 4. Quota Enforcement (Monthly Limit)
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
     startOfMonth.setHours(0, 0, 0, 0);
@@ -92,48 +93,67 @@ export async function POST(req: Request) {
       }, { status: 403 });
     }
 
-    // 5. "Generate" Personas (Mock)
-    const mockPersonas = [
-      {
-        name: "Sarah the Starter",
-        role: "Small Business Owner",
-        bio: "Sarah runs a local bakery and needs simple tools to manage her inventory and orders. She is not tech-savvy.",
-        goals: ["Save time on admin tasks", "Increase online orders", "Track inventory easily"],
-        frustrations: ["Complicated software", "High monthly fees", "Lack of mobile support"],
-        imageUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah"
-      },
-      {
-        name: "Mike the Manager",
-        role: "Operations Manager",
-        bio: "Mike oversees operations for a mid-sized logistics company. He needs robust reporting and team collaboration features.",
-        goals: ["Optimize route planning", "Reduce fuel costs", "Improve team communication"],
-        frustrations: ["Disconnected systems", "Manual data entry", "Slow reporting"],
-        imageUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike"
-      }
-    ];
+    // 5. Generate Personas using Real AI
+    const contextDescription = description || project.description || "A new innovative product";
 
-    // 6. Log Usage
-    await prisma.aIUsageLog.create({
-      data: {
-        teamId: team.id,
-        action: 'generate_personas',
-        inputTokens: 120,
-        outputTokens: 400,
-        model: 'gpt-mock-persona',
-      },
-    });
+    if (!isAIConfigured()) {
+       console.warn('OpenAI API Key missing, falling back to mock data');
+       const mockPersonas = [
+        {
+          name: "Sarah the Starter (Mock)",
+          role: "Small Business Owner",
+          bio: "Sarah runs a local bakery and needs simple tools to manage her inventory and orders. She is not tech-savvy.",
+          goals: ["Save time on admin", "Increase sales", "Understand customer trends"],
+          frustrations: ["Complex software", "High costs", "Lack of mobile support"]
+        }
+       ];
+       return NextResponse.json({ personas: mockPersonas });
+    }
 
-    return NextResponse.json({ 
-      personas: mockPersonas,
-      usage: {
-        used: monthlyUsage + 1,
-        limit: limits.maxAIGenerationsPerMonth
+    try {
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4-turbo-preview", 
+        response_format: { type: "json_object" },
+        messages: [
+          {
+            role: "system",
+            content: "You are an expert User Researcher. Generate 3 detailed User Personas for the product described by the user. Return a JSON object with a single key 'personas' containing an array of objects. Each object must have 'name', 'role', 'bio', 'goals' (array of strings), and 'frustrations' (array of strings)."
+          },
+          {
+            role: "user",
+            content: `Product Description: ${contextDescription}`
+          }
+        ]
+      });
+
+      const content = completion.choices[0].message.content;
+      if (!content) {
+        throw new Error("No content received from AI");
       }
-    });
+
+      const result = JSON.parse(content);
+
+      // Log usage
+      await prisma.aIUsageLog.create({
+        data: {
+          teamId: team.id,
+          action: 'GENERATE_PERSONAS',
+          model: 'gpt-4-turbo-preview',
+          inputTokens: completion.usage?.prompt_tokens || 0,
+          outputTokens: completion.usage?.completion_tokens || 0,
+        }
+      });
+
+      return NextResponse.json(result);
+
+    } catch (error) {
+      console.error('AI Generation Error:', error);
+      await logSystem('ERROR', 'AI', 'Failed to generate Personas', { error: String(error) });
+      return NextResponse.json({ error: 'Failed to generate Personas. Please try again later.' }, { status: 500 });
+    }
 
   } catch (error) {
-    console.error('AI Persona Generation error:', error);
-    await logSystem('ERROR', 'AI', 'Persona Generation failed', { error: error instanceof Error ? error.message : 'Unknown' });
+    console.error('Request Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

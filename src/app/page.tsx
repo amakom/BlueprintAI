@@ -6,7 +6,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-navy text-white selection:bg-cyan selection:text-navy">
       {/* Grid Lines and Dots Background */}
       <div 
-        className="fixed inset-0 z-0 pointer-events-none" 
+        className="fixed inset-0 z-0 pointer-events-none opacity-20" 
         style={{
           backgroundImage: `
             radial-gradient(circle at 1px 1px, #334155 2px, transparent 0),

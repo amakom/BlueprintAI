@@ -21,14 +21,26 @@ export function Sidebar() {
   const router = useRouter();
   const { plan, isLoading: isSubLoading } = useSubscription();
   const [user, setUser] = useState<{name: string, email: string, role: string} | null>(null);
+  const [recentProjects, setRecentProjects] = useState<any[]>([]);
 
   useEffect(() => {
+    // Fetch user
     fetch('/api/auth/me')
       .then(res => res.json())
       .then(data => {
         if (data.user) setUser(data.user);
       })
       .catch(err => console.error(err));
+
+    // Fetch recent projects
+    fetch('/api/projects')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && Array.isArray(data.projects)) {
+          setRecentProjects(data.projects.slice(0, 5));
+        }
+      })
+      .catch(err => console.error('Failed to fetch projects', err));
   }, []);
 
   const handleLogout = async () => {

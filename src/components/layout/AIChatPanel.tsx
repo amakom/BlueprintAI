@@ -90,8 +90,10 @@ export function AIChatPanel() {
       <div className="p-4 border-b border-border bg-cloud/50">
         <div className="flex items-center justify-between">
           <h2 className="font-bold text-navy flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-cyan" />
-              BlueprintAI
+            <div className="w-6 h-6 bg-cyan rounded-md flex items-center justify-center text-navy text-xs font-bold">
+              B
+            </div>
+            BlueprintAI
           </h2>
           <button 
             onClick={() => setShowSettings(!showSettings)}

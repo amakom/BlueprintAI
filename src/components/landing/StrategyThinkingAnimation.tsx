@@ -16,7 +16,7 @@ export function StrategyThinkingAnimation() {
      timers.push(window.setTimeout(() => setPhase('competitors'), reduce ? 0 : 2800))
      timers.push(window.setTimeout(() => setPhase('complete'), reduce ? 0 : 3800))
      return () => timers.forEach(t => clearTimeout(t))
-   }, [reduce])
+  }, [reduce, isInView])
  
    const card = useMemo(
      () => ({

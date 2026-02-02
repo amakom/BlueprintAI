@@ -19,7 +19,7 @@ export function FinalCTAAnimation() {
        clearTimeout(t1)
        clearTimeout(t2)
      }
-   }, [reduce])
+  }, [reduce, isInView])
  
    const chips = [
     { id: 'idea-1', text: 'Feature creep?', x: 40, y: 28 },

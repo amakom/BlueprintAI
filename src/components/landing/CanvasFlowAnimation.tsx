@@ -20,7 +20,7 @@ export function CanvasFlowAnimation() {
        clearTimeout(t2)
        clearTimeout(t3)
      }
-   }, [reduce])
+  }, [reduce, isInView])
  
    const nodes = [
      { id: 'login', label: 'Login', tag: 'Auth', x: 60, y: 40 },

@@ -22,7 +22,7 @@ export function HeroAnimation() {
        }
      }, reduce ? 0 : 60)
      return () => clearInterval(interval)
-   }, [phase, reduce])
+   }, [phase, reduce, isInView])
  
    useEffect(() => {
      if (phase !== 'streams') return

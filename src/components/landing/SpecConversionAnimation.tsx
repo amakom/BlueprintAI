@@ -18,7 +18,7 @@ export function SpecConversionAnimation() {
        clearTimeout(t1)
        clearTimeout(t2)
      }
-   }, [reduce])
+  }, [reduce, isInView])
  
    const appear = useMemo(
      () => ({

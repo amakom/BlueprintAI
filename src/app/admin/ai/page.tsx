@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { Activity, Zap, Server, BarChart3, Ban, RotateCcw, CheckCircle } from 'lucide-react';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
+import { AlertModal } from '@/components/ui/AlertModal';
 
 interface Stats {
   requests: number;
@@ -31,6 +33,11 @@ export default function AdminAIPage() {
   const [topTeams, setTopTeams] = useState<TeamUsage[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Modal states
+  const [showBlockConfirm, setShowBlockConfirm] = useState<{ isOpen: boolean; teamId: string; currentStatus: boolean } | null>(null);
+  const [showResetConfirm, setShowResetConfirm] = useState<{ isOpen: boolean; teamId: string } | null>(null);
+  const [alertMessage, setAlertMessage] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -51,8 +58,10 @@ export default function AdminAIPage() {
     }
   };
 
-  const handleBlock = async (teamId: string, currentStatus: boolean) => {
-    if (!confirm(`Are you sure you want to ${currentStatus ? 'unblock' : 'block'} AI usage for this team?`)) return;
+  const confirmBlock = async () => {
+    if (!showBlockConfirm) return;
+    const { teamId, currentStatus } = showBlockConfirm;
+    
     try {
       const res = await fetch(`/api/admin/ai/teams/${teamId}/block`, {
         method: 'POST',
@@ -64,21 +73,29 @@ export default function AdminAIPage() {
       }
     } catch (error) {
       console.error('Failed to update block status', error);
+      setAlertMessage({ message: 'Failed to update block status', type: 'error' });
+    } finally {
+      setShowBlockConfirm(null);
     }
   };
 
-  const handleReset = async (teamId: string) => {
-    if (!confirm('Are you sure you want to RESET usage logs for this team for the current month? This cannot be undone.')) return;
+  const confirmReset = async () => {
+    if (!showResetConfirm) return;
+    const { teamId } = showResetConfirm;
+
     try {
       const res = await fetch(`/api/admin/ai/teams/${teamId}/reset`, {
         method: 'POST',
       });
       if (res.ok) {
         fetchData();
-        alert('Usage reset successfully.');
+        setAlertMessage({ message: 'Usage reset successfully.', type: 'success' });
       }
     } catch (error) {
       console.error('Failed to reset usage', error);
+      setAlertMessage({ message: 'Failed to reset usage', type: 'error' });
+    } finally {
+      setShowResetConfirm(null);
     }
   };
 
@@ -169,14 +186,14 @@ export default function AdminAIPage() {
                                     </td>
                                     <td className="px-4 py-3 text-center flex justify-center gap-2">
                                         <button 
-                                            onClick={() => handleBlock(team.teamId, team.aiBlocked)}
+                                            onClick={() => setShowBlockConfirm({ isOpen: true, teamId: team.teamId, currentStatus: team.aiBlocked })}
                                             className={`p-1 rounded hover:bg-gray-200 ${team.aiBlocked ? 'text-green-600' : 'text-red-600'}`}
                                             title={team.aiBlocked ? "Unblock AI" : "Block AI"}
                                         >
                                             {team.aiBlocked ? <CheckCircle className="w-4 h-4" /> : <Ban className="w-4 h-4" />}
                                         </button>
                                         <button 
-                                            onClick={() => handleReset(team.teamId)}
+                                            onClick={() => setShowResetConfirm({ isOpen: true, teamId: team.teamId })}
                                             className="p-1 text-blue-600 rounded hover:bg-gray-200"
                                             title="Reset Usage"
                                         >
@@ -230,6 +247,34 @@ export default function AdminAIPage() {
             </div>
           </div>
       </div>
+
+      {/* Modals */}
+      <ConfirmModal
+        isOpen={!!showBlockConfirm?.isOpen}
+        onClose={() => setShowBlockConfirm(null)}
+        onConfirm={confirmBlock}
+        title={showBlockConfirm?.currentStatus ? "Unblock AI Usage" : "Block AI Usage"}
+        message={`Are you sure you want to ${showBlockConfirm?.currentStatus ? 'unblock' : 'block'} AI usage for this team?`}
+        confirmText={showBlockConfirm?.currentStatus ? "Unblock" : "Block"}
+        isDanger={!showBlockConfirm?.currentStatus}
+      />
+
+      <ConfirmModal
+        isOpen={!!showResetConfirm?.isOpen}
+        onClose={() => setShowResetConfirm(null)}
+        onConfirm={confirmReset}
+        title="Reset Usage Logs"
+        message="Are you sure you want to RESET usage logs for this team for the current month? This cannot be undone."
+        confirmText="Reset Usage"
+        isDanger={true}
+      />
+
+      <AlertModal
+        isOpen={!!alertMessage}
+        onClose={() => setAlertMessage(null)}
+        message={alertMessage?.message || ''}
+        title={alertMessage?.type === 'error' ? 'Error' : 'Success'}
+      />
     </div>
   );
 }

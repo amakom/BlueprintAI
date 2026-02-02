@@ -28,6 +28,7 @@ import { CollaborativeCursors } from '@/components/canvas/CollaborativeCursors';
 import { CommentInput } from './CommentsOverlay';
 import { VersionHistory } from './VersionHistory';
 import { useSocket } from '@/components/providers/socket-provider';
+import { AlertModal } from '@/components/ui/AlertModal';
 
 const nodeTypes: NodeTypes = {
   userStory: UserStoryNode,
@@ -67,7 +68,9 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
     saveCanvas, 
     isSaving,
     userName,
-    documentId
+    documentId,
+    error,
+    clearError
   } = useCanvas();
 
   const { socket } = useSocket();
@@ -85,6 +88,8 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
     }
     return false;
   });
+
+  const [warning, setWarning] = useState<string | null>(null);
 
   useEffect(() => {
     localStorage.setItem('blueprint_theme', isDarkMode ? 'dark' : 'light');
@@ -170,7 +175,7 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
       if (!res.ok) throw new Error(data.error || 'Failed to generate flow');
 
       if (data.warning) {
-        alert(data.warning);
+        setWarning(data.warning);
       }
 
       if (data.nodes && data.edges) {
@@ -179,7 +184,7 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
       }
     } catch (error) {
       console.error('Error generating flow:', error);
-      alert(error instanceof Error ? error.message : "Failed to generate flow");
+      onError(error instanceof Error ? error.message : "Failed to generate flow");
     } finally {
       setIsGenerating(false);
     }
@@ -551,6 +556,18 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
               </div>
            </div>
         )}
+        <AlertModal
+            isOpen={!!warning}
+            onClose={() => setWarning(null)}
+            message={warning || ''}
+            title="Warning"
+        />
+        <AlertModal
+            isOpen={!!error}
+            onClose={clearError}
+            message={error || ''}
+            title="Error"
+        />
     </div>
   );
 }

@@ -24,6 +24,8 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
   const { limits, isLoading: isSubLoading, plan } = useSubscription();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   
   // Renaming state
   const [isRenaming, setIsRenaming] = useState(false);
@@ -78,16 +80,20 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
         setProject({ ...project, name: newName });
         setIsRenaming(false);
       } else {
-        alert('Failed to rename project');
+        setError('Failed to rename project');
       }
     } catch (error) {
       console.error('Failed to rename project:', error);
-      alert('An unexpected error occurred');
+      setError('An unexpected error occurred');
     }
   };
 
-  const handleDeleteProject = async () => {
-    if (!project || !window.confirm('Are you sure you want to delete this project? This action cannot be undone.')) return;
+  const handleDeleteProject = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const performDeleteProject = async () => {
+    if (!project) return;
 
     try {
       const res = await fetch(`/api/projects/${project.id}`, {
@@ -97,11 +103,11 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
       if (res.ok) {
         router.push('/dashboard');
       } else {
-        alert('Failed to delete project');
+        setError('Failed to delete project');
       }
     } catch (error) {
       console.error('Failed to delete project:', error);
-      alert('An unexpected error occurred');
+      setError('An unexpected error occurred');
     }
   };
 
@@ -288,7 +294,7 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
                       className="bg-navy text-white px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2"
                       onClick={() => {
                           if (limits.maxCollaborators <= 2) { // Assume current count is 2 for demo
-                              alert('Upgrade to Pro to add more collaborators!');
+                              setError('Upgrade to Pro to add more collaborators!');
                           }
                       }}
                    >
@@ -316,6 +322,16 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
         isOpen={isActivityOpen}
         onClose={() => setIsActivityOpen(false)}
         projectId={params.id}
+      />
+      
+      <AlertModal isOpen={!!error} onClose={() => setError(null)} message={error || ''} />
+      <ConfirmModal 
+        isOpen={showDeleteConfirm} 
+        onClose={() => setShowDeleteConfirm(false)} 
+        onConfirm={performDeleteProject}
+        title="Delete Project?"
+        message="Are you sure you want to delete this project? This action cannot be undone."
+        confirmText="Delete Project"
       />
     </CanvasProvider>
   );

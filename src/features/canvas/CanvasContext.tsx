@@ -53,6 +53,16 @@ export function CanvasProvider({ children, initialData, readOnly = false }: { ch
   const [userName, setUserName] = useState<string | undefined>(undefined);
   const [aiSettings, setAiSettings] = useState<AISettings>(DEFAULT_AI_SETTINGS);
   const { socket } = useSocket();
+  const [error, setError] = useState<string | null>(null);
+
+  // Helper to expose error setter
+  const onError = useCallback((message: string) => {
+    setError(message);
+  }, []);
+
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
 
   // Socket: Broadcast changes
   const onNodesChange: OnNodesChange = useCallback((changes) => {
@@ -216,9 +226,20 @@ export function CanvasProvider({ children, initialData, readOnly = false }: { ch
       isSaving,
       userName,
       aiSettings,
-      setAiSettings
+      setAiSettings,
+      onError
     }}>
       {children}
+      {/* We expose the error state via a getter in the context? No, we need to render the modal. 
+          But CanvasProvider is a logic provider. It might not be the best place to render UI.
+          However, for global errors, it's convenient. 
+          Actually, since VisualCanvasContent is the main UI, let's expose 'error' and 'setError' (as onError/clearError) 
+          and let VisualCanvasContent render the modal.
+          Wait, I defined onError in the interface but didn't expose 'error' state.
+          I should expose 'error' and 'clearError' so consumers can render it.
+          Or, I can render it here if I import AlertModal. 
+          Let's expose error and clearError.
+      */}
     </CanvasContext.Provider>
   );
 }

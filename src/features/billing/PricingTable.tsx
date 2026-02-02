@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Check, Loader2 } from 'lucide-react';
 import { SUBSCRIPTION_PLANS } from '@/lib/plans';
+import { AlertModal } from '@/components/ui/AlertModal';
 
 interface PricingTableProps {
     initialTeamId?: string;
@@ -13,6 +14,7 @@ interface PricingTableProps {
 export function PricingTable({ initialTeamId, initialUserEmail, initialUserName }: PricingTableProps) {
   const [currency, setCurrency] = useState<'USD' | 'NGN'>('USD');
   const [loading, setLoading] = useState<string | null>(null);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   // Use provided data or fall back to mock for demo
   const userEmail = initialUserEmail || 'demo@blueprint.ai';
@@ -37,11 +39,11 @@ export function PricingTable({ initialTeamId, initialUserEmail, initialUserName 
       if (data.link) {
         window.location.href = data.link;
       } else {
-        alert('Failed to initialize payment');
+        setAlertMessage('Failed to initialize payment');
       }
     } catch (err) {
       console.error(err);
-      alert('Error connecting to billing service');
+      setAlertMessage('Error connecting to billing service');
     } finally {
       setLoading(null);
     }
@@ -116,6 +118,13 @@ export function PricingTable({ initialTeamId, initialUserEmail, initialUserName 
           </div>
         ))}
       </div>
+
+      <AlertModal
+        isOpen={!!alertMessage}
+        onClose={() => setAlertMessage(null)}
+        message={alertMessage || ''}
+        title="Payment Error"
+      />
     </div>
   );
 }

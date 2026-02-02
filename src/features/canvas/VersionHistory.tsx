@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useCanvas } from './CanvasContext';
 import { RotateCcw, X, Clock } from 'lucide-react';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 
 interface Version {
   id: string;
@@ -9,9 +10,10 @@ interface Version {
 }
 
 export function VersionHistory({ onClose }: { onClose: () => void }) {
-  const { projectId, setNodes, setEdges } = useCanvas();
+  const { projectId, setNodes, setEdges, onError } = useCanvas();
   const [versions, setVersions] = useState<Version[]>([]);
   const [loading, setLoading] = useState(true);
+  const [versionToRestore, setVersionToRestore] = useState<string | null>(null);
 
   useEffect(() => {
     if (!projectId) return;
@@ -24,11 +26,15 @@ export function VersionHistory({ onClose }: { onClose: () => void }) {
       .finally(() => setLoading(false));
   }, [projectId]);
 
-  const restoreVersion = async (versionId: string) => {
-    if (!confirm('Are you sure you want to restore this version? Current changes will be lost unless saved.')) return;
+  const confirmRestore = (versionId: string) => {
+    setVersionToRestore(versionId);
+  };
+
+  const performRestore = async () => {
+    if (!versionToRestore) return;
     
     try {
-        const res = await fetch(`/api/versions/${versionId}`);
+        const res = await fetch(`/api/versions/${versionToRestore}`);
         const version = await res.json();
         if (version.content) {
             const { nodes, edges } = version.content;
@@ -38,7 +44,9 @@ export function VersionHistory({ onClose }: { onClose: () => void }) {
         }
     } catch (err) {
         console.error(err);
-        alert('Failed to restore version');
+        onError('Failed to restore version');
+    } finally {
+        setVersionToRestore(null);
     }
   };
 
@@ -75,7 +83,7 @@ export function VersionHistory({ onClose }: { onClose: () => void }) {
                         {v.commitMsg || 'Auto-saved version'}
                     </p>
                     <button 
-                        onClick={() => restoreVersion(v.id)}
+                        onClick={() => confirmRestore(v.id)}
                         className="text-xs w-full bg-white border border-gray-200 text-gray-700 py-1.5 rounded shadow-sm hover:bg-navy hover:text-white hover:border-navy flex items-center justify-center gap-1.5 transition-all duration-200 font-medium"
                     >
                         <RotateCcw size={12} /> Restore Version
@@ -84,6 +92,15 @@ export function VersionHistory({ onClose }: { onClose: () => void }) {
             ))
         )}
       </div>
+      
+      <ConfirmModal 
+        isOpen={!!versionToRestore} 
+        onClose={() => setVersionToRestore(null)} 
+        onConfirm={performRestore}
+        title="Restore Version?"
+        message="Are you sure you want to restore this version? Current changes will be lost unless saved."
+        confirmText="Restore"
+      />
     </div>
   );
 }

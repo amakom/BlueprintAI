@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { Sparkles, Save, Download, FileText, Loader2 } from 'lucide-react';
+import { AlertModal } from '@/components/ui/AlertModal';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 
 interface SpecViewProps {
   projectId: string;
@@ -13,6 +15,8 @@ export function SpecView({ projectId }: SpecViewProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   // Fetch existing spec
   useEffect(() => {
@@ -37,9 +41,11 @@ export function SpecView({ projectId }: SpecViewProps) {
     fetchSpec();
   }, [projectId]);
 
-  const handleGenerate = async () => {
-    if (!confirm('This will overwrite the current spec based on the latest Canvas data. Continue?')) return;
-    
+  const handleGenerate = () => {
+    setShowConfirm(true);
+  };
+
+  const performGeneration = async () => {
     setIsGenerating(true);
     try {
       const res = await fetch('/api/ai/generate-spec', {
@@ -56,7 +62,7 @@ export function SpecView({ projectId }: SpecViewProps) {
       await saveSpec(data.spec);
     } catch (error) {
       console.error('Generation failed:', error);
-      alert('Failed to generate spec. Make sure your canvas has content.');
+      setError('Failed to generate spec. Make sure your canvas has content.');
     } finally {
       setIsGenerating(false);
     }
@@ -159,6 +165,16 @@ export function SpecView({ projectId }: SpecViewProps) {
             />
         </div>
       </div>
+      
+      <AlertModal isOpen={!!error} onClose={() => setError(null)} message={error || ''} />
+      <ConfirmModal 
+        isOpen={showConfirm} 
+        onClose={() => setShowConfirm(false)} 
+        onConfirm={performGeneration}
+        title="Regenerate Spec?"
+        message="This will overwrite the current spec based on the latest Canvas data. Continue?"
+        confirmText="Regenerate"
+      />
     </div>
   );
 }

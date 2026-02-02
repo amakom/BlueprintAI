@@ -84,6 +84,7 @@ function OKRSection({ projectId }: { projectId: string }) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [okrs, setOkrs] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   // Fetch OKRs on mount
   useEffect(() => {
@@ -122,7 +123,7 @@ function OKRSection({ projectId }: { projectId: string }) {
       }
     } catch (e) {
       console.error("Failed to generate OKRs:", e);
-      alert(e instanceof Error ? e.message : "Failed to generate OKRs");
+      setError(e instanceof Error ? e.message : "Failed to generate OKRs");
     } finally {
       setIsGenerating(false);
     }
@@ -199,6 +200,7 @@ function OKRSection({ projectId }: { projectId: string }) {
           <p className="text-slate-500 text-center py-8">No OKRs defined yet. Start by generating some!</p>
         </div>
       )}
+      <AlertModal isOpen={!!error} onClose={() => setError(null)} message={error || ''} title="Error" />
     </div>
   );
 }
@@ -341,6 +343,7 @@ function PersonaSection({ projectId }: { projectId: string }) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [personas, setPersonas] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   // Fetch Personas on mount
   useEffect(() => {
@@ -377,7 +380,7 @@ function PersonaSection({ projectId }: { projectId: string }) {
       }
     } catch (e) {
       console.error("Failed to generate Personas:", e);
-      alert(e instanceof Error ? e.message : "Failed to generate Personas");
+      setError(e instanceof Error ? e.message : "Failed to generate Personas");
     } finally {
       setIsGenerating(false);
     }
@@ -477,6 +480,7 @@ function PersonaSection({ projectId }: { projectId: string }) {
           <p className="text-slate-500 text-center py-8">No personas created yet. Generate some with AI!</p>
         </div>
       )}
+      <AlertModal isOpen={!!error} onClose={() => setError(null)} message={error || ''} title="Error" />
     </div>
   );
 }
@@ -630,6 +634,8 @@ function StrategyDocSection({ projectId }: { projectId: string }) {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchDoc = async () => {
@@ -649,11 +655,7 @@ function StrategyDocSection({ projectId }: { projectId: string }) {
     fetchDoc();
   }, [projectId]);
 
-  const handleGenerate = async () => {
-    if (content && !confirm("This will overwrite your current strategy document. Are you sure?")) {
-      return;
-    }
-
+  const performGeneration = async () => {
     setIsGenerating(true);
     try {
       const res = await fetch('/api/ai/generate-strategy-doc', {
@@ -675,9 +677,17 @@ function StrategyDocSection({ projectId }: { projectId: string }) {
       }
     } catch (e) {
       console.error("Failed to generate Strategy Doc:", e);
-      alert(e instanceof Error ? e.message : "Failed to generate Strategy Doc");
+      setError(e instanceof Error ? e.message : "Failed to generate Strategy Doc");
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  const handleGenerate = async () => {
+    if (content) {
+      setShowConfirm(true);
+    } else {
+      performGeneration();
     }
   };
 
@@ -758,6 +768,16 @@ function StrategyDocSection({ projectId }: { projectId: string }) {
           </div>
         )}
       </div>
+      
+      <ConfirmModal 
+        isOpen={showConfirm} 
+        onClose={() => setShowConfirm(false)} 
+        onConfirm={performGeneration}
+        title="Regenerate Strategy?"
+        message="This will overwrite your current strategy document with a new AI-generated version. This action cannot be undone."
+        confirmText="Regenerate"
+      />
+      <AlertModal isOpen={!!error} onClose={() => setError(null)} message={error || ''} title="Generation Failed" />
     </div>
   );
 }

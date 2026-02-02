@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { MoreHorizontal, Trash2, Shield, User, Clock } from 'lucide-react';
 import { InviteMemberModal } from './InviteMemberModal';
+import { AlertModal } from '@/components/ui/AlertModal';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 
 interface Member {
   id: string;
@@ -34,6 +36,8 @@ export function TeamMembersList({ teamId, currentUserRole }: TeamMembersListProp
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [memberToRemove, setMemberToRemove] = useState<string | null>(null);
 
   const fetchMembers = async () => {
     try {
@@ -75,14 +79,18 @@ export function TeamMembersList({ teamId, currentUserRole }: TeamMembersListProp
       fetchInvitations();
     } else {
         const err = await res.json();
-        alert(err.error);
+        setError(err.error || 'Failed to invite member');
     }
   };
 
-  const handleRemoveMember = async (memberId: string) => {
-    if (!confirm('Are you sure you want to remove this member?')) return;
+  const handleRemoveMember = (memberId: string) => {
+    setMemberToRemove(memberId);
+  };
 
-    const res = await fetch(`/api/teams/${teamId}/members?memberId=${memberId}`, {
+  const performRemoveMember = async () => {
+    if (!memberToRemove) return;
+
+    const res = await fetch(`/api/teams/${teamId}/members?memberId=${memberToRemove}`, {
       method: 'DELETE',
     });
 
@@ -90,8 +98,9 @@ export function TeamMembersList({ teamId, currentUserRole }: TeamMembersListProp
       fetchMembers();
     } else {
          const err = await res.json();
-         alert(err.error);
+         setError(err.error || 'Failed to remove member');
     }
+    setMemberToRemove(null);
   };
 
   if (isLoading) {
@@ -144,7 +153,7 @@ export function TeamMembersList({ teamId, currentUserRole }: TeamMembersListProp
               </span>
               {canManage && member.role !== 'OWNER' && (
                 <button
-                  onClick={() => handleRemoveMember(member.id)}
+                  onClick={() => confirmRemove(member.id)}
                   className="p-2 text-gray-400 hover:text-red-500 transition-colors"
                   title="Remove member"
                 >
@@ -185,6 +194,28 @@ export function TeamMembersList({ teamId, currentUserRole }: TeamMembersListProp
         isOpen={isInviteModalOpen}
         onClose={() => setIsInviteModalOpen(false)}
         onInvite={handleInvite}
+      />
+      
+      <AlertModal isOpen={!!error} onClose={() => setError(null)} message={error || ''} />
+      
+      <ConfirmModal 
+        isOpen={!!memberToRemove} 
+        onClose={() => setMemberToRemove(null)} 
+        onConfirm={performRemoveMember}
+        title="Remove Member?"
+        message="Are you sure you want to remove this member? They will lose access to the team and its projects."
+        confirmText="Remove"
+      />
+    </div>
+  );
+}
+      <ConfirmModal 
+        isOpen={!!memberToRemove} 
+        onClose={() => setMemberToRemove(null)} 
+        onConfirm={performRemoveMember}
+        title="Remove Member?"
+        message="Are you sure you want to remove this member? They will lose access to the team and its projects."
+        confirmText="Remove"
       />
     </div>
   );

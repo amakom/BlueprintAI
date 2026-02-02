@@ -56,11 +56,9 @@ export function ProjectCard({ id, title, updatedAt, documentCount, teamName, onR
   };
 
   const handleDelete = async () => {
-    if (confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
-      setIsLoading(true);
-      await onDelete(id);
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    await onDelete(id);
+    setIsLoading(false);
   };
 
   const formatDate = (dateString: string) => {

@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { CreateProjectModal } from '@/components/dashboard/CreateProjectModal';
 import { ProjectCard } from '@/components/dashboard/ProjectCard';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { AlertModal } from '@/components/ui/AlertModal';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 
 interface Project {
   id: string;
@@ -20,6 +22,8 @@ export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     fetchProjects();
@@ -54,11 +58,11 @@ export default function DashboardPage() {
       if (res.ok && data.project) {
         router.push(`/canvas/${data.project.id}`);
       } else {
-        alert(data.error || 'Failed to create project');
+        setError(data.error || 'Failed to create project');
       }
     } catch (error) {
       console.error('Failed to create project:', error);
-      alert('An unexpected error occurred');
+      setError('An unexpected error occurred');
     }
   };
 
@@ -76,29 +80,37 @@ export default function DashboardPage() {
         );
       } else {
         const data = await res.json();
-        alert(data.error || 'Failed to rename project');
+        setError(data.error || 'Failed to rename project');
       }
     } catch (error) {
       console.error('Failed to rename project:', error);
-      alert('An unexpected error occurred');
+      setError('An unexpected error occurred');
     }
   };
 
-  const handleDeleteProject = async (id: string) => {
+  const confirmDelete = (id: string) => {
+    setProjectToDelete(id);
+  };
+
+  const performDelete = async () => {
+    if (!projectToDelete) return;
+    
     try {
-      const res = await fetch(`/api/projects/${id}`, {
+      const res = await fetch(`/api/projects/${projectToDelete}`, {
         method: 'DELETE',
       });
 
       if (res.ok) {
-        setProjects((prev) => prev.filter((p) => p.id !== id));
+        setProjects((prev) => prev.filter((p) => p.id !== projectToDelete));
       } else {
         const data = await res.json();
-        alert(data.error || 'Failed to delete project');
+        setError(data.error || 'Failed to delete project');
       }
     } catch (error) {
       console.error('Failed to delete project:', error);
-      alert('An unexpected error occurred');
+      setError('An unexpected error occurred');
+    } finally {
+      setProjectToDelete(null);
     }
   };
 
@@ -176,7 +188,7 @@ export default function DashboardPage() {
               documentCount={project._count.documents}
               teamName={project.team.name}
               onRename={handleRenameProject}
-              onDelete={handleDeleteProject}
+              onDelete={async (id) => confirmDelete(id)}
             />
           ))}
         </div>
@@ -186,6 +198,16 @@ export default function DashboardPage() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleCreateProject}
+      />
+      
+      <AlertModal isOpen={!!error} onClose={() => setError(null)} message={error || ''} />
+      <ConfirmModal 
+        isOpen={!!projectToDelete} 
+        onClose={() => setProjectToDelete(null)} 
+        onConfirm={performDelete}
+        title="Delete Project?"
+        message="Are you sure you want to delete this project? This action cannot be undone and all associated documents will be lost."
+        confirmText="Delete Project"
       />
     </div>
   );

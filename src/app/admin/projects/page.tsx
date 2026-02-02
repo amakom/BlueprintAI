@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Folder, Search, Trash2, Archive, Eye } from 'lucide-react';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 
 interface Project {
   id: string;
@@ -17,6 +18,7 @@ export default function AdminProjectsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     fetchProjects();
@@ -36,21 +38,22 @@ export default function AdminProjectsPage() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this project?')) return;
+  const handleDelete = async () => {
+    if (!projectToDelete) return;
     
-    setActionLoading(id);
+    setActionLoading(projectToDelete);
     try {
-        const res = await fetch(`/api/admin/projects/${id}`, {
+        const res = await fetch(`/api/admin/projects/${projectToDelete}`, {
             method: 'DELETE',
         });
         if (res.ok) {
-            setProjects(projects.filter(p => p.id !== id));
+            setProjects(projects.filter(p => p.id !== projectToDelete));
         }
     } catch (error) {
         console.error('Failed to delete project', error);
     } finally {
         setActionLoading(null);
+        setProjectToDelete(null);
     }
   };
 
@@ -119,7 +122,7 @@ export default function AdminProjectsPage() {
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500">
                     <div className="flex items-center gap-2">
                         <button 
-                            onClick={() => handleDelete(project.id)}
+                            onClick={() => setProjectToDelete(project.id)}
                             disabled={actionLoading === project.id}
                             className="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50"
                             title="Delete"
@@ -140,6 +143,16 @@ export default function AdminProjectsPage() {
           </tbody>
         </table>
       </div>
+
+      <ConfirmModal
+        isOpen={!!projectToDelete}
+        onClose={() => setProjectToDelete(null)}
+        onConfirm={handleDelete}
+        title="Delete Project"
+        message="Are you sure you want to delete this project? This action cannot be undone."
+        confirmText="Delete"
+        isDanger={true}
+      />
     </div>
   );
 }

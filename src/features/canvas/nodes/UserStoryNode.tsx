@@ -134,7 +134,7 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
 
   const handleRegenerate = useCallback(async () => {
     if (!projectId) {
-      alert('Project context missing. Please refresh.');
+      onError('Project context missing. Please refresh.');
       return;
     }
 
@@ -188,11 +188,11 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
 
     } catch (error: any) {
       console.error(error);
-      alert(error.message);
+      onError(error.message);
     } finally {
       setIsRegenerating(false);
     }
-  }, [id, data.description, data.label, aiSettings, setNodes, adjustHeight, projectId]);
+  }, [id, data.description, data.label, aiSettings, setNodes, adjustHeight, projectId, onError]);
 
   const handleRestore = useCallback((item: AIHistoryItem) => {
     const currentDescription = data.description || '';

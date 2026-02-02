@@ -433,7 +433,7 @@ export function ProductDemoAnimation() {
                 />
                 
                 {/* Nodes Container */}
-                <div className="absolute inset-0 flex items-center justify-center">
+                <div className="absolute inset-0">
                   <AnimatePresence>
                     {canvasNodes && (
                       <motion.div 
@@ -441,54 +441,72 @@ export function ProductDemoAnimation() {
                         animate={{ opacity: 1 }}
                         className="relative w-full h-full"
                       >
+                         {/* Edges SVG Layer */}
+                         <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
+                           {[
+                             { startY: 375, endY: 200, delay: 0.2 },
+                             { startY: 375, endY: 315, delay: 0.3 },
+                             { startY: 375, endY: 430, delay: 0.4 },
+                             { startY: 375, endY: 545, delay: 0.5 },
+                           ].map((edge, i) => (
+                             <motion.path
+                               key={`edge-${i}`}
+                               d={`M 464 375 C 600 375, 600 ${edge.endY}, 750 ${edge.endY}`}
+                               fill="none"
+                               stroke="#2EE6D6"
+                               strokeWidth="2"
+                               strokeDasharray="6 4"
+                               initial={{ pathLength: 0, opacity: 0 }}
+                               animate={{ pathLength: 1, opacity: 1 }}
+                               transition={{ duration: 1.5, delay: edge.delay, ease: "easeInOut" }}
+                             />
+                           ))}
+                         </svg>
+
                          {/* Central Node */}
                          <motion.div
                            initial={{ scale: 0, opacity: 0 }}
                            animate={{ scale: 1, opacity: 1 }}
-                           transition={{ type: "spring", delay: 0.2 }}
-                           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 bg-white rounded-lg shadow-xl border-2 border-cyan overflow-hidden z-10"
+                           transition={{ type: "spring", delay: 0.1 }}
+                           className="absolute top-1/2 left-[300px] -translate-y-1/2 w-64 bg-white rounded-lg shadow-xl border-2 border-cyan overflow-hidden z-10"
                          >
                            <div className="h-8 bg-slate-50 border-b border-slate-100 flex items-center px-3 gap-2">
-                             <div className="w-4 h-4 bg-orange-100 rounded text-orange-600 flex items-center justify-center"><User size={10} /></div>
-                             <span className="text-xs font-bold text-slate-700">User Story</span>
+                             <div className="w-4 h-4 bg-amber-100 rounded text-amber-600 flex items-center justify-center"><User size={10} /></div>
+                             <span className="text-xs font-bold text-slate-700">Lotenna Story</span>
                            </div>
                            <div className="p-3">
-                             <div className="font-bold text-slate-900 text-sm mb-1">As a User, I want to Login</div>
-                             <div className="text-[10px] text-slate-400">So that I can access my account safely.</div>
+                             <div className="font-bold text-slate-900 text-sm mb-1">New userStory</div>
+                             <div className="text-[10px] text-slate-400">Edit this description...</div>
                            </div>
+                           {/* Handles */}
+                           <div className="absolute top-1/2 -right-1 w-2 h-2 bg-cyan rounded-full translate-x-1/2 -translate-y-1/2" />
                          </motion.div>
 
                          {/* Child Nodes */}
                          {[
-                           { x: -200, y: -100, label: "Enter Credentials", delay: 0.4 },
-                           { x: 200, y: -100, label: "Forgot Password", delay: 0.6 },
-                           { x: 0, y: 150, label: "2FA Verification", delay: 0.8 },
+                           { y: 200, delay: 0.6 },
+                           { y: 315, delay: 0.7 },
+                           { y: 430, delay: 0.8 },
+                           { y: 545, delay: 0.9 },
                          ].map((node, i) => (
                             <motion.div
                               key={i}
-                              initial={{ scale: 0, opacity: 0, x: node.x * 0.5, y: node.y * 0.5 }}
-                              animate={{ scale: 1, opacity: 1, x: node.x, y: node.y }}
+                              initial={{ scale: 0, opacity: 0, x: 780 }}
+                              animate={{ scale: 1, opacity: 1, x: 750 }}
                               transition={{ type: "spring", delay: node.delay }}
-                              className="absolute top-1/2 left-1/2 w-48 bg-[#1e293b] rounded-lg shadow-lg border border-white/10 overflow-hidden z-0"
-                              style={{ marginLeft: -96, marginTop: -30 }} // Center offset
+                              className="absolute left-[750px] w-64 bg-white rounded-lg shadow-lg border border-slate-200 overflow-hidden z-10"
+                              style={{ top: node.y, marginTop: -40 }} // Center vertically based on height approx 80px
                             >
-                               <div className="h-7 bg-white/5 border-b border-white/5 flex items-center px-3 gap-2">
-                                 <div className="w-3 h-3 bg-purple-500/20 rounded text-purple-400 flex items-center justify-center"><Box size={8} /></div>
-                                 <span className="text-[10px] font-bold text-slate-300">Screen</span>
+                               <div className="h-8 bg-slate-50 border-b border-slate-100 flex items-center px-3 gap-2">
+                                 <div className="w-4 h-4 bg-amber-100 rounded text-amber-600 flex items-center justify-center"><User size={10} /></div>
+                                 <span className="text-xs font-bold text-slate-700">Lotenna Story</span>
                                </div>
                                <div className="p-3">
-                                 <div className="font-bold text-white text-xs">{node.label}</div>
+                                 <div className="font-bold text-slate-900 text-sm mb-1">New userStory</div>
+                                 <div className="text-[10px] text-slate-400">Edit this description...</div>
                                </div>
-                               
-                               {/* Connection Line (Simplified SVG overlay would be better but CSS lines work for simple demo) */}
-                               <div 
-                                 className="absolute top-1/2 left-1/2 w-0.5 bg-cyan/30 origin-top"
-                                 style={{ 
-                                   height: 200, 
-                                   transform: `rotate(${Math.atan2(-node.y, -node.x) * (180/Math.PI) + 90}deg) translate(0, -50%)`,
-                                   zIndex: -1
-                                 }} 
-                               />
+                               {/* Handles */}
+                               <div className="absolute top-1/2 -left-1 w-2 h-2 bg-slate-300 rounded-full -translate-x-1/2 -translate-y-1/2" />
                             </motion.div>
                          ))}
                       </motion.div>

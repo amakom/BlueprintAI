@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { AlertModal } from '@/components/ui/AlertModal';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 
 interface StrategyViewProps {
   projectId: string;

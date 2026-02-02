@@ -230,8 +230,24 @@ export function ProductDemoAnimation() {
                 <Plus size={14} className="text-cyan" />
               </div>
               <div className="space-y-1">
-                <div className="px-3 py-2 text-sm text-slate-400 hover:text-white cursor-pointer hover:bg-white/5 rounded-lg">Fintech App</div>
-                <div className="px-3 py-2 text-sm text-slate-400 hover:text-white cursor-pointer hover:bg-white/5 rounded-lg">E-commerce Platform</div>
+                <div className="px-3 py-2 text-sm text-cyan bg-white/5 rounded-lg flex items-center gap-2 cursor-pointer">
+                   <div className="w-4 h-4 rounded-sm border border-cyan/30 flex items-center justify-center bg-cyan/10">
+                     <span className="text-[8px] font-bold">M</span>
+                   </div>
+                   Monra
+                </div>
+                <div className="px-3 py-2 text-sm text-slate-400 hover:text-white cursor-pointer hover:bg-white/5 rounded-lg flex items-center gap-2">
+                   <div className="w-4 h-4 rounded-sm border border-slate-700 flex items-center justify-center bg-slate-800">
+                     <span className="text-[8px] font-bold">F</span>
+                   </div>
+                   Fintech App
+                </div>
+                <div className="px-3 py-2 text-sm text-slate-400 hover:text-white cursor-pointer hover:bg-white/5 rounded-lg flex items-center gap-2">
+                   <div className="w-4 h-4 rounded-sm border border-slate-700 flex items-center justify-center bg-slate-800">
+                     <span className="text-[8px] font-bold">E</span>
+                   </div>
+                   E-commerce Platform
+                </div>
               </div>
             </div>
           </div>
@@ -421,81 +437,110 @@ export function ProductDemoAnimation() {
 
             {/* Canvas Body */}
             <div className="flex-1 flex min-h-0">
-              {/* The Grid Canvas */}
-              <div className="flex-1 relative overflow-hidden bg-[#0B1F33]">
-                {/* Dot Grid */}
-                <div 
-                  className="absolute inset-0 opacity-20"
-                  style={{
-                    backgroundImage: 'radial-gradient(#475569 1px, transparent 1px)',
-                    backgroundSize: '24px 24px'
-                  }}
-                />
-                
-                {/* Nodes Container */}
-                <div className="absolute inset-0">
-                  <AnimatePresence>
-                    {canvasNodes && (
+               {/* The Grid Canvas */}
+               <div className="flex-1 relative overflow-hidden bg-[#0B1F33]">
+                 {/* Dot Grid */}
+                 <div 
+                   className="absolute inset-0 opacity-20"
+                   style={{
+                     backgroundImage: 'radial-gradient(#475569 1px, transparent 1px)',
+                     backgroundSize: '24px 24px'
+                   }}
+                 />
+                 
+                 {/* Nodes Container */}
+                 <div className="absolute inset-0">
+                   <AnimatePresence>
+                     {canvasNodes && (
                       <motion.div 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="relative w-full h-full"
+                        initial={{ opacity: 0, scale: 1.1 }}
+                        animate={{ opacity: 1, scale: 0.8 }}
+                        transition={{ duration: 1.5, ease: "easeOut" }}
+                        className="relative w-full h-full origin-left"
                       >
-                         {/* Edges SVG Layer */}
-                         <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
-                           {[
-                             { startY: 375, endY: 200, delay: 0.2 },
-                             { startY: 375, endY: 315, delay: 0.3 },
-                             { startY: 375, endY: 430, delay: 0.4 },
-                             { startY: 375, endY: 545, delay: 0.5 },
-                           ].map((edge, i) => (
-                             <motion.path
-                               key={`edge-${i}`}
-                               d={`M 464 375 C 600 375, 600 ${edge.endY}, 750 ${edge.endY}`}
-                               fill="none"
-                               stroke="#2EE6D6"
-                               strokeWidth="2"
-                               strokeDasharray="6 4"
-                               initial={{ pathLength: 0, opacity: 0 }}
-                               animate={{ pathLength: 1, opacity: 1 }}
-                               transition={{ duration: 1.5, delay: edge.delay, ease: "easeInOut" }}
-                             />
-                           ))}
-                         </svg>
+                          {/* Edges SVG Layer */}
+                          <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
+                            {[
+                              { endY: 150, delay: 0.2 },
+                              { endY: 265, delay: 0.3 },
+                              { endY: 380, delay: 0.4 }, // Center aligned with root at ~375
+                              { endY: 495, delay: 0.5 },
+                              { endY: 610, delay: 0.6 },
+                            ].map((edge, i) => (
+                              <g key={`edge-group-${i}`}>
+                                <motion.path
+                                  d={`M 276 375 C 438 375, 438 ${edge.endY}, 600 ${edge.endY}`}
+                                  fill="none"
+                                  stroke="#2EE6D6"
+                                  strokeWidth="2"
+                                  strokeDasharray="8 6"
+                                  initial={{ pathLength: 0, opacity: 0 }}
+                                  animate={{ 
+                                    pathLength: 1, 
+                                    opacity: 1,
+                                    strokeDashoffset: [0, -28]
+                                  }}
+                                  transition={{ 
+                                    pathLength: { duration: 1.2, delay: edge.delay, ease: "easeInOut" },
+                                    opacity: { duration: 0.5, delay: edge.delay },
+                                    strokeDashoffset: { duration: 1.5, repeat: Infinity, ease: "linear" }
+                                  }}
+                                />
+                                {/* X Button on Curve */}
+                                <motion.foreignObject
+                                  width="20"
+                                  height="20"
+                                  x={428} 
+                                  y={(375 + edge.endY) / 2 - 10}
+                                  initial={{ scale: 0, opacity: 0 }}
+                                  animate={{ scale: 1, opacity: 1 }}
+                                  transition={{ delay: edge.delay + 0.8, type: "spring" }}
+                                >
+                                  <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-md border border-slate-100 cursor-pointer hover:bg-slate-50">
+                                    <X size={12} className="text-slate-400" />
+                                  </div>
+                                </motion.foreignObject>
+                              </g>
+                            ))}
+                          </svg>
 
-                         {/* Central Node */}
-                         <motion.div
-                           initial={{ scale: 0, opacity: 0 }}
-                           animate={{ scale: 1, opacity: 1 }}
-                           transition={{ type: "spring", delay: 0.1 }}
-                           className="absolute top-1/2 left-[300px] -translate-y-1/2 w-64 bg-white rounded-lg shadow-xl border-2 border-cyan overflow-hidden z-10"
-                         >
-                           <div className="h-8 bg-slate-50 border-b border-slate-100 flex items-center px-3 gap-2">
-                             <div className="w-4 h-4 bg-amber-100 rounded text-amber-600 flex items-center justify-center"><User size={10} /></div>
-                             <span className="text-xs font-bold text-slate-700">Lotenna Story</span>
-                           </div>
-                           <div className="p-3">
-                             <div className="font-bold text-slate-900 text-sm mb-1">New userStory</div>
-                             <div className="text-[10px] text-slate-400">Edit this description...</div>
-                           </div>
-                           {/* Handles */}
-                           <div className="absolute top-1/2 -right-1 w-2 h-2 bg-cyan rounded-full translate-x-1/2 -translate-y-1/2" />
-                         </motion.div>
+                          {/* Central Node */}
+                          <motion.div
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ type: "spring", delay: 0.1 }}
+                            className="absolute top-1/2 left-[20px] -translate-y-1/2 w-64 bg-white rounded-lg shadow-xl border-2 border-cyan overflow-hidden z-10"
+                          >
+                            <div className="h-8 bg-slate-50 border-b border-slate-100 flex items-center px-3 gap-2">
+                              <div className="w-4 h-4 bg-amber-100 rounded text-amber-600 flex items-center justify-center"><User size={10} /></div>
+                              <span className="text-xs font-bold text-slate-700">Lotenna Story</span>
+                            </div>
+                            <div className="p-3">
+                              <div className="font-bold text-slate-900 text-sm mb-1">New userStory</div>
+                              <div className="text-[10px] text-slate-400">Edit this description...</div>
+                            </div>
+                            {/* Handles */}
+                            <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border border-cyan z-20" />
+                            <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border border-cyan z-20" />
+                            <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border border-cyan z-20" />
+                            <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border border-cyan z-20" />
+                          </motion.div>
 
-                         {/* Child Nodes */}
-                         {[
-                           { y: 200, delay: 0.6 },
-                           { y: 315, delay: 0.7 },
-                           { y: 430, delay: 0.8 },
-                           { y: 545, delay: 0.9 },
-                         ].map((node, i) => (
+                          {/* Child Nodes */}
+                          {[
+                            { y: 150, delay: 0.6 },
+                            { y: 265, delay: 0.7 },
+                            { y: 380, delay: 0.8 },
+                            { y: 495, delay: 0.9 },
+                            { y: 610, delay: 1.0 },
+                          ].map((node, i) => (
                             <motion.div
                               key={i}
-                              initial={{ scale: 0, opacity: 0, x: 780 }}
-                              animate={{ scale: 1, opacity: 1, x: 750 }}
+                              initial={{ scale: 0, opacity: 0, x: 50 }}
+                              animate={{ scale: 1, opacity: 1, x: 0 }}
                               transition={{ type: "spring", delay: node.delay }}
-                              className="absolute left-[750px] w-64 bg-white rounded-lg shadow-lg border border-slate-200 overflow-hidden z-10"
-                              style={{ top: node.y, marginTop: -40 }} // Center vertically based on height approx 80px
+                              className="absolute left-[600px] w-64 bg-white rounded-lg shadow-lg border border-slate-200 overflow-hidden z-10"
+                              style={{ top: node.y, marginTop: -40 }}
                             >
                                <div className="h-8 bg-slate-50 border-b border-slate-100 flex items-center px-3 gap-2">
                                  <div className="w-4 h-4 bg-amber-100 rounded text-amber-600 flex items-center justify-center"><User size={10} /></div>
@@ -515,8 +560,8 @@ export function ProductDemoAnimation() {
                 </div>
               </div>
 
-              {/* Right AI Panel */}
-              <div className="w-80 bg-white border-l border-slate-200 flex flex-col">
+             {/* Right AI Panel */}
+             <div className="w-72 bg-white border-l border-slate-200 flex flex-col">
                 <div className="h-12 border-b border-slate-100 flex items-center px-4 justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-5 h-5 bg-cyan rounded flex items-center justify-center text-navy font-bold text-[10px]">B</div>

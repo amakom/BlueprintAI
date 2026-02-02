@@ -4,7 +4,7 @@ import { HeroSection } from '@/components/landing/HeroSection';
 import { StrategyThinkingAnimation } from '@/components/landing/StrategyThinkingAnimation';
 import { CanvasFlowAnimation } from '@/components/landing/CanvasFlowAnimation';
 import { SpecConversionAnimation } from '@/components/landing/SpecConversionAnimation';
-import { FinalCTAAnimation } from '@/components/landing/FinalCTAAnimation';
+import { InteractiveCanvasNodeAnimation } from '@/components/landing/InteractiveCanvasNodeAnimation';
 import { FadeUp, SlideIn, ScaleIn, StaggerContainer, StaggerItem } from '@/components/landing/ScrollAnimation';
 
 export default function LandingPage() {
@@ -238,6 +238,7 @@ export default function LandingPage() {
         <section className="container mx-auto px-6 py-20 border-t border-white/5">
           <StaggerContainer className="grid md:grid-cols-2 gap-12">
             <StaggerItem className="border-b border-white/10 pb-8 md:border-b-0 md:border-r md:pr-8">
+              <InteractiveCanvasNodeAnimation />
               <h3 className="text-cyan font-bold text-sm mb-2">Feature 1 — Visual Canvas</h3>
               <h4 className="text-2xl font-bold mb-2">Design real product flows, not static diagrams.</h4>
               <p className="text-gray-400">AI-generated, fully editable, and aware of product logic.</p>

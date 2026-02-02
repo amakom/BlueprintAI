@@ -8,12 +8,18 @@ export function HeroAnimation() {
   const containerRef = useRef(null)
   const isInView = useInView(containerRef, { once: true, margin: "-100px" })
   const [typed, setTyped] = useState('')
-  const [phase, setPhase] = useState<'typing' | 'streams' | 'merge'>('typing')
+  const [phase, setPhase] = useState<'entrance' | 'typing' | 'streams' | 'merge'>('entrance')
   const [replayKey, setReplayKey] = useState(0)
   const target = 'An Uber for dog walkers'
 
   useEffect(() => {
-    if (!isInView || phase !== 'typing') return
+    if (!isInView || phase !== 'entrance') return
+    const t = setTimeout(() => setPhase('typing'), reduce ? 0 : 800)
+    return () => clearTimeout(t)
+  }, [phase, reduce, isInView, replayKey])
+
+  useEffect(() => {
+    if (phase !== 'typing') return
     let i = 0
     setTyped('') // Reset typing
     const interval = setInterval(() => {
@@ -25,7 +31,7 @@ export function HeroAnimation() {
       }
     }, reduce ? 0 : 60)
     return () => clearInterval(interval)
-  }, [phase, reduce, isInView, replayKey])
+  }, [phase, reduce])
 
   useEffect(() => {
     if (phase !== 'streams') return
@@ -34,7 +40,7 @@ export function HeroAnimation() {
   }, [phase, reduce])
 
   const handleReplay = () => {
-    setPhase('typing')
+    setPhase('entrance')
     setTyped('')
     setReplayKey(k => k + 1)
   }
@@ -71,9 +77,30 @@ export function HeroAnimation() {
         </button>
       </div>
 
-      <div className="mx-auto w-full max-w-xl rounded-2xl border border-white/10 bg-white/5 px-6 py-4 backdrop-blur-sm">
-         <div className="flex items-center gap-3">
-           <div className="h-6 w-6 rounded-md bg-cyan/80 text-navy flex items-center justify-center text-xs font-bold">AI</div>
+      <div className="mx-auto w-full max-w-xl rounded-2xl border border-white/10 bg-white/5 px-6 py-4 backdrop-blur-sm relative overflow-hidden">
+        {/* Your Idea Label */}
+        <AnimatePresence>
+          {(phase === 'entrance' || phase === 'typing' || phase === 'streams' || phase === 'merge') && (
+             <motion.div
+               initial={{ y: 20, opacity: 0 }}
+               animate={{ y: 0, opacity: 1 }}
+               transition={{ duration: 0.5, delay: 0.2 }}
+               className="absolute top-2 left-6 text-[10px] uppercase font-bold text-cyan tracking-wider"
+             >
+               Your Idea
+             </motion.div>
+          )}
+        </AnimatePresence>
+
+         <div className="flex items-center gap-3 mt-4">
+           <motion.div
+             initial={{ opacity: 0, scale: 0.8 }}
+             animate={{ opacity: 1, scale: 1 }}
+             transition={{ duration: 0.4 }}
+             className="h-6 w-6 rounded-md bg-cyan/80 text-navy flex items-center justify-center text-xs font-bold"
+           >
+             AI
+           </motion.div>
            <div className="flex-1">
              <div className="font-mono text-lg text-white">
                <span>{typed}</span>
@@ -82,9 +109,9 @@ export function HeroAnimation() {
            </div>
          </div>
        </div>
- 
+
        <AnimatePresence>
-         {phase !== 'typing' && (
+         {phase !== 'entrance' && phase !== 'typing' && (
            <motion.div
              initial={{ opacity: 0 }}
              animate={{ opacity: 1 }}

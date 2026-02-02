@@ -153,7 +153,7 @@ export function TeamMembersList({ teamId, currentUserRole }: TeamMembersListProp
               </span>
               {canManage && member.role !== 'OWNER' && (
                 <button
-                  onClick={() => confirmRemove(member.id)}
+                  onClick={() => handleRemoveMember(member.id)}
                   className="p-2 text-gray-400 hover:text-red-500 transition-colors"
                   title="Remove member"
                 >
@@ -198,17 +198,6 @@ export function TeamMembersList({ teamId, currentUserRole }: TeamMembersListProp
       
       <AlertModal isOpen={!!error} onClose={() => setError(null)} message={error || ''} />
       
-      <ConfirmModal 
-        isOpen={!!memberToRemove} 
-        onClose={() => setMemberToRemove(null)} 
-        onConfirm={performRemoveMember}
-        title="Remove Member?"
-        message="Are you sure you want to remove this member? They will lose access to the team and its projects."
-        confirmText="Remove"
-      />
-    </div>
-  );
-}
       <ConfirmModal 
         isOpen={!!memberToRemove} 
         onClose={() => setMemberToRemove(null)} 

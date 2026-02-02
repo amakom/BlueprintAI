@@ -70,7 +70,8 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
     userName,
     documentId,
     error,
-    clearError
+    clearError,
+    onError
   } = useCanvas();
 
   const { socket } = useSocket();

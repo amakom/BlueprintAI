@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getSession } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { getSession } from '@/lib/auth';
+import { openai, isAIConfigured } from '@/lib/openai';
 
 export async function POST(req: Request) {
   const session = await getSession();
@@ -33,13 +34,71 @@ export async function POST(req: Request) {
     const nodes = canvasData.nodes || [];
     const edges = canvasData.edges || [];
 
-    // Mock AI Generation Logic based on Canvas Nodes
-    // In a real app, this would call OpenAI with the nodes/edges JSON
+    // Real AI Generation
+    if (isAIConfigured()) {
+      try {
+        const prompt = `
+          You are a Senior Technical Product Manager and System Architect.
+          Generate a detailed Engineering Specification (PRD) in Markdown format based on the following Visual Canvas Data.
+          
+          Project Name: ${project.name}
+          Project Description: ${project.description || 'N/A'}
+          
+          Canvas Nodes (User Stories, Screens, etc.):
+          ${JSON.stringify(nodes.map((n: any) => ({ type: n.type, label: n.data.label, details: n.data })))}
+          
+          Canvas Connections (Flow):
+          ${JSON.stringify(edges.map((e: any) => ({ from: e.source, to: e.target })))}
+          
+          Structure the response as a professional Technical Spec with the following sections:
+          1. Executive Summary
+          2. User Flows & User Stories (Detailed breakdown)
+          3. Frontend Specifications (Screens, Components, Routes)
+          4. Backend Data Models (Prisma Schema suggestions)
+          5. API Endpoints (RESTful definitions)
+          6. Edge Cases & Error Handling
+          
+          Output valid Markdown only. Do not wrap in markdown code blocks.
+        `;
+
+        const response = await openai.chat.completions.create({
+          model: 'gpt-4o',
+          messages: [
+            { role: 'system', content: 'You are an expert Technical Architect.' },
+            { role: 'user', content: prompt }
+          ],
+          temperature: 0.7,
+        });
+
+        const specMarkdown = response.choices[0].message.content || '';
+
+        // Log Usage
+        await prisma.aIUsageLog.create({
+          data: {
+            teamId: project.teamId,
+            action: 'generate_spec',
+            inputTokens: JSON.stringify(nodes).length / 4, // Approx
+            outputTokens: specMarkdown.length / 4, // Approx
+            model: 'gpt-4o'
+          }
+        });
+
+        return NextResponse.json({ spec: specMarkdown });
+
+      } catch (aiError) {
+        console.error('OpenAI API Error:', aiError);
+        // Fallback to mock if AI fails
+      }
+    }
+
+    // Fallback Mock Logic (if AI not configured or fails)
+    console.warn('Using fallback mock generation for spec');
     const userStories = nodes.filter((n: any) => n.type === 'userStory');
     const screens = nodes.filter((n: any) => n.type === 'screen');
     
     let specMarkdown = `# Engineering Specification: ${project.name}\n\n`;
     specMarkdown += `**Generated on:** ${new Date().toLocaleDateString()}\n\n`;
+    specMarkdown += `> **Note:** This is a mock specification generated because the OpenAI API Key is missing or failed.\n\n`;
     
     specMarkdown += `## 1. Overview\n`;
     specMarkdown += `This document outlines the technical implementation details for the ${project.name} user flows.\n\n`;
@@ -72,21 +131,6 @@ export async function POST(req: Request) {
     specMarkdown += "```prisma\n";
     specMarkdown += "model Entity {\n  id String @id @default(cuid())\n  createdAt DateTime @default(now())\n}\n";
     specMarkdown += "```\n\n";
-
-    specMarkdown += `## 5. API Endpoints\n`;
-    specMarkdown += `- \`POST /api/resource\`\n`;
-    specMarkdown += `- \`GET /api/resource/:id\`\n`;
-
-    // Log Usage
-    await prisma.aIUsageLog.create({
-      data: {
-        teamId: project.teamId,
-        action: 'generate_spec',
-        inputTokens: JSON.stringify(nodes).length / 4,
-        outputTokens: specMarkdown.length / 4,
-        model: 'gpt-mock-spec'
-      }
-    });
 
     return NextResponse.json({ spec: specMarkdown });
 

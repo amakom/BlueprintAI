@@ -2,6 +2,7 @@
  import { useEffect, useState, useRef } from 'react'
 import { motion, AnimatePresence, useReducedMotion, useInView } from 'framer-motion'
 import Link from 'next/link'
+import { RotateCcw } from 'lucide-react'
 
 type Phase = 'messy' | 'align' | 'cta'
 
@@ -10,18 +11,24 @@ export function FinalCTAAnimation() {
   const containerRef = useRef(null)
   const isInView = useInView(containerRef, { once: true, margin: "-100px" })
   const [phase, setPhase] = useState<Phase>('messy')
+  const [replayKey, setReplayKey] = useState(0)
 
   useEffect(() => {
     if (!isInView) return
     const t1 = window.setTimeout(() => setPhase('align'), reduce ? 0 : 1400)
-     const t2 = window.setTimeout(() => setPhase('cta'), reduce ? 0 : 2600)
-     return () => {
-       clearTimeout(t1)
-       clearTimeout(t2)
-     }
-  }, [reduce, isInView])
- 
-   const chips = [
+    const t2 = window.setTimeout(() => setPhase('cta'), reduce ? 0 : 2600)
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+    }
+  }, [reduce, isInView, replayKey])
+
+  const handleReplay = () => {
+    setPhase('messy')
+    setReplayKey(k => k + 1)
+  }
+
+  const chips = [
     { id: 'idea-1', text: 'Feature creep?', x: 40, y: 28 },
     { id: 'idea-2', text: 'Target users?', x: 220, y: 70 },
     { id: 'idea-3', text: 'Tech debt?', x: 120, y: 140 },
@@ -32,6 +39,16 @@ export function FinalCTAAnimation() {
  
    return (
     <div ref={containerRef} className="relative mx-auto max-w-6xl">
+      <div className="absolute -top-12 right-0">
+        <button
+          onClick={handleReplay}
+          className="p-2 text-gray-500 hover:text-cyan transition-colors"
+          title="Replay Animation"
+        >
+          <RotateCcw className="w-5 h-5" />
+        </button>
+      </div>
+
       <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-white/5 p-6">
         <div className="text-center">
           <div className="text-sm font-bold text-cyan">From idea to blueprint</div>

@@ -1,24 +1,31 @@
  'use client'
  import { useEffect, useState, useMemo, useRef } from 'react'
 import { motion, AnimatePresence, useReducedMotion, useInView } from 'framer-motion'
+import { RotateCcw } from 'lucide-react'
 
 export function StrategyThinkingAnimation() {
   const reduce = useReducedMotion()
   const containerRef = useRef(null)
   const isInView = useInView(containerRef, { once: true, margin: "-100px" })
   const [phase, setPhase] = useState<'idea' | 'personas' | 'kpis' | 'competitors' | 'complete'>('idea')
+  const [replayKey, setReplayKey] = useState(0)
 
   useEffect(() => {
     if (!isInView) return
     let timers: number[] = []
-     timers.push(window.setTimeout(() => setPhase('personas'), reduce ? 0 : 800))
-     timers.push(window.setTimeout(() => setPhase('kpis'), reduce ? 0 : 1800))
-     timers.push(window.setTimeout(() => setPhase('competitors'), reduce ? 0 : 2800))
-     timers.push(window.setTimeout(() => setPhase('complete'), reduce ? 0 : 3800))
-     return () => timers.forEach(t => clearTimeout(t))
-  }, [reduce, isInView])
- 
-   const card = useMemo(
+    timers.push(window.setTimeout(() => setPhase('personas'), reduce ? 0 : 800))
+    timers.push(window.setTimeout(() => setPhase('kpis'), reduce ? 0 : 1800))
+    timers.push(window.setTimeout(() => setPhase('competitors'), reduce ? 0 : 2800))
+    timers.push(window.setTimeout(() => setPhase('complete'), reduce ? 0 : 3800))
+    return () => timers.forEach(t => clearTimeout(t))
+  }, [reduce, isInView, replayKey])
+
+  const handleReplay = () => {
+    setPhase('idea')
+    setReplayKey(k => k + 1)
+  }
+
+  const card = useMemo(
      () => ({
        initial: { opacity: 0, y: 10, scale: 0.98 },
        enter: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.45 } },
@@ -36,6 +43,16 @@ export function StrategyThinkingAnimation() {
  
    return (
     <div ref={containerRef} className="relative mx-auto max-w-6xl">
+      <div className="absolute -top-12 right-0">
+        <button
+          onClick={handleReplay}
+          className="p-2 text-gray-500 hover:text-cyan transition-colors"
+          title="Replay Animation"
+        >
+          <RotateCcw className="w-5 h-5" />
+        </button>
+      </div>
+
       <div className="grid md:grid-cols-3 gap-6">
          <div className="md:col-span-1">
            <AnimatePresence>

@@ -1,6 +1,7 @@
  'use client'
  import { useEffect, useState, useMemo, useRef } from 'react'
 import { motion, AnimatePresence, useReducedMotion, useInView } from 'framer-motion'
+import { RotateCcw } from 'lucide-react'
 
 type Phase = 'canvas' | 'morph' | 'doc'
 
@@ -9,18 +10,24 @@ export function SpecConversionAnimation() {
   const containerRef = useRef(null)
   const isInView = useInView(containerRef, { once: true, margin: "-100px" })
   const [phase, setPhase] = useState<Phase>('canvas')
+  const [replayKey, setReplayKey] = useState(0)
 
   useEffect(() => {
     if (!isInView) return
     const t1 = window.setTimeout(() => setPhase('morph'), reduce ? 0 : 1200)
-     const t2 = window.setTimeout(() => setPhase('doc'), reduce ? 0 : 2200)
-     return () => {
-       clearTimeout(t1)
-       clearTimeout(t2)
-     }
-  }, [reduce, isInView])
- 
-   const appear = useMemo(
+    const t2 = window.setTimeout(() => setPhase('doc'), reduce ? 0 : 2200)
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+    }
+  }, [reduce, isInView, replayKey])
+
+  const handleReplay = () => {
+    setPhase('canvas')
+    setReplayKey(k => k + 1)
+  }
+
+  const appear = useMemo(
      () => ({
        initial: { opacity: 0, y: 10, scale: 0.98 },
        enter: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.45 } },
@@ -38,6 +45,16 @@ export function SpecConversionAnimation() {
  
    return (
     <div ref={containerRef} className="relative mx-auto max-w-6xl">
+      <div className="absolute -top-12 right-0">
+        <button
+          onClick={handleReplay}
+          className="p-2 text-gray-500 hover:text-cyan transition-colors"
+          title="Replay Animation"
+        >
+          <RotateCcw className="w-5 h-5" />
+        </button>
+      </div>
+
       <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-white/5 p-6">
         <AnimatePresence>
           {phase !== 'doc' && (

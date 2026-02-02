@@ -1,6 +1,7 @@
  'use client'
  import { useEffect, useState, useRef } from 'react'
 import { motion, AnimatePresence, useReducedMotion, useInView } from 'framer-motion'
+import { RotateCcw } from 'lucide-react'
 
 type Phase = 'blank' | 'prompt' | 'nodes' | 'edges'
 
@@ -9,20 +10,26 @@ export function CanvasFlowAnimation() {
   const containerRef = useRef(null)
   const isInView = useInView(containerRef, { once: true, margin: "-100px" })
   const [phase, setPhase] = useState<Phase>('blank')
+  const [replayKey, setReplayKey] = useState(0)
 
   useEffect(() => {
     if (!isInView) return
     const t1 = window.setTimeout(() => setPhase('prompt'), reduce ? 0 : 600)
-     const t2 = window.setTimeout(() => setPhase('nodes'), reduce ? 0 : 1400)
-     const t3 = window.setTimeout(() => setPhase('edges'), reduce ? 0 : 2400)
-     return () => {
-       clearTimeout(t1)
-       clearTimeout(t2)
-       clearTimeout(t3)
-     }
-  }, [reduce, isInView])
- 
-   const nodes = [
+    const t2 = window.setTimeout(() => setPhase('nodes'), reduce ? 0 : 1400)
+    const t3 = window.setTimeout(() => setPhase('edges'), reduce ? 0 : 2400)
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+      clearTimeout(t3)
+    }
+  }, [reduce, isInView, replayKey])
+
+  const handleReplay = () => {
+    setPhase('blank')
+    setReplayKey(k => k + 1)
+  }
+
+  const nodes = [
      { id: 'login', label: 'Login', tag: 'Auth', x: 60, y: 40 },
      { id: 'search', label: 'Search', tag: 'Discovery', x: 220, y: 90 },
      { id: 'booking', label: 'Booking', tag: 'Flow', x: 380, y: 40 },
@@ -42,6 +49,16 @@ export function CanvasFlowAnimation() {
  
    return (
     <div ref={containerRef} className="relative mx-auto max-w-6xl">
+      <div className="absolute -top-12 right-0">
+        <button
+          onClick={handleReplay}
+          className="p-2 text-gray-500 hover:text-cyan transition-colors"
+          title="Replay Animation"
+        >
+          <RotateCcw className="w-5 h-5" />
+        </button>
+      </div>
+
       <div className="relative h-72 rounded-3xl overflow-hidden border border-white/10 bg-navy flex items-center justify-center">
         <AnimatePresence>
           {phase !== 'blank' && (

@@ -1,6 +1,7 @@
  'use client'
  import { useEffect, useMemo, useState, useRef } from 'react'
 import { motion, AnimatePresence, useReducedMotion, useInView } from 'framer-motion'
+import { RotateCcw } from 'lucide-react'
 
 export function HeroAnimation() {
   const reduce = useReducedMotion()
@@ -8,29 +9,37 @@ export function HeroAnimation() {
   const isInView = useInView(containerRef, { once: true, margin: "-100px" })
   const [typed, setTyped] = useState('')
   const [phase, setPhase] = useState<'typing' | 'streams' | 'merge'>('typing')
+  const [replayKey, setReplayKey] = useState(0)
   const target = 'An Uber for dog walkers'
 
   useEffect(() => {
     if (!isInView || phase !== 'typing') return
     let i = 0
-     const interval = setInterval(() => {
-       i += 1
-       setTyped(target.slice(0, i))
-       if (i >= target.length) {
-         clearInterval(interval)
-         setTimeout(() => setPhase('streams'), 700)
-       }
-     }, reduce ? 0 : 60)
-     return () => clearInterval(interval)
-   }, [phase, reduce, isInView])
- 
-   useEffect(() => {
-     if (phase !== 'streams') return
-     const t = setTimeout(() => setPhase('merge'), reduce ? 0 : 2800)
-     return () => clearTimeout(t)
-   }, [phase, reduce])
- 
-   const streamVariants = useMemo(
+    setTyped('') // Reset typing
+    const interval = setInterval(() => {
+      i += 1
+      setTyped(target.slice(0, i))
+      if (i >= target.length) {
+        clearInterval(interval)
+        setTimeout(() => setPhase('streams'), 700)
+      }
+    }, reduce ? 0 : 60)
+    return () => clearInterval(interval)
+  }, [phase, reduce, isInView, replayKey])
+
+  useEffect(() => {
+    if (phase !== 'streams') return
+    const t = setTimeout(() => setPhase('merge'), reduce ? 0 : 2800)
+    return () => clearTimeout(t)
+  }, [phase, reduce])
+
+  const handleReplay = () => {
+    setPhase('typing')
+    setTyped('')
+    setReplayKey(k => k + 1)
+  }
+
+  const streamVariants = useMemo(
      () => ({
        initial: { opacity: 0, y: 12, scale: 0.96 },
        enter: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5 } },
@@ -52,6 +61,16 @@ export function HeroAnimation() {
  
    return (
     <div ref={containerRef} className="relative mx-auto max-w-6xl">
+      <div className="absolute -top-12 right-0">
+        <button
+          onClick={handleReplay}
+          className="p-2 text-gray-500 hover:text-cyan transition-colors"
+          title="Replay Animation"
+        >
+          <RotateCcw className="w-5 h-5" />
+        </button>
+      </div>
+
       <div className="mx-auto w-full max-w-xl rounded-2xl border border-white/10 bg-white/5 px-6 py-4 backdrop-blur-sm">
          <div className="flex items-center gap-3">
            <div className="h-6 w-6 rounded-md bg-cyan/80 text-navy flex items-center justify-center text-xs font-bold">AI</div>

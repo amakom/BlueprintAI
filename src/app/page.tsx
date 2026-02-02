@@ -334,7 +334,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-6 py-16 text-center">
           <div className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6">BlueprintAI</div>
           <p className="text-gray-400 text-lg mb-2">Your 24/7 AI Product Manager</p>
-          <p className="text-gray-500 text-sm">From idea → strategy → visual plans → developer tasks</p>
+          <p className="text-gray-500 text-sm">Idea → Plan → Build</p>
           <p className="mt-12 text-xs text-gray-600">© 2025 BlueprintAI</p>
         </div>
       </footer>

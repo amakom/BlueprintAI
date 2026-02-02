@@ -75,7 +75,7 @@ export function StrategyThinkingAnimation() {
               <AnimatePresence>
                 {phase !== 'idea' && (
                   <motion.div variants={card} initial="initial" animate="enter" className="rounded-md border border-white/10 bg-white/5 p-5">
-                    <div className="text-xs font-bold text-cyan">Target Audience</div>
+                    <div className="text-xs font-bold text-cyan">Target Users</div>
                     <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
                      <motion.div custom={0} variants={item} initial="initial" animate="enter" className="rounded-md border border-white/10 bg-white/5 p-4">
                        <div className="h-8 w-8 rounded-md bg-amber-500/20 flex items-center justify-center mb-2">
@@ -95,8 +95,8 @@ export function StrategyThinkingAnimation() {
                        <div className="h-8 w-8 rounded-md bg-blue-500/20 flex items-center justify-center mb-2">
                          <ShieldCheck className="w-4 h-4 text-blue-500" />
                        </div>
-                       <div className="text-sm">City Admin</div>
-                       <div className="text-xs text-gray-400">Compliance oversight</div>
+                       <div className="text-sm">City Official</div>
+                       <div className="text-xs text-gray-400">Safety & Rules</div>
                      </motion.div>
                    </div>
                  </motion.div>
@@ -170,8 +170,8 @@ export function StrategyThinkingAnimation() {
                    animate={{ opacity: 1, transition: { duration: 0.6 } }}
                    className="rounded-md border border-white/10 bg-white/5 p-5"
                  >
-                   <div className="text-xs font-bold text-cyan">Strategic Summary</div>
-                   <div className="mt-2 text-sm text-gray-300">Clear personas, measurable KPIs, and market positioning identified.</div>
+                   <div className="text-xs font-bold text-cyan">Strategy Ready</div>
+                   <div className="mt-2 text-sm text-gray-300">Users, goals, and market defined. Ready to build.</div>
                  </motion.div>
                )}
              </AnimatePresence>

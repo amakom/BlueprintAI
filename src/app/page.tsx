@@ -17,7 +17,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      <main className="px-6">
+      <main className="px-6 relative z-10">
         <section className="container mx-auto pt-20 pb-24 text-center">
           <p className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-white/10 border border-white/20">Collaborate with Intelligence</p>
           <h1 className="mt-6 text-5xl md:text-7xl font-extrabold leading-tight">

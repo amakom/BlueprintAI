@@ -40,6 +40,7 @@ interface CanvasContextType {
   userName?: string;
   aiSettings: AISettings;
   setAiSettings: (settings: AISettings) => void;
+  onError: (message: string) => void;
 }
 
 const CanvasContext = createContext<CanvasContextType | undefined>(undefined);

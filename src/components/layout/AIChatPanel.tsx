@@ -241,7 +241,7 @@ export function AIChatPanel() {
            {/* Drawer Panel */}
            <div className="absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl animate-in slide-in-from-right duration-200 flex flex-col">
              <button
-            onClick={() => setIsOpen(false)}
+            onClick={() => setIsMobileOpen(false)}
             className="absolute top-2 right-2 z-10 p-1 bg-white/50 rounded-md text-gray-500 hover:text-navy"
           >
                <X className="w-5 h-5" />

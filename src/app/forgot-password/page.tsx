@@ -37,9 +37,13 @@ export default function ForgotPasswordPage() {
 
   if (status === 'success') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-cloud p-4">
-        <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
-          <Mail className="w-16 h-16 text-cyan mx-auto mb-4" />
+      <div className="min-h-screen flex items-center justify-center bg-[#f6f8fb] p-4">
+        <div className="bg-white p-8 rounded-md shadow-md max-w-md w-full text-center">
+          <div className="mb-6 flex justify-center">
+            <div className="h-12 w-12 rounded-md bg-blue-100 flex items-center justify-center">
+              <Mail className="h-6 w-6 text-blue-600" />
+            </div>
+          </div>
           <h1 className="text-2xl font-bold text-navy mb-2">Check your email</h1>
           <p className="text-gray-600 mb-6">
             If an account exists for <strong>{email}</strong>, we've sent instructions to reset your password.
@@ -57,7 +61,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-cloud p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
+      <div className="bg-white p-8 rounded-md shadow-md max-w-md w-full">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-navy">Reset Password</h1>
           <p className="text-gray-500 mt-2">Enter your email to receive reset instructions</p>

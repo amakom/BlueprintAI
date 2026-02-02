@@ -61,7 +61,7 @@ export function StrategyThinkingAnimation() {
                   variants={card}
                   initial="initial"
                   animate="enter"
-                  className="rounded-2xl border border-white/10 bg-white/5 p-5"
+                  className="rounded-md border border-white/10 bg-white/5 p-5"
                 >
                   <div className="text-xs font-bold text-cyan">Your Idea</div>
                   <div className="mt-2 text-sm text-gray-300">“An Uber for dog walkers”</div>
@@ -74,25 +74,25 @@ export function StrategyThinkingAnimation() {
             <div className="grid gap-6">
               <AnimatePresence>
                 {phase !== 'idea' && (
-                  <motion.div variants={card} initial="initial" animate="enter" className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                  <motion.div variants={card} initial="initial" animate="enter" className="rounded-md border border-white/10 bg-white/5 p-5">
                     <div className="text-xs font-bold text-cyan">Target Audience</div>
                     <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                     <motion.div custom={0} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4">
-                       <div className="h-8 w-8 rounded-full bg-amber-500/20 flex items-center justify-center mb-2">
+                     <motion.div custom={0} variants={item} initial="initial" animate="enter" className="rounded-md border border-white/10 bg-white/5 p-4">
+                       <div className="h-8 w-8 rounded-md bg-amber-500/20 flex items-center justify-center mb-2">
                          <User className="w-4 h-4 text-amber-500" />
                        </div>
                        <div className="text-sm">Busy Buyer</div>
                        <div className="text-xs text-gray-400">Schedules in seconds</div>
                      </motion.div>
-                     <motion.div custom={1} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4">
-                       <div className="h-8 w-8 rounded-full bg-emerald-500/20 flex items-center justify-center mb-2">
+                     <motion.div custom={1} variants={item} initial="initial" animate="enter" className="rounded-md border border-white/10 bg-white/5 p-4">
+                       <div className="h-8 w-8 rounded-md bg-emerald-500/20 flex items-center justify-center mb-2">
                          <UserCheck className="w-4 h-4 text-emerald-500" />
                        </div>
                        <div className="text-sm">Trusted Walker</div>
                        <div className="text-xs text-gray-400">Reliable earnings</div>
                      </motion.div>
-                     <motion.div custom={2} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4">
-                       <div className="h-8 w-8 rounded-full bg-blue-500/20 flex items-center justify-center mb-2">
+                     <motion.div custom={2} variants={item} initial="initial" animate="enter" className="rounded-md border border-white/10 bg-white/5 p-4">
+                       <div className="h-8 w-8 rounded-md bg-blue-500/20 flex items-center justify-center mb-2">
                          <ShieldCheck className="w-4 h-4 text-blue-500" />
                        </div>
                        <div className="text-sm">City Admin</div>
@@ -105,18 +105,18 @@ export function StrategyThinkingAnimation() {
  
              <AnimatePresence>
                 {phase === 'kpis' || phase === 'competitors' || phase === 'complete' ? (
-                  <motion.div variants={card} initial="initial" animate="enter" className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                  <motion.div variants={card} initial="initial" animate="enter" className="rounded-md border border-white/10 bg-white/5 p-5">
                     <div className="text-xs font-bold text-cyan">Success Metrics</div>
                     <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <motion.div custom={0} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
+                      <motion.div custom={0} variants={item} initial="initial" animate="enter" className="rounded-md border border-white/10 bg-white/5 p-4 text-center">
                         <div className="text-xs text-gray-400">Retention</div>
                         <div className="text-lg font-bold">42%</div>
                       </motion.div>
-                      <motion.div custom={1} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
+                      <motion.div custom={1} variants={item} initial="initial" animate="enter" className="rounded-md border border-white/10 bg-white/5 p-4 text-center">
                         <div className="text-xs text-gray-400">Conversion</div>
                         <div className="text-lg font-bold">3.8%</div>
                       </motion.div>
-                      <motion.div custom={2} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
+                      <motion.div custom={2} variants={item} initial="initial" animate="enter" className="rounded-md border border-white/10 bg-white/5 p-4 text-center">
                         <div className="text-xs text-gray-400">NPS</div>
                         <div className="text-lg font-bold">62</div>
                       </motion.div>
@@ -127,9 +127,9 @@ export function StrategyThinkingAnimation() {
 
               <AnimatePresence>
                 {phase === 'competitors' || phase === 'complete' ? (
-                  <motion.div variants={card} initial="initial" animate="enter" className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                  <motion.div variants={card} initial="initial" animate="enter" className="rounded-md border border-white/10 bg-white/5 p-5">
                     <div className="text-xs font-bold text-cyan">Market Analysis</div>
-                    <div className="mt-3 overflow-hidden rounded-xl border border-white/10">
+                    <div className="mt-3 overflow-hidden rounded-md border border-white/10">
                       <div className="overflow-x-auto">
                         <div className="min-w-[400px]">
                           <div className="grid grid-cols-4 bg-white/5">
@@ -168,7 +168,7 @@ export function StrategyThinkingAnimation() {
                  <motion.div
                    initial={{ opacity: 0 }}
                    animate={{ opacity: 1, transition: { duration: 0.6 } }}
-                   className="rounded-2xl border border-white/10 bg-white/5 p-5"
+                   className="rounded-md border border-white/10 bg-white/5 p-5"
                  >
                    <div className="text-xs font-bold text-cyan">Strategic Summary</div>
                    <div className="mt-2 text-sm text-gray-300">Clear personas, measurable KPIs, and market positioning identified.</div>

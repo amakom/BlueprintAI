@@ -119,7 +119,7 @@ export const CollaborativeCursors = ({ projectId }: { projectId: string }) => {
             />
           </svg>
           <span 
-            className="px-2 py-1 text-xs text-white rounded-full whitespace-nowrap"
+            className="px-2 py-1 text-xs text-white rounded-md whitespace-nowrap"
             style={{ backgroundColor: cursor.color }}
           >
             {cursor.userName}

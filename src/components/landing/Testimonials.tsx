@@ -84,9 +84,9 @@ export function Testimonials() {
 
 function TestimonialCard({ name, role, image, content }: { name: string, role: string, image: string, content: string }) {
   return (
-    <div className="w-[85vw] md:w-[350px] bg-white/5 border border-white/10 p-6 rounded-2xl flex flex-col gap-4 hover:border-cyan/50 transition-colors">
+    <div className="w-[85vw] md:w-[350px] bg-white/5 border border-white/10 p-6 rounded-md flex flex-col gap-4 hover:border-cyan/50 transition-colors">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full overflow-hidden bg-[#2ee6d6] relative">
+        <div className="w-10 h-10 rounded-md overflow-hidden bg-[#2ee6d6] relative">
           <Image 
             src={image} 
             alt={name}

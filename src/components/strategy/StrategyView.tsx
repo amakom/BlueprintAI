@@ -165,7 +165,7 @@ function OKRSection({ projectId }: { projectId: string }) {
             <button 
               onClick={handleSave}
               disabled={isSaving}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-opacity-90 disabled:opacity-50"
             >
               {isSaving ? 'Saving...' : 'Save Changes'}
             </button>
@@ -173,7 +173,7 @@ function OKRSection({ projectId }: { projectId: string }) {
           <button 
             onClick={handleGenerate}
             disabled={isGenerating}
-            className="bg-navy text-white px-4 py-2 rounded-lg hover:bg-opacity-90 disabled:opacity-50 flex items-center gap-2"
+            className="bg-navy text-white px-4 py-2 rounded-md hover:bg-opacity-90 disabled:opacity-50 flex items-center gap-2"
           >
             {isGenerating ? 'Generating...' : 'Generate with AI'}
           </button>
@@ -183,7 +183,7 @@ function OKRSection({ projectId }: { projectId: string }) {
       {okrs.length > 0 ? (
         <div className="grid gap-4">
           {okrs.map((okr, index) => (
-            <div key={okr.id || `temp-${index}`} className={`bg-white p-6 rounded-xl shadow-sm border ${!okr.id ? 'border-amber-300 ring-1 ring-amber-100' : 'border-slate-100'}`}>
+            <div key={okr.id || `temp-${index}`} className={`bg-white p-6 rounded-md shadow-sm border ${!okr.id ? 'border-amber-300 ring-1 ring-amber-100' : 'border-slate-100'}`}>
               <div className="flex justify-between items-start mb-2">
                 <h3 className="font-bold text-lg">{okr.objective}</h3>
                 {!okr.id && <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded">Unsaved</span>}
@@ -197,7 +197,7 @@ function OKRSection({ projectId }: { projectId: string }) {
           ))}
         </div>
       ) : (
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+        <div className="bg-white p-6 rounded-md shadow-sm border border-slate-100">
           <p className="text-slate-500 text-center py-8">No OKRs defined yet. Start by generating some!</p>
         </div>
       )}
@@ -299,7 +299,7 @@ function KPISection({ projectId }: { projectId: string }) {
             <button 
               onClick={handleSave}
               disabled={isSaving}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-opacity-90 disabled:opacity-50"
             >
               {isSaving ? 'Saving...' : 'Save Changes'}
             </button>
@@ -307,7 +307,7 @@ function KPISection({ projectId }: { projectId: string }) {
           <button 
             onClick={handleGenerate}
             disabled={isGenerating}
-            className="bg-navy text-white px-4 py-2 rounded-lg hover:bg-opacity-90 disabled:opacity-50 flex items-center gap-2"
+            className="bg-navy text-white px-4 py-2 rounded-md hover:bg-opacity-90 disabled:opacity-50 flex items-center gap-2"
           >
             {isGenerating ? 'Generating...' : 'Generate with AI'}
           </button>
@@ -317,7 +317,7 @@ function KPISection({ projectId }: { projectId: string }) {
       {kpis.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {kpis.map((kpi, index) => (
-            <div key={kpi.id || `temp-${index}`} className={`bg-white p-6 rounded-xl shadow-sm border ${!kpi.id ? 'border-amber-300 ring-1 ring-amber-100' : 'border-slate-100'}`}>
+            <div key={kpi.id || `temp-${index}`} className={`bg-white p-6 rounded-md shadow-sm border ${!kpi.id ? 'border-amber-300 ring-1 ring-amber-100' : 'border-slate-100'}`}>
               <div className="flex justify-between items-start mb-4">
                 <span className={`text-xs font-semibold px-2 py-1 rounded ${getStatusColor(kpi.status)}`}>
                   {kpi.status.replace('_', ' ')}
@@ -331,7 +331,7 @@ function KPISection({ projectId }: { projectId: string }) {
           ))}
         </div>
       ) : (
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+        <div className="bg-white p-6 rounded-md shadow-sm border border-slate-100">
           <p className="text-slate-500 text-center py-8">No KPIs defined yet. Start by generating some!</p>
         </div>
       )}
@@ -421,7 +421,7 @@ function PersonaSection({ projectId }: { projectId: string }) {
             <button 
               onClick={handleSave}
               disabled={isSaving}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-opacity-90 disabled:opacity-50"
             >
               {isSaving ? 'Saving...' : 'Save Changes'}
             </button>
@@ -429,7 +429,7 @@ function PersonaSection({ projectId }: { projectId: string }) {
           <button 
             onClick={handleGenerate}
             disabled={isGenerating}
-            className="bg-navy text-white px-4 py-2 rounded-lg hover:bg-opacity-90 disabled:opacity-50 flex items-center gap-2"
+            className="bg-navy text-white px-4 py-2 rounded-md hover:bg-opacity-90 disabled:opacity-50 flex items-center gap-2"
           >
             {isGenerating ? 'Generating...' : 'Generate with AI'}
           </button>
@@ -439,11 +439,11 @@ function PersonaSection({ projectId }: { projectId: string }) {
       {personas.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {personas.map((persona, index) => (
-            <div key={persona.id || `temp-${index}`} className={`bg-white p-6 rounded-xl shadow-sm border ${!persona.id ? 'border-amber-300 ring-1 ring-amber-100' : 'border-slate-100'}`}>
+            <div key={persona.id || `temp-${index}`} className={`bg-white p-6 rounded-md shadow-sm border ${!persona.id ? 'border-amber-300 ring-1 ring-amber-100' : 'border-slate-100'}`}>
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-4">
                   {persona.imageUrl && (
-                    <img src={persona.imageUrl} alt={persona.name} className="w-16 h-16 rounded-full bg-slate-100" />
+                    <img src={persona.imageUrl} alt={persona.name} className="w-16 h-16 rounded-md bg-slate-100" />
                   )}
                   <div>
                     <h3 className="font-bold text-lg text-navy">{persona.name}</h3>
@@ -477,7 +477,7 @@ function PersonaSection({ projectId }: { projectId: string }) {
           ))}
         </div>
       ) : (
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+        <div className="bg-white p-6 rounded-md shadow-sm border border-slate-100">
           <p className="text-slate-500 text-center py-8">No personas created yet. Generate some with AI!</p>
         </div>
       )}
@@ -570,7 +570,7 @@ function CompetitorSection({ projectId }: { projectId: string }) {
             <button 
               onClick={handleSave}
               disabled={isSaving}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-opacity-90 disabled:opacity-50"
             >
               {isSaving ? 'Saving...' : 'Save Changes'}
             </button>
@@ -578,7 +578,7 @@ function CompetitorSection({ projectId }: { projectId: string }) {
           <button 
             onClick={handleGenerate}
             disabled={isGenerating}
-            className="bg-navy text-white px-4 py-2 rounded-lg hover:bg-opacity-90 disabled:opacity-50 flex items-center gap-2"
+            className="bg-navy text-white px-4 py-2 rounded-md hover:bg-opacity-90 disabled:opacity-50 flex items-center gap-2"
           >
             {isGenerating ? 'Generating...' : 'Generate with AI'}
           </button>
@@ -588,7 +588,7 @@ function CompetitorSection({ projectId }: { projectId: string }) {
       {competitors.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {competitors.map((competitor, index) => (
-            <div key={competitor.id || `temp-${index}`} className={`bg-white p-6 rounded-xl shadow-sm border ${!competitor.id ? 'border-amber-300 ring-1 ring-amber-100' : 'border-slate-100'}`}>
+            <div key={competitor.id || `temp-${index}`} className={`bg-white p-6 rounded-md shadow-sm border ${!competitor.id ? 'border-amber-300 ring-1 ring-amber-100' : 'border-slate-100'}`}>
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 className="font-bold text-lg text-navy">{competitor.name}</h3>
@@ -620,7 +620,7 @@ function CompetitorSection({ projectId }: { projectId: string }) {
           ))}
         </div>
       ) : (
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+        <div className="bg-white p-6 rounded-md shadow-sm border border-slate-100">
           <p className="text-slate-500 text-center py-8">No competitors analyzed yet. Generate some with AI!</p>
         </div>
       )}
@@ -637,6 +637,8 @@ function StrategyDocSection({ projectId }: { projectId: string }) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const isDirty = doc && content !== (doc.content?.text || '');
 
   useEffect(() => {
     const fetchDoc = async () => {
@@ -719,7 +721,14 @@ function StrategyDocSection({ projectId }: { projectId: string }) {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-navy">Strategy Document</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-bold text-navy">Strategy Document</h2>
+          {isDirty && (
+            <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-md">
+              Unsaved Changes
+            </span>
+          )}
+        </div>
         {isEditing ? (
           <div className="flex gap-2">
             <button 
@@ -731,7 +740,7 @@ function StrategyDocSection({ projectId }: { projectId: string }) {
             <button 
               onClick={handleSave}
               disabled={isSaving}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-opacity-90 disabled:opacity-50"
             >
               {isSaving ? 'Saving...' : 'Save'}
             </button>
@@ -741,13 +750,13 @@ function StrategyDocSection({ projectId }: { projectId: string }) {
             <button 
               onClick={handleGenerate}
               disabled={isGenerating}
-              className="bg-navy text-white px-4 py-2 rounded-lg hover:bg-opacity-90 disabled:opacity-50 flex items-center gap-2"
+              className="bg-navy text-white px-4 py-2 rounded-md hover:bg-opacity-90 disabled:opacity-50 flex items-center gap-2"
             >
               {isGenerating ? 'Generating...' : 'Generate with AI'}
             </button>
             <button 
               onClick={() => setIsEditing(true)}
-              className="bg-white text-navy border border-navy px-4 py-2 rounded-lg hover:bg-slate-50"
+              className="bg-white text-navy border border-navy px-4 py-2 rounded-md hover:bg-slate-50"
             >
               Edit
             </button>
@@ -755,12 +764,12 @@ function StrategyDocSection({ projectId }: { projectId: string }) {
         )}
       </div>
       
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 min-h-[400px]">
+      <div className="bg-white p-6 rounded-md shadow-sm border border-slate-100 min-h-[400px]">
         {isEditing ? (
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="w-full h-[400px] p-4 border border-slate-200 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:border-transparent outline-none resize-none font-mono text-sm"
+            className="w-full h-[400px] p-4 border border-slate-200 rounded-md focus:ring-2 focus:ring-cyan-400 focus:border-transparent outline-none resize-none font-mono text-sm"
             placeholder="Write your product strategy here..."
           />
         ) : (

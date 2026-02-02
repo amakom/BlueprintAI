@@ -26,7 +26,7 @@ export function ConfirmModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-[#0b1f33] border border-[#2ee6d6]/30 rounded-xl shadow-2xl w-full max-w-md p-6 relative animate-in zoom-in-95 duration-200">
+      <div className="bg-[#0b1f33] border border-[#2ee6d6]/30 rounded-md shadow-2xl w-full max-w-md p-6 relative animate-in zoom-in-95 duration-200">
         <button 
           onClick={onClose}
           className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
@@ -35,7 +35,7 @@ export function ConfirmModal({
         </button>
 
         <div className="flex flex-col items-center text-center">
-          <div className="w-12 h-12 rounded-full bg-[#2ee6d6]/10 flex items-center justify-center mb-4">
+          <div className="w-12 h-12 rounded-md bg-[#2ee6d6]/10 flex items-center justify-center mb-4">
             <HelpCircle className="w-6 h-6 text-[#2ee6d6]" />
           </div>
           
@@ -48,7 +48,7 @@ export function ConfirmModal({
           <div className="flex gap-3 w-full">
             <button
               onClick={onClose}
-              className="flex-1 bg-slate-700 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-slate-600 transition-colors"
+              className="flex-1 bg-slate-700 text-white font-bold py-2.5 px-4 rounded-md hover:bg-slate-600 transition-colors"
             >
               {cancelText}
             </button>
@@ -57,7 +57,7 @@ export function ConfirmModal({
                 onConfirm();
                 onClose();
               }}
-              className={`flex-1 font-bold py-2.5 px-4 rounded-lg transition-colors ${
+              className={`flex-1 font-bold py-2.5 px-4 rounded-md transition-colors ${
                 isDanger 
                   ? 'bg-red-500 text-white hover:bg-red-600' 
                   : 'bg-[#2ee6d6] text-[#0b1f33] hover:bg-[#2ee6d6]/90'

@@ -118,8 +118,9 @@ export function AIChatPanel() {
             BlueprintAI
           </h2>
           <button 
+            type="button"
             onClick={() => setShowSettings(!showSettings)}
-            className={`p-1 rounded hover:bg-gray-200 transition-colors ${showSettings ? 'bg-gray-200 text-navy' : 'text-gray-500'}`}
+            className={`p-1 rounded-md hover:bg-gray-200 transition-colors ${showSettings ? 'bg-gray-200 text-navy' : 'text-gray-500'}`}
             title="AI Settings"
           >
             <Settings2 className="w-4 h-4" />
@@ -137,7 +138,7 @@ export function AIChatPanel() {
                 <select 
                   value={aiSettings.productType}
                   onChange={(e) => setAiSettings({...aiSettings, productType: e.target.value as ProductType})}
-                  className="w-full text-xs p-1.5 border border-border rounded bg-cloud text-navy focus:outline-none focus:ring-1 focus:ring-cyan"
+                  className="w-full text-xs p-1.5 border border-border rounded-md bg-cloud text-navy focus:outline-none focus:ring-1 focus:ring-cyan"
                 >
                   {PRODUCT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
@@ -147,7 +148,7 @@ export function AIChatPanel() {
                 <select 
                   value={aiSettings.tone}
                   onChange={(e) => setAiSettings({...aiSettings, tone: e.target.value as Tone})}
-                  className="w-full text-xs p-1.5 border border-border rounded bg-cloud text-navy focus:outline-none focus:ring-1 focus:ring-cyan"
+                  className="w-full text-xs p-1.5 border border-border rounded-md bg-cloud text-navy focus:outline-none focus:ring-1 focus:ring-cyan"
                 >
                   {TONES.map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
@@ -159,7 +160,7 @@ export function AIChatPanel() {
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((msg, idx) => (
-            <div key={idx} className={`p-3 rounded-lg text-sm ${
+            <div key={idx} className={`p-3 rounded-md text-sm ${
                 msg.role === 'assistant' 
                 ? 'bg-cloud rounded-tl-none text-navy' 
                 : 'bg-navy text-white rounded-tr-none ml-auto max-w-[90%]'
@@ -168,7 +169,7 @@ export function AIChatPanel() {
             </div>
         ))}
         {isGenerating && (
-             <div className="bg-cloud p-3 rounded-lg rounded-tl-none text-sm text-navy flex items-center gap-2">
+             <div className="bg-cloud p-3 rounded-md rounded-tl-none text-sm text-navy flex items-center gap-2">
                 <Sparkles className="w-3 h-3 animate-spin text-cyan" />
                 Thinking...
             </div>
@@ -219,7 +220,7 @@ export function AIChatPanel() {
       {/* Mobile Toggle Button */}
       <button 
         onClick={() => setIsMobileOpen(true)}
-        className="lg:hidden fixed bottom-4 right-4 z-40 p-3 bg-cyan text-navy rounded-full shadow-lg hover:bg-cyan/90 transition-all hover:scale-105"
+        className="lg:hidden fixed bottom-4 right-4 z-40 p-3 bg-cyan text-navy rounded-md shadow-lg hover:bg-cyan/90 transition-all hover:scale-105"
       >
         <MessageSquare className="w-6 h-6" />
       </button>
@@ -239,10 +240,10 @@ export function AIChatPanel() {
            />
            {/* Drawer Panel */}
            <div className="absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl animate-in slide-in-from-right duration-200 flex flex-col">
-             <button 
-               onClick={() => setIsMobileOpen(false)}
-               className="absolute top-2 right-2 z-10 p-1 bg-white/50 rounded-full text-gray-500 hover:text-navy"
-             >
+             <button
+            onClick={() => setIsOpen(false)}
+            className="absolute top-2 right-2 z-10 p-1 bg-white/50 rounded-md text-gray-500 hover:text-navy"
+          >
                <X className="w-5 h-5" />
              </button>
              <ChatContent />

@@ -308,7 +308,7 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
            <div className={`bg-white border-r border-slate-200 z-10 shadow-sm shrink-0 flex flex-col transition-all duration-300 relative ${isLibraryCollapsed ? 'w-0 border-none' : 'w-48'}`}>
               <button 
             onClick={() => setIsLibraryCollapsed(!isLibraryCollapsed)}
-            className={`absolute top-3 bg-white border border-slate-200 rounded-full p-1 shadow-sm hover:bg-slate-50 z-50 flex items-center justify-center w-6 h-6 transition-all duration-300 ${isLibraryCollapsed ? '-right-8' : '-right-3'}`}
+            className={`absolute top-3 bg-white border border-slate-200 rounded-md p-1 shadow-sm hover:bg-slate-50 z-50 flex items-center justify-center w-6 h-6 transition-all duration-300 ${isLibraryCollapsed ? '-right-8' : '-right-3'}`}
             title={isLibraryCollapsed ? "Expand Library" : "Collapse Library"}
           >
             {isLibraryCollapsed ? <ChevronRight size={14} className="text-slate-600" /> : <ChevronLeft size={14} className="text-slate-600" />}
@@ -324,24 +324,24 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
                    <div className="mb-4">
                       <h4 className="text-xs font-semibold text-slate-400 uppercase mb-2">Nodes</h4>
                       <div 
-                          className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group mb-2"
+                          className="p-3 border border-slate-200 rounded-md bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group mb-2"
                           onDragStart={(event) => onDragStart(event, 'userStory')}
                           draggable
                       >
                           <div className="flex items-center gap-2 mb-1">
-                          <div className="p-1 bg-navy text-white rounded group-hover:bg-amber transition-colors"><Plus size={12}/></div>
+                          <div className="p-1 bg-navy text-white rounded-md group-hover:bg-amber transition-colors"><Plus size={12}/></div>
                           <span className="font-bold text-navy text-sm">User Story</span>
                           </div>
                           <p className="text-xs text-slate-500">Define requirements</p>
                       </div>
 
                       <div 
-                          className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group"
+                          className="p-3 border border-slate-200 rounded-md bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group"
                           onDragStart={(event) => onDragStart(event, 'screen')}
                           draggable
                       >
                           <div className="flex items-center gap-2 mb-1">
-                          <div className="p-1 bg-white border border-slate-200 text-navy rounded group-hover:border-cyan group-hover:text-cyan transition-colors"><Smartphone size={12}/></div>
+                          <div className="p-1 bg-white border border-slate-200 text-navy rounded-md group-hover:border-cyan group-hover:text-cyan transition-colors"><Smartphone size={12}/></div>
                           <span className="font-bold text-navy text-sm">Screen</span>
                           </div>
                           <p className="text-xs text-slate-500">Generic Screen</p>
@@ -351,36 +351,36 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
                    <div className="mb-4">
                       <h4 className="text-xs font-semibold text-slate-400 uppercase mb-2">Frames</h4>
                       <div 
-                          className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group mb-2"
+                          className="p-3 border border-slate-200 rounded-md bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group mb-2"
                           onDragStart={(event) => onDragStart(event, 'screen', { label: 'iPhone 14', style: { width: 390, height: 844 } })}
                           draggable
                       >
                           <div className="flex items-center gap-2 mb-1">
-                          <div className="p-1 bg-slate-100 text-slate-600 rounded"><Smartphone size={12}/></div>
+                          <div className="p-1 bg-slate-100 text-slate-600 rounded-md"><Smartphone size={12}/></div>
                           <span className="font-bold text-navy text-sm">Mobile App</span>
                           </div>
                           <p className="text-xs text-slate-500">390 x 844</p>
                       </div>
 
                       <div 
-                          className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group mb-2"
+                          className="p-3 border border-slate-200 rounded-md bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group mb-2"
                           onDragStart={(event) => onDragStart(event, 'screen', { label: 'Web Desktop', style: { width: 1440, height: 900 } })}
                           draggable
                       >
                           <div className="flex items-center gap-2 mb-1">
-                          <div className="p-1 bg-slate-100 text-slate-600 rounded"><Monitor size={12}/></div>
+                          <div className="p-1 bg-slate-100 text-slate-600 rounded-md"><Monitor size={12}/></div>
                           <span className="font-bold text-navy text-sm">Web App</span>
                           </div>
                           <p className="text-xs text-slate-500">1440 x 900</p>
                       </div>
 
                        <div 
-                          className="p-3 border border-slate-200 rounded-lg bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group"
+                          className="p-3 border border-slate-200 rounded-md bg-slate-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group"
                           onDragStart={(event) => onDragStart(event, 'screen', { label: 'Social Post', style: { width: 1080, height: 1080 } })}
                           draggable
                       >
                           <div className="flex items-center gap-2 mb-1">
-                          <div className="p-1 bg-slate-100 text-slate-600 rounded"><Layout size={12}/></div>
+                          <div className="p-1 bg-slate-100 text-slate-600 rounded-md"><Layout size={12}/></div>
                           <span className="font-bold text-navy text-sm">Social Post</span>
                           </div>
                           <p className="text-xs text-slate-500">1080 x 1080</p>
@@ -393,6 +393,14 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
 
         <div className="flex-1 relative h-full overflow-hidden">
             <CollaborativeCursors projectId={projectId} />
+
+            {/* Mode Indicator */}
+            <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 bg-white shadow-sm border border-slate-200 rounded-md px-3 py-1.5 flex items-center gap-2 pointer-events-none">
+                <div className={`w-2 h-2 rounded-md ${isCommentMode ? 'bg-amber-500' : 'bg-green-500'}`} />
+                <span className="text-xs font-medium text-slate-600">
+                    {isCommentMode ? 'Comment Mode' : 'Edit Mode'}
+                </span>
+            </div>
 
             {/* Overlays */}
             {inputScreenPos && (
@@ -408,7 +416,7 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
 
             {/* Comment Mode Indicator overlay to capture clicks is NOT needed because we use onPaneClick */}
             {isCommentMode && (
-                <div className="absolute top-20 left-1/2 -translate-x-1/2 bg-amber-100 text-amber-800 px-4 py-1 rounded-full text-xs font-bold shadow-md z-10 border border-amber-200 animate-in slide-in-from-top">
+                <div className="absolute top-20 left-1/2 -translate-x-1/2 bg-amber-100 text-amber-800 px-4 py-1 rounded-md text-xs font-bold shadow-md z-10 border border-amber-200 animate-in slide-in-from-top">
                     Click anywhere to comment
                     <button onClick={() => setCommentMode(false)} className="ml-2 hover:text-amber-950"><X size={12}/></button>
                 </div>
@@ -417,8 +425,8 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
             {/* Empty State Overlay */}
             {nodes.length === 0 && !readOnly && (
             <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-                <div className="bg-white/90 backdrop-blur p-8 rounded-2xl border border-border shadow-xl text-center pointer-events-auto max-w-md">
-                <div className="w-16 h-16 bg-cyan/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <div className="bg-white/90 backdrop-blur p-8 rounded-md border border-border shadow-xl text-center pointer-events-auto max-w-md">
+                <div className="w-16 h-16 bg-cyan/10 rounded-md flex items-center justify-center mx-auto mb-6">
                     <Sparkles className="w-8 h-8 text-cyan" />
                 </div>
                 <h3 className="text-xl font-bold text-navy mb-2">Start Building Your Flow</h3>
@@ -429,7 +437,7 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
                     <button 
                         onClick={handleGenerateFlow}
                         disabled={isGenerating}
-                        className="px-4 py-2 bg-white text-navy border border-border rounded-lg font-bold hover:bg-gray-50 transition-colors flex items-center gap-2 shadow-sm"
+                        className="px-4 py-2 bg-white text-navy border border-border rounded-md font-bold hover:bg-gray-50 transition-colors flex items-center gap-2 shadow-sm"
                     >
                         <Sparkles className="w-4 h-4 text-purple-600" />
                         Generate with AI
@@ -546,7 +554,7 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
            <div className={`bg-white border-l border-slate-200 z-10 shadow-sm shrink-0 flex flex-col transition-all duration-300 relative ${isPropertiesCollapsed ? 'w-0 border-none' : 'w-64'}`}>
               <button 
             onClick={() => setIsPropertiesCollapsed(!isPropertiesCollapsed)}
-            className={`absolute top-20 bg-white border border-slate-200 rounded-full p-1 shadow-sm hover:bg-slate-50 z-50 flex items-center justify-center w-6 h-6 transition-all duration-300 ${isPropertiesCollapsed ? '-left-8' : '-left-3'}`}
+            className={`absolute top-20 bg-white border border-slate-200 rounded-md p-1 shadow-sm hover:bg-slate-50 z-50 flex items-center justify-center w-6 h-6 transition-all duration-300 ${isPropertiesCollapsed ? '-left-8' : '-left-3'}`}
             title={isPropertiesCollapsed ? "Expand Properties" : "Collapse Properties"}
           >
             {isPropertiesCollapsed ? <ChevronLeft size={14} className="text-slate-600" /> : <ChevronRight size={14} className="text-slate-600" />}

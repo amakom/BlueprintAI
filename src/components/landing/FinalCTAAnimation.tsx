@@ -49,13 +49,13 @@ export function FinalCTAAnimation() {
         </button>
       </div>
 
-      <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-white/5 p-6">
+      <div className="relative rounded-md overflow-hidden border border-white/10 bg-white/5 p-6">
         <div className="text-center">
           <div className="text-sm font-bold text-cyan">From idea to blueprint</div>
           <div className="mt-1 text-xl font-extrabold text-white">Clarity without the noise</div>
         </div>
 
-        <div className="relative mt-6 h-56 rounded-2xl border border-white/10 bg-navy overflow-hidden flex items-center justify-center">
+        <div className="relative mt-6 h-56 rounded-md border border-white/10 bg-navy overflow-hidden flex items-center justify-center">
           <AnimatePresence>
             {phase !== 'cta' && (
               <motion.div
@@ -77,7 +77,7 @@ export function FinalCTAAnimation() {
                         top: phase === 'messy' ? c.y : 70 + (i % 2) * 60,
                         transition: { duration: 0.5, delay: i * 0.08 },
                       }}
-                      className="absolute rounded-full border border-white/10 bg-white/10 text-white text-xs px-3 py-1 backdrop-blur-sm whitespace-nowrap"
+                      className="absolute rounded-md border border-white/10 bg-white/10 text-white text-xs px-3 py-1 backdrop-blur-sm whitespace-nowrap"
                     >
                       {c.text}
                     </motion.div>
@@ -96,17 +96,17 @@ export function FinalCTAAnimation() {
                  className="absolute inset-0 flex items-center justify-center"
                >
                  <motion.div
-                   initial={{ scale: 0.98, y: 8 }}
-                   animate={{ scale: 1, y: 0, transition: { duration: 0.5 } }}
-                   className="w-full max-w-2xl rounded-2xl border border-white/10 bg-white/5 p-6 text-center"
-                 >
-                   <div className="text-sm font-bold text-cyan">Product Blueprint</div>
+                  initial={{ scale: 0.98, y: 8 }}
+                  animate={{ scale: 1, y: 0, transition: { duration: 0.5 } }}
+                  className="w-full max-w-2xl rounded-md border border-white/10 bg-white/5 p-6 text-center"
+                >
+                  <div className="text-sm font-bold text-cyan">Product Blueprint</div>
                    <div className="mt-2 text-2xl font-extrabold text-white">Everything connected and ready</div>
                    <div className="mt-3 text-sm text-gray-300">Strategy, flows, and specs unified.</div>
                    <div className="mt-6 flex items-center justify-center gap-4">
-                     <Link href="/dashboard" className="bg-cyan text-navy px-6 py-2 rounded-full font-bold hover:bg-cyan/90 transition-colors">
-                       Turn your idea into an engineering blueprint
-                     </Link>
+                     <Link href="/dashboard" className="bg-cyan text-navy px-6 py-2 rounded-md font-bold hover:bg-cyan/90 transition-colors">
+                      Turn your idea into an engineering blueprint
+                    </Link>
                    </div>
                  </motion.div>
                </motion.div>

@@ -21,7 +21,7 @@ export function SharedCanvasWrapper({ projectId, projectName, initialData }: Sha
           </Link>
           <span className="text-gray-300">/</span>
           <span className="font-medium text-navy">{projectName}</span>
-          <span className="ml-2 text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">Read Only</span>
+          <span className="ml-2 text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-md">Read Only</span>
         </div>
         <div>
             <Link href="/" className="text-sm font-medium text-cyan hover:underline">

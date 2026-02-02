@@ -30,7 +30,7 @@ export default function LandingPage() {
         </Link>
         <div className="flex items-center gap-3 md:gap-6">
           <Link href="/login" className="text-sm md:text-base text-gray-300 hover:text-white transition-colors">Login</Link>
-          <Link href="/dashboard" className="bg-cyan text-navy px-4 py-2 md:px-5 text-sm md:text-base rounded-full font-bold hover:bg-white transition-colors">Get Started</Link>
+          <Link href="/dashboard" className="bg-cyan text-navy px-4 py-2 md:px-5 text-sm md:text-base rounded-md font-bold hover:bg-white transition-colors">Get Started</Link>
         </div>
       </nav>
 
@@ -47,7 +47,7 @@ export default function LandingPage() {
               </h2>
             </FadeUp>
             
-            <FadeUp delay={0.2} className="bg-white/5 rounded-3xl p-6 md:p-12 border border-white/10 text-left">
+            <FadeUp delay={0.2} className="bg-white/5 rounded-md p-6 md:p-12 border border-white/10 text-left">
               <p className="text-lg md:text-xl text-gray-300 mb-6 md:mb-8 font-medium">Most products break down before development even starts.</p>
               <ul className="space-y-4 mb-8">
                 <li className="flex items-start gap-3">
@@ -64,7 +64,7 @@ export default function LandingPage() {
                 </li>
               </ul>
               
-              <FadeUp delay={0.4} className="p-6 bg-navy/50 rounded-2xl border border-white/5 text-center">
+              <FadeUp delay={0.4} className="p-6 bg-navy/50 rounded-md border border-white/5 text-center">
                 <p className="text-gray-400 text-sm uppercase tracking-wider font-bold mb-2">The Result?</p>
                 <p className="text-xl md:text-2xl font-bold text-white">Misalignment, wasted time, rework, and slow shipping.</p>
               </FadeUp>
@@ -91,19 +91,19 @@ export default function LandingPage() {
                   It connects <strong className="text-white">strategy, visuals, and technical specs</strong> into one living system — generated intelligently by AI.
                 </p>
               </SlideIn>
-              <SlideIn direction="right" className="bg-navy/50 p-8 rounded-3xl border border-white/10">
+              <SlideIn direction="right" className="bg-navy/50 p-8 rounded-md border border-white/10">
                 <h3 className="text-cyan font-bold mb-6 text-lg">Key Outcomes</h3>
                 <ul className="space-y-6">
                   <li className="flex items-start gap-4">
-                    <ScaleIn delay={0.2} className="w-8 h-8 rounded-full bg-cyan/20 flex items-center justify-center text-cyan shrink-0">1</ScaleIn>
+                    <ScaleIn delay={0.2} className="w-8 h-8 rounded-md bg-cyan/20 flex items-center justify-center text-cyan shrink-0">1</ScaleIn>
                     <span className="text-lg text-gray-200">Go from idea to structured product plan in minutes</span>
                   </li>
                   <li className="flex items-start gap-4">
-                    <ScaleIn delay={0.3} className="w-8 h-8 rounded-full bg-cyan/20 flex items-center justify-center text-cyan shrink-0">2</ScaleIn>
+                    <ScaleIn delay={0.3} className="w-8 h-8 rounded-md bg-cyan/20 flex items-center justify-center text-cyan shrink-0">2</ScaleIn>
                     <span className="text-lg text-gray-200">Visualize flows instead of guessing requirements</span>
                   </li>
                   <li className="flex items-start gap-4">
-                    <ScaleIn delay={0.4} className="w-8 h-8 rounded-full bg-cyan/20 flex items-center justify-center text-cyan shrink-0">3</ScaleIn>
+                    <ScaleIn delay={0.4} className="w-8 h-8 rounded-md bg-cyan/20 flex items-center justify-center text-cyan shrink-0">3</ScaleIn>
                     <span className="text-lg text-gray-200">Hand developers specs they can actually build from</span>
                   </li>
                 </ul>
@@ -125,13 +125,13 @@ export default function LandingPage() {
               <StrategyThinkingAnimation />
             </SlideIn>
             <SlideIn direction="right" className="order-1 md:order-2">
-              <div className="inline-block px-3 py-1 bg-cyan/10 text-cyan text-sm font-bold rounded-full mb-4">Step 1 — Strategic Intelligence</div>
+              <div className="inline-block px-3 py-1 bg-cyan/10 text-cyan text-sm font-bold rounded-md mb-4">Step 1 — Strategic Intelligence</div>
               <h3 className="text-2xl md:text-3xl font-bold mb-4">Describe your idea in plain language.</h3>
               <p className="text-gray-300 mb-6 text-lg">BlueprintAI generates:</p>
               <ul className="space-y-2 mb-8 text-gray-300">
-                <li className="flex items-center gap-2"><ScaleIn delay={0.2}><span className="w-1.5 h-1.5 bg-cyan rounded-full"></span></ScaleIn> User personas</li>
-                <li className="flex items-center gap-2"><ScaleIn delay={0.3}><span className="w-1.5 h-1.5 bg-cyan rounded-full"></span></ScaleIn> Business goals (OKRs & KPIs)</li>
-                <li className="flex items-center gap-2"><ScaleIn delay={0.4}><span className="w-1.5 h-1.5 bg-cyan rounded-full"></span></ScaleIn> Competitive insights</li>
+                <li className="flex items-center gap-2"><ScaleIn delay={0.2}><span className="w-1.5 h-1.5 bg-cyan rounded-sm"></span></ScaleIn> User personas</li>
+                <li className="flex items-center gap-2"><ScaleIn delay={0.3}><span className="w-1.5 h-1.5 bg-cyan rounded-sm"></span></ScaleIn> Business goals (OKRs & KPIs)</li>
+                <li className="flex items-center gap-2"><ScaleIn delay={0.4}><span className="w-1.5 h-1.5 bg-cyan rounded-sm"></span></ScaleIn> Competitive insights</li>
               </ul>
               <blockquote className="border-l-4 border-cyan pl-4 text-gray-400 italic">
                 You start with clarity, not assumptions.
@@ -142,13 +142,13 @@ export default function LandingPage() {
           {/* Step 2 */}
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center mb-20 md:mb-32">
             <SlideIn direction="left">
-              <div className="inline-block px-3 py-1 bg-cyan/10 text-cyan text-sm font-bold rounded-full mb-4">Step 2 — Visual Architecture</div>
+              <div className="inline-block px-3 py-1 bg-cyan/10 text-cyan text-sm font-bold rounded-md mb-4">Step 2 — Visual Architecture</div>
               <h3 className="text-2xl md:text-3xl font-bold mb-4">Design your product on a smart canvas.</h3>
               <p className="text-gray-300 mb-6 text-lg">Using an interactive visual board:</p>
               <ul className="space-y-2 mb-8 text-gray-300">
-                <li className="flex items-center gap-2"><ScaleIn delay={0.2}><span className="w-1.5 h-1.5 bg-cyan rounded-full"></span></ScaleIn> AI draws user flows and screens</li>
-                <li className="flex items-center gap-2"><ScaleIn delay={0.3}><span className="w-1.5 h-1.5 bg-cyan rounded-full"></span></ScaleIn> You edit, move, and refine visually</li>
-                <li className="flex items-center gap-2"><ScaleIn delay={0.4}><span className="w-1.5 h-1.5 bg-cyan rounded-full"></span></ScaleIn> Each node understands product logic</li>
+                <li className="flex items-center gap-2"><ScaleIn delay={0.2}><span className="w-1.5 h-1.5 bg-cyan rounded-sm"></span></ScaleIn> AI draws user flows and screens</li>
+                <li className="flex items-center gap-2"><ScaleIn delay={0.3}><span className="w-1.5 h-1.5 bg-cyan rounded-sm"></span></ScaleIn> You edit, move, and refine visually</li>
+                <li className="flex items-center gap-2"><ScaleIn delay={0.4}><span className="w-1.5 h-1.5 bg-cyan rounded-sm"></span></ScaleIn> Each node understands product logic</li>
               </ul>
               <blockquote className="border-l-4 border-cyan pl-4 text-gray-400 italic">
                 Think Figma + Miro — but aware of software concepts.
@@ -165,13 +165,13 @@ export default function LandingPage() {
               <SpecConversionAnimation />
             </SlideIn>
             <SlideIn direction="right" className="order-1 md:order-2">
-              <div className="inline-block px-3 py-1 bg-cyan/10 text-cyan text-sm font-bold rounded-full mb-4">Step 3 — Technical Handoff</div>
+              <div className="inline-block px-3 py-1 bg-cyan/10 text-cyan text-sm font-bold rounded-md mb-4">Step 3 — Technical Handoff</div>
               <h3 className="text-2xl md:text-3xl font-bold mb-4">One-click Engineering Specification.</h3>
               <p className="text-gray-300 mb-6 text-lg">BlueprintAI reads your strategy and flows and produces:</p>
               <ul className="space-y-2 mb-8 text-gray-300">
-                <li className="flex items-center gap-2"><ScaleIn delay={0.2}><span className="w-1.5 h-1.5 bg-cyan rounded-full"></span></ScaleIn> Database schemas</li>
-                <li className="flex items-center gap-2"><ScaleIn delay={0.3}><span className="w-1.5 h-1.5 bg-cyan rounded-full"></span></ScaleIn> API endpoints</li>
-                <li className="flex items-center gap-2"><ScaleIn delay={0.4}><span className="w-1.5 h-1.5 bg-cyan rounded-full"></span></ScaleIn> Frontend component breakdowns</li>
+                <li className="flex items-center gap-2"><ScaleIn delay={0.2}><span className="w-1.5 h-1.5 bg-cyan rounded-sm"></span></ScaleIn> Database schemas</li>
+                <li className="flex items-center gap-2"><ScaleIn delay={0.3}><span className="w-1.5 h-1.5 bg-cyan rounded-sm"></span></ScaleIn> API endpoints</li>
+                <li className="flex items-center gap-2"><ScaleIn delay={0.4}><span className="w-1.5 h-1.5 bg-cyan rounded-sm"></span></ScaleIn> Frontend component breakdowns</li>
               </ul>
               <blockquote className="border-l-4 border-cyan pl-4 text-gray-400 italic">
                 Ready for developers to build — no translation needed.
@@ -181,32 +181,32 @@ export default function LandingPage() {
         </section>
 
         {/* 🔵 CORE BENEFITS SECTION */}
-        <section className="container mx-auto px-6 py-12 md:py-20 border-t border-white/5 bg-white/5 rounded-3xl my-10">
+        <section className="container mx-auto px-6 py-12 md:py-20 border-t border-white/5 bg-white/5 rounded-md my-10">
           <FadeUp className="text-center mb-12">
             <h2 className="text-2xl md:text-5xl font-bold">Why teams use BlueprintAI</h2>
           </FadeUp>
           <StaggerContainer className="grid md:grid-cols-3 gap-6">
-            <StaggerItem className="p-6 bg-navy rounded-2xl border border-white/10 hover:border-cyan/50 transition-colors">
+            <StaggerItem className="p-6 bg-navy rounded-md border border-white/10 hover:border-cyan/50 transition-colors">
               <ScaleIn delay={0.2} className="text-4xl mb-4">🚀</ScaleIn>
               <h3 className="text-xl font-bold mb-2">10x Faster Planning</h3>
               <p className="text-gray-400">Eliminate weeks of documentation and alignment meetings.</p>
             </StaggerItem>
-            <StaggerItem className="p-6 bg-navy rounded-2xl border border-white/10 hover:border-cyan/50 transition-colors">
+            <StaggerItem className="p-6 bg-navy rounded-md border border-white/10 hover:border-cyan/50 transition-colors">
               <ScaleIn delay={0.3} className="text-4xl mb-4">🧠</ScaleIn>
               <h3 className="text-xl font-bold mb-2">AI That Thinks Like a PM</h3>
               <p className="text-gray-400">Not generic text — real product reasoning.</p>
             </StaggerItem>
-            <StaggerItem className="p-6 bg-navy rounded-2xl border border-white/10 hover:border-cyan/50 transition-colors">
+            <StaggerItem className="p-6 bg-navy rounded-md border border-white/10 hover:border-cyan/50 transition-colors">
               <ScaleIn delay={0.4} className="text-4xl mb-4">🧩</ScaleIn>
               <h3 className="text-xl font-bold mb-2">Always In Sync</h3>
               <p className="text-gray-400">Strategy, flows, and specs update together.</p>
             </StaggerItem>
-            <StaggerItem className="p-6 bg-navy rounded-2xl border border-white/10 hover:border-cyan/50 transition-colors md:col-span-1.5">
+            <StaggerItem className="p-6 bg-navy rounded-md border border-white/10 hover:border-cyan/50 transition-colors md:col-span-1.5">
               <ScaleIn delay={0.5} className="text-4xl mb-4">🛠</ScaleIn>
               <h3 className="text-xl font-bold mb-2">Built for Builders</h3>
               <p className="text-gray-400">Developers receive clear, structured requirements.</p>
             </StaggerItem>
-            <StaggerItem className="p-6 bg-navy rounded-2xl border border-white/10 hover:border-cyan/50 transition-colors md:col-span-1.5">
+            <StaggerItem className="p-6 bg-navy rounded-md border border-white/10 hover:border-cyan/50 transition-colors md:col-span-1.5">
               <ScaleIn delay={0.6} className="text-4xl mb-4">📐</ScaleIn>
               <h3 className="text-xl font-bold mb-2">Visual First</h3>
               <p className="text-gray-400">See the product before writing a single line of code.</p>
@@ -221,16 +221,14 @@ export default function LandingPage() {
             <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto">Watch how a raw idea becomes a full engineering blueprint in under 2 minutes.</p>
           </FadeUp>
           
-          <ScaleIn delay={0.2} className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-cyan/10 bg-white/5 aspect-video flex items-center justify-center group cursor-pointer max-w-5xl mx-auto">
-            <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-transparent to-transparent opacity-60"></div>
-            <div className="w-20 h-20 bg-cyan/90 rounded-full flex items-center justify-center pl-1 group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm shadow-lg shadow-cyan/20 z-10">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-navy">
-                <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div className="absolute bottom-8 left-8 right-8 z-10 text-left">
-               <h3 className="text-2xl font-bold text-white mb-2">Product Walkthrough</h3>
-               <p className="text-gray-300">Watch the Demo</p>
+          <ScaleIn delay={0.2} className="relative rounded-md overflow-hidden border border-white/10 shadow-2xl shadow-cyan/10 bg-white/5 aspect-video flex items-center justify-center group cursor-pointer max-w-5xl mx-auto">
+            <div className="relative z-10 text-center">
+              <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-md flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 border border-white/20">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-white ml-1">
+                  <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <span className="font-bold text-white text-lg tracking-wide">Watch Demo</span>
             </div>
           </ScaleIn>
         </section>
@@ -321,10 +319,10 @@ export default function LandingPage() {
             <h2 className="text-3xl md:text-6xl font-bold mb-6">Ready to build better products?</h2>
             <p className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">Join the waitlist and be the first to experience the future of product planning.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/signup" className="px-8 py-4 bg-cyan text-navy font-bold rounded-lg hover:bg-white transition-all text-lg shadow-lg shadow-cyan/20">
+              <Link href="/signup" className="px-8 py-4 bg-cyan text-navy font-bold rounded-md hover:bg-white transition-all text-lg shadow-lg shadow-cyan/20">
                 Get Started for Free
               </Link>
-              <Link href="#demo" className="px-8 py-4 bg-transparent border border-white/20 text-white font-bold rounded-lg hover:bg-white/10 transition-all text-lg">
+              <Link href="#demo" className="px-8 py-4 bg-transparent border border-white/20 text-white font-bold rounded-md hover:bg-white/10 transition-all text-lg">
                 View Demo
               </Link>
             </div>

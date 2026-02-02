@@ -60,7 +60,7 @@ export default function AdminUsersPage() {
     <div>
       <h1 className="text-2xl font-bold text-navy mb-8">User Management</h1>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
                 <thead className="bg-gray-50 border-b border-gray-100">
@@ -81,7 +81,7 @@ export default function AdminUsersPage() {
                                 <div className="text-gray-500 text-xs">{user.name}</div>
                             </td>
                             <td className="p-4">
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-gray-100 text-gray-800">
                                     {user.plan}
                                 </span>
                             </td>
@@ -92,9 +92,9 @@ export default function AdminUsersPage() {
                                 {user.aiUsageCount}
                             </td>
                             <td className="p-4">
-                                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-bold ${
-                                    user.status === 'ACTIVE' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                                }`}>
+                                <span className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-bold ${
+                      user.status === 'ACTIVE' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                    }`}>
                                     {user.status}
                                 </span>
                             </td>
@@ -103,7 +103,7 @@ export default function AdminUsersPage() {
                                     value={user.role}
                                     onChange={(e) => handleRoleChange(user.id, e.target.value)}
                                     disabled={actionLoading === user.id}
-                                    className="text-xs bg-white border border-gray-300 rounded px-2 py-1 focus:ring-cyan focus:border-cyan"
+                                    className="text-xs bg-white border border-gray-300 rounded-md px-2 py-1 focus:ring-cyan focus:border-cyan"
                                 >
                                     <option value="USER">User</option>
                                     <option value="ADMIN">Admin</option>
@@ -112,7 +112,7 @@ export default function AdminUsersPage() {
                                 <button 
                                     onClick={() => handleStatusChange(user.id, user.status === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE')}
                                     disabled={actionLoading === user.id}
-                                    className={`text-xs px-2 py-1 rounded border ${
+                                    className={`text-xs px-2 py-1 rounded-md border ${
                                         user.status === 'ACTIVE' 
                                             ? 'border-red-200 text-red-600 hover:bg-red-50' 
                                             : 'border-green-200 text-green-600 hover:bg-green-50'

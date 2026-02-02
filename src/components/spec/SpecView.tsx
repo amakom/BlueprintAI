@@ -113,7 +113,7 @@ export function SpecView({ projectId }: SpecViewProps) {
       {/* Toolbar */}
       <div className="flex items-center justify-between p-4 bg-white border-b border-slate-200">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-amber/10 rounded-lg">
+          <div className="p-2 bg-amber/10 rounded-md">
             <FileText className="h-5 w-5 text-amber" />
           </div>
           <div>
@@ -156,7 +156,7 @@ export function SpecView({ projectId }: SpecViewProps) {
 
       {/* Editor/Preview Area */}
       <div className="flex-1 p-6 overflow-hidden">
-        <div className="h-full max-w-4xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col">
+        <div className="h-full max-w-4xl mx-auto bg-white rounded-md shadow-sm border border-slate-200 flex flex-col">
             <textarea
               value={spec}
               onChange={(e) => setSpec(e.target.value)}

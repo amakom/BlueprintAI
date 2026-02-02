@@ -48,7 +48,7 @@ export default async function AdminLayout({
                 <Link 
                     key={item.href} 
                     href={item.href}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors text-gray-300 hover:text-white"
+                    className="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-white/10 transition-colors text-gray-300 hover:text-white"
                 >
                     <item.icon className="w-5 h-5" />
                     {item.label}

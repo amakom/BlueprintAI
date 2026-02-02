@@ -114,7 +114,7 @@ export function HeroSection() {
             className="w-full md:w-auto relative group"
           >
             <motion.div
-              className="absolute inset-0 bg-cyan rounded-full blur-lg opacity-20 group-hover:opacity-40 transition-opacity"
+              className="absolute inset-0 bg-cyan rounded-md blur-lg opacity-20 group-hover:opacity-40 transition-opacity"
               animate={{
                 scale: [1, 1.1, 1],
                 opacity: [0.2, 0.3, 0.2]
@@ -125,7 +125,7 @@ export function HeroSection() {
                 ease: "easeInOut"
               }}
             />
-            <Link href="/dashboard" className="relative block bg-cyan text-navy px-8 py-4 rounded-full font-bold text-lg hover:bg-white transition-all shadow-[0_0_20px_rgba(46,230,214,0.2)] hover:shadow-[0_0_30px_rgba(46,230,214,0.4)]">
+            <Link href="/dashboard" className="relative block bg-cyan text-navy px-8 py-4 rounded-md font-bold text-lg hover:bg-white transition-all shadow-[0_0_20px_rgba(46,230,214,0.2)] hover:shadow-[0_0_30px_rgba(46,230,214,0.4)]">
               Start Free — Build Your First Blueprint
             </Link>
           </motion.div>
@@ -135,7 +135,7 @@ export function HeroSection() {
             whileTap={{ scale: 0.95 }}
             className="w-full md:w-auto"
           >
-            <Link href="#demo" className="block border border-white/20 text-white px-8 py-4 rounded-full font-bold text-lg hover:border-white transition-all hover:bg-white/5 backdrop-blur-sm">
+            <Link href="#demo" className="block border border-white/20 text-white px-8 py-4 rounded-md font-bold text-lg hover:border-white transition-all hover:bg-white/5 backdrop-blur-sm">
               Watch 90-Second Demo
             </Link>
           </motion.div>

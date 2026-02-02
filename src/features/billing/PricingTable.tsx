@@ -80,9 +80,9 @@ export function PricingTable({ initialTeamId, initialUserEmail, initialUserName 
             <span className={currency === 'USD' ? 'font-bold text-navy' : 'text-gray-500'}>USD</span>
             <button 
                 onClick={() => setCurrency(c => c === 'USD' ? 'NGN' : 'USD')}
-                className="w-12 h-6 bg-gray-200 rounded-full relative transition-colors"
+                className="w-12 h-6 bg-gray-200 rounded-md relative transition-colors"
             >
-                <div className={`absolute top-1 w-4 h-4 rounded-full bg-navy transition-all ${currency === 'NGN' ? 'left-7' : 'left-1'}`} />
+                <div className={`absolute top-1 w-4 h-4 rounded-md bg-navy transition-all ${currency === 'NGN' ? 'left-7' : 'left-1'}`} />
             </button>
             <span className={currency === 'NGN' ? 'font-bold text-navy' : 'text-gray-500'}>NGN</span>
         </div>
@@ -92,7 +92,7 @@ export function PricingTable({ initialTeamId, initialUserEmail, initialUserName 
         {plans.map((plan) => (
           <div 
             key={plan.id} 
-            className={`bg-white rounded-xl p-8 border ${plan.highlight ? 'border-cyan shadow-lg ring-1 ring-cyan' : 'border-border'}`}
+            className={`bg-white rounded-md p-8 border ${plan.highlight ? 'border-cyan shadow-lg ring-1 ring-cyan' : 'border-border'}`}
             onMouseEnter={() => setSelectedPreview(plan.id as 'FREE' | 'PRO' | 'TEAM')}
             onFocus={() => setSelectedPreview(plan.id as 'FREE' | 'PRO' | 'TEAM')}
           >
@@ -114,7 +114,7 @@ export function PricingTable({ initialTeamId, initialUserEmail, initialUserName 
             <button
               onClick={() => handleSubscribe(plan.id)}
               disabled={!!loading || plan.price === 0}
-              className={`w-full py-2.5 rounded-lg font-bold transition-all flex items-center justify-center gap-2
+              className={`w-full py-2.5 rounded-md font-bold transition-all flex items-center justify-center gap-2
                 ${plan.highlight 
                     ? 'bg-cyan text-navy hover:bg-cyan/90' 
                     : 'bg-navy text-white hover:bg-navy/90'}

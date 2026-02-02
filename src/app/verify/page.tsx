@@ -55,7 +55,7 @@ function VerifyContent() {
   if (status === 'success') {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-cloud p-4">
-        <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
+        <div className="bg-white p-8 rounded-md shadow-md max-w-md w-full text-center">
           <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-navy mb-2">Email Verified!</h1>
           <p className="text-gray-600 mb-6">Your email has been successfully verified. You can now access all features.</p>
@@ -72,7 +72,7 @@ function VerifyContent() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-cloud p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
+      <div className="bg-white p-8 rounded-md shadow-md max-w-md w-full text-center">
         <XCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
         <h1 className="text-2xl font-bold text-navy mb-2">Verification Failed</h1>
         <p className="text-gray-600 mb-6">{message}</p>

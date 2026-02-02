@@ -103,7 +103,7 @@ export function CreateProjectModal({ isOpen, onClose, onSubmit }: CreateProjectM
               key={type.id}
               type="button"
               onClick={() => setFormData({ ...formData, type: type.id })}
-              className={`p-3 border rounded-xl text-left transition-all hover:border-cyan/50 ${
+              className={`p-3 border rounded-md text-left transition-all hover:border-cyan/50 ${
                 isSelected 
                   ? 'border-cyan bg-cyan/5 ring-1 ring-cyan' 
                   : 'border-border hover:bg-gray-50'
@@ -123,7 +123,7 @@ export function CreateProjectModal({ isOpen, onClose, onSubmit }: CreateProjectM
 
   const renderStep3 = () => (
     <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-200">
-      <div className="bg-gradient-to-br from-indigo-50 to-cyan/10 p-4 rounded-xl border border-cyan/20">
+      <div className="bg-gradient-to-br from-indigo-50 to-cyan/10 p-4 rounded-md border border-cyan/20">
         <div className="flex items-center gap-2 mb-2">
           <Sparkles className="w-5 h-5 text-indigo-600" />
           <h3 className="font-bold text-navy">AI Kickstart</h3>
@@ -160,15 +160,15 @@ export function CreateProjectModal({ isOpen, onClose, onSubmit }: CreateProjectM
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy/50 backdrop-blur-sm p-4">
-      <div className="bg-white w-full max-w-md rounded-xl shadow-xl border border-border animate-in fade-in zoom-in duration-200 overflow-hidden">
+      <div className="bg-white w-full max-w-md rounded-md shadow-xl border border-border animate-in fade-in zoom-in duration-200 overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-border bg-gray-50/50">
           <div>
             <h2 className="text-xl font-bold text-navy">Create New Project</h2>
             <div className="flex items-center gap-2 mt-1">
-              <div className={`h-1.5 w-8 rounded-full transition-colors ${step >= 1 ? 'bg-cyan' : 'bg-gray-200'}`} />
-              <div className={`h-1.5 w-8 rounded-full transition-colors ${step >= 2 ? 'bg-cyan' : 'bg-gray-200'}`} />
-              <div className={`h-1.5 w-8 rounded-full transition-colors ${step >= 3 ? 'bg-cyan' : 'bg-gray-200'}`} />
+              <div className={`h-1.5 w-8 rounded-md transition-colors ${step >= 1 ? 'bg-cyan' : 'bg-gray-200'}`} />
+              <div className={`h-1.5 w-8 rounded-md transition-colors ${step >= 2 ? 'bg-cyan' : 'bg-gray-200'}`} />
+              <div className={`h-1.5 w-8 rounded-md transition-colors ${step >= 3 ? 'bg-cyan' : 'bg-gray-200'}`} />
             </div>
           </div>
           <button 

@@ -89,13 +89,13 @@ export function PricingCard({
         transition: { duration: 0.3, ease: "easeOut" }
       }}
       className={`
-        relative flex flex-col p-6 md:p-8 rounded-2xl transition-colors duration-300
+        relative flex flex-col p-6 md:p-8 rounded-md transition-colors duration-300
         border ${theme.border} ${theme.bg}
         ${isPro ? 'border-2 shadow-2xl shadow-cyan/10 md:-mt-4 z-10' : ''}
       `}
     >
       {isPro && (
-        <div className="absolute top-0 right-0 bg-cyan text-navy text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">
+        <div className="absolute top-0 right-0 bg-cyan text-navy text-xs font-bold px-3 py-1 rounded-bl-md rounded-tr-md">
           RECOMMENDED
         </div>
       )}
@@ -126,7 +126,7 @@ export function PricingCard({
       <Link 
         href={ctaLink} 
         className={`
-          block w-full py-3 rounded-lg text-center font-bold transition-all
+          block w-full py-3 rounded-md text-center font-bold transition-all
           ${theme.cta}
         `}
       >

@@ -122,11 +122,11 @@ export default function DashboardPage() {
             <Skeleton className="h-8 w-32 mb-2" />
             <Skeleton className="h-4 w-64" />
           </div>
-          <Skeleton className="h-10 w-32 rounded-lg" />
+          <Skeleton className="h-10 w-32 rounded-md" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="bg-white rounded-xl border border-border p-6 h-[200px] flex flex-col justify-between">
+            <div key={i} className="bg-white rounded-md border border-border p-6 h-[200px] flex flex-col justify-between">
               <div className="space-y-3">
                 <Skeleton className="h-6 w-3/4" />
                 <Skeleton className="h-4 w-full" />
@@ -134,7 +134,7 @@ export default function DashboardPage() {
               </div>
               <div className="flex justify-between items-center">
                 <Skeleton className="h-4 w-20" />
-                <Skeleton className="h-8 w-8 rounded-full" />
+                <Skeleton className="h-8 w-8 rounded-md" />
               </div>
             </div>
           ))}
@@ -152,7 +152,7 @@ export default function DashboardPage() {
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center justify-center gap-2 px-4 py-2 bg-navy text-white rounded-lg hover:bg-navy/90 transition-colors font-medium shadow-lg shadow-navy/20 w-full md:w-auto"
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-navy text-white rounded-md hover:bg-navy/90 transition-colors font-medium shadow-lg shadow-navy/20 w-full md:w-auto"
         >
           <Plus className="w-4 h-4" />
           New Project
@@ -161,8 +161,8 @@ export default function DashboardPage() {
 
       {projects.length === 0 ? (
         // Guided Empty State
-        <div className="flex flex-col items-center justify-center py-20 bg-white border-2 border-dashed border-gray-200 rounded-xl">
-          <div className="w-16 h-16 bg-cyan/10 rounded-full flex items-center justify-center mb-6">
+        <div className="flex flex-col items-center justify-center py-20 bg-white border-2 border-dashed border-gray-200 rounded-md">
+          <div className="w-16 h-16 bg-cyan/10 rounded-md flex items-center justify-center mb-6">
             <Sparkles className="w-8 h-8 text-cyan" />
           </div>
           <h2 className="text-xl font-bold text-navy mb-2">Start Your First Blueprint</h2>
@@ -172,7 +172,7 @@ export default function DashboardPage() {
           </p>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-cyan text-navy rounded-lg hover:bg-cyan/90 transition-all font-bold shadow-lg shadow-cyan/20 hover:scale-105"
+            className="flex items-center gap-2 px-6 py-3 bg-cyan text-navy rounded-md hover:bg-cyan/90 transition-all font-bold shadow-lg shadow-cyan/20 hover:scale-105"
           >
             Create Project <ArrowRight className="w-4 h-4" />
           </button>

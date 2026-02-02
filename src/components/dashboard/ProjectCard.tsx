@@ -81,8 +81,8 @@ export function ProjectCard({ id, title, updatedAt, documentCount, teamName, onR
     <div className="relative group h-full">
         {/* Card Content - Wrapped in Link but handles menu separately */}
         <Link href={`/canvas/${id}`} className="block h-full">
-            <div className="bg-white p-5 rounded-xl border border-border hover:border-cyan transition-colors shadow-sm h-full flex flex-col relative">
-                <div className="h-32 bg-cloud rounded-lg mb-4 flex items-center justify-center relative overflow-hidden">
+            <div className="bg-white p-5 rounded-md border border-border hover:border-cyan transition-colors shadow-sm h-full flex flex-col relative">
+                <div className="h-32 bg-cloud rounded-md mb-4 flex items-center justify-center relative overflow-hidden">
                     <span className="text-gray-400 font-medium z-10 flex items-center gap-2">
                         <FileText className="w-8 h-8 opacity-50" />
                     </span>
@@ -105,11 +105,11 @@ export function ProjectCard({ id, title, updatedAt, documentCount, teamName, onR
                                     }
                                 }}
                                 onClick={(e) => e.stopPropagation()}
-                                className="w-full text-sm font-bold text-navy border border-cyan rounded px-1 py-0.5 outline-none focus:ring-2 focus:ring-cyan/20"
+                                className="w-full text-sm font-bold text-navy border border-cyan rounded-md px-1 py-0.5 outline-none focus:ring-2 focus:ring-cyan/20"
                             />
                             <button 
                                 onClick={(e) => { e.stopPropagation(); handleRenameSubmit(); }}
-                                className="p-1 text-green-600 hover:bg-green-50 rounded"
+                                className="p-1 text-green-600 hover:bg-green-50 rounded-md"
                             >
                                 <Check className="w-4 h-4" />
                             </button>
@@ -119,7 +119,7 @@ export function ProjectCard({ id, title, updatedAt, documentCount, teamName, onR
                                     setIsRenaming(false);
                                     setNewName(title);
                                 }}
-                                className="p-1 text-red-500 hover:bg-red-50 rounded"
+                                className="p-1 text-red-500 hover:bg-red-50 rounded-md"
                             >
                                 <X className="w-4 h-4" />
                             </button>
@@ -132,7 +132,7 @@ export function ProjectCard({ id, title, updatedAt, documentCount, teamName, onR
                     
                     <div className="flex justify-between items-center mt-2">
                         <p className="text-xs text-gray-500">{formatDate(updatedAt)}</p>
-                        <span className="text-xs px-2 py-1 bg-cloud text-gray-600 rounded-full">
+                        <span className="text-xs px-2 py-1 bg-cloud text-gray-600 rounded-md">
                             {documentCount} docs
                         </span>
                     </div>
@@ -155,7 +155,7 @@ export function ProjectCard({ id, title, updatedAt, documentCount, teamName, onR
             </button>
 
             {isMenuOpen && (
-                <div className="absolute right-0 mt-1 w-32 bg-white rounded-lg shadow-xl border border-border py-1 animate-in fade-in zoom-in-95 duration-100 origin-top-right">
+                <div className="absolute right-0 mt-1 w-32 bg-white rounded-md shadow-xl border border-border py-1 animate-in fade-in zoom-in-95 duration-100 origin-top-right">
                     <button
                         onClick={(e) => {
                             e.preventDefault();

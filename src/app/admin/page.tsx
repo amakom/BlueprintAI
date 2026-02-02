@@ -87,10 +87,10 @@ export default function AdminDashboard() {
         />
       </div>
 
-      {/* Recent Signups Section */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-            <h2 className="text-lg font-bold text-navy">Recent Signups</h2>
+      {/* Recent Signups */}
+      <div className="bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden">
+        <div className="p-6 border-b border-gray-100">
+          <h2 className="text-lg font-bold text-navy">Recent Signups</h2>
         </div>
         <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
@@ -119,7 +119,7 @@ export default function AdminDashboard() {
 
 function StatCard({ title, value, subValue, label, icon: Icon, color, textColor, bgLight }: any) {
     return (
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex flex-col justify-between h-full transition-all hover:shadow-md">
+        <div className="bg-white p-6 rounded-md shadow-sm border border-gray-200 flex flex-col justify-between h-full transition-all hover:shadow-md">
             <div className="flex items-start justify-between mb-4">
                 <div>
                     <p className="text-sm font-medium text-gray-500 mb-1">{title}</p>
@@ -129,7 +129,7 @@ function StatCard({ title, value, subValue, label, icon: Icon, color, textColor,
                     </div>
                     {label && <p className="text-xs text-gray-400 mt-1">{label}</p>}
                 </div>
-                <div className={`w-10 h-10 rounded-lg ${bgLight} flex items-center justify-center`}>
+                <div className={`w-10 h-10 rounded-md ${bgLight} flex items-center justify-center`}>
                     <Icon className={`w-5 h-5 ${textColor}`} />
                 </div>
             </div>

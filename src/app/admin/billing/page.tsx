@@ -99,7 +99,7 @@ export default function AdminBillingPage() {
         <div className="flex gap-2">
             <button
                 onClick={() => setShowGrantModal(true)}
-                className="bg-navy text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-navy/90"
+                className="bg-navy text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-navy/90"
             >
                 Grant Plan
             </button>
@@ -130,7 +130,7 @@ export default function AdminBillingPage() {
           </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden">
         {activeTab === 'transactions' ? (
             <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
@@ -167,7 +167,7 @@ export default function AdminBillingPage() {
                                         {new Date(inv.date).toLocaleDateString()}
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold ${
+                                        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-bold ${
                                             inv.status === 'successful' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                                         }`}>
                                             {inv.status === 'successful' ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
@@ -204,7 +204,7 @@ export default function AdminBillingPage() {
                                     </td>
                                     <td className="px-6 py-4 font-medium text-navy">{log.provider}</td>
                                     <td className="px-6 py-4">
-                                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-bold ${
+                                        <span className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-bold ${
                                             log.status === 'SUCCESS' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                                         }`}>
                                             {log.status}
@@ -225,7 +225,7 @@ export default function AdminBillingPage() {
       {/* Grant Plan Modal */}
       {showGrantModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl">
+            <div className="bg-white rounded-md p-6 w-full max-w-md shadow-2xl">
                 <h3 className="text-lg font-bold text-navy mb-4">Grant Plan Manually</h3>
                 <form onSubmit={handleGrantPlan} className="space-y-4">
                     <div>
@@ -235,7 +235,7 @@ export default function AdminBillingPage() {
                             required
                             value={grantTeamId}
                             onChange={(e) => setGrantTeamId(e.target.value)}
-                            className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-navy/20 outline-none"
+                            className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-navy/20 outline-none"
                             placeholder="cl..."
                         />
                     </div>
@@ -244,7 +244,7 @@ export default function AdminBillingPage() {
                         <select 
                             value={grantPlan}
                             onChange={(e) => setGrantPlan(e.target.value)}
-                            className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-navy/20 outline-none"
+                            className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-navy/20 outline-none"
                         >
                             <option value="PRO">PRO</option>
                             <option value="TEAM">TEAM</option>
@@ -255,14 +255,14 @@ export default function AdminBillingPage() {
                         <button 
                             type="button"
                             onClick={() => setShowGrantModal(false)}
-                            className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                            className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md"
                         >
                             Cancel
                         </button>
                         <button 
                             type="submit"
                             disabled={grantStatus === 'loading'}
-                            className="px-4 py-2 bg-navy text-white rounded-lg hover:bg-navy/90 disabled:opacity-50"
+                            className="px-4 py-2 bg-navy text-white rounded-md hover:bg-navy/90 disabled:opacity-50"
                         >
                             {grantStatus === 'loading' ? 'Granting...' : 'Grant Plan'}
                         </button>

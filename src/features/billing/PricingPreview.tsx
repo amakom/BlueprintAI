@@ -37,22 +37,22 @@
    )
  
    const Cursors = () => (
-     <div className="absolute inset-0 pointer-events-none">
-       <motion.div initial={{ opacity: 0, x: -6, y: 4 }} animate={{ opacity: 1, x: 0, y: 0, transition: { duration: 0.4, delay: 0.1 } }} className="absolute left-10 top-6 h-4 w-4 rounded-full bg-amber" />
-       <motion.div initial={{ opacity: 0, x: 6, y: -4 }} animate={{ opacity: 1, x: 0, y: 0, transition: { duration: 0.4, delay: 0.2 } }} className="absolute left-24 top-16 h-4 w-4 rounded-full bg-cyan" />
-       <motion.div initial={{ opacity: 0, x: -4, y: 6 }} animate={{ opacity: 1, x: 0, y: 0, transition: { duration: 0.4, delay: 0.3 } }} className="absolute left-44 top-10 h-4 w-4 rounded-full bg-white/80" />
-     </div>
-   )
+    <div className="absolute inset-0 pointer-events-none">
+      <motion.div initial={{ opacity: 0, x: -6, y: 4 }} animate={{ opacity: 1, x: 0, y: 0, transition: { duration: 0.4, delay: 0.1 } }} className="absolute left-10 top-6 h-4 w-4 rounded-md bg-amber" />
+      <motion.div initial={{ opacity: 0, x: 6, y: -4 }} animate={{ opacity: 1, x: 0, y: 0, transition: { duration: 0.4, delay: 0.2 } }} className="absolute left-24 top-16 h-4 w-4 rounded-md bg-cyan" />
+      <motion.div initial={{ opacity: 0, x: -4, y: 6 }} animate={{ opacity: 1, x: 0, y: 0, transition: { duration: 0.4, delay: 0.3 } }} className="absolute left-44 top-10 h-4 w-4 rounded-md bg-white/80" />
+    </div>
+  )
  
    return (
      <div className="mt-12">
-       <motion.div variants={variants.panel} initial="initial" animate="enter" className="relative rounded-2xl border border-border bg-white p-5">
-         <div className="text-sm font-bold text-navy">Plan Preview</div>
-         <div className="mt-4 grid md:grid-cols-3 gap-4">
-           <motion.div variants={variants.item} custom={0} initial="initial" animate="enter" className="relative rounded-xl border border-border bg-cloud p-4">
-             <div className="text-xs text-gray-500">Canvas</div>
-             <div className="mt-2 h-28 rounded-lg border border-border bg-white relative overflow-hidden">
-               {selected === 'FREE' && (
+      <motion.div variants={variants.panel} initial="initial" animate="enter" className="relative rounded-md border border-border bg-white p-5">
+        <div className="text-sm font-bold text-navy">Plan Preview</div>
+        <div className="mt-4 grid md:grid-cols-3 gap-4">
+          <motion.div variants={variants.item} custom={0} initial="initial" animate="enter" className="relative rounded-md border border-border bg-cloud p-4">
+            <div className="text-xs text-gray-500">Canvas</div>
+            <div className="mt-2 h-28 rounded-md border border-border bg-white relative overflow-hidden">
+              {selected === 'FREE' && (
                  <AnimatePresence>
                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-white/70" />
                  </AnimatePresence>
@@ -69,10 +69,10 @@
              </div>
            </motion.div>
  
-           <motion.div variants={variants.item} custom={1} initial="initial" animate="enter" className="rounded-xl border border-border bg-cloud p-4">
-             <div className="text-xs text-gray-500">AI Generation</div>
-             <div className="mt-2 h-28 rounded-lg border border-border bg-white p-3">
-               <div className="text-[11px] text-gray-500">Capacity</div>
+           <motion.div variants={variants.item} custom={1} initial="initial" animate="enter" className="rounded-md border border-border bg-cloud p-4">
+            <div className="text-xs text-gray-500">AI Generation</div>
+            <div className="mt-2 h-28 rounded-md border border-border bg-white p-3">
+              <div className="text-[11px] text-gray-500">Capacity</div>
                <Gauge level={selected === 'FREE' ? 1 : selected === 'PRO' ? 2 : 3} />
              </div>
              <div className="mt-2 text-[11px] text-gray-500">
@@ -82,14 +82,14 @@
              </div>
            </motion.div>
  
-           <motion.div variants={variants.item} custom={2} initial="initial" animate="enter" className="rounded-xl border border-border bg-cloud p-4">
-             <div className="text-xs text-gray-500">Collaboration</div>
-             <div className="mt-2 h-28 rounded-lg border border-border bg-white p-3 relative">
-               <div className="text-[11px] text-gray-500">Presence</div>
-               <div className="mt-3 flex items-center gap-2">
-                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: selected === 'TEAM' ? 1 : 0.25 }} className="h-6 w-6 rounded-full bg-amber" />
-                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: selected === 'TEAM' ? 1 : 0.25 }} className="h-6 w-6 rounded-full bg-cyan" />
-                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: selected === 'TEAM' ? 1 : 0.25 }} className="h-6 w-6 rounded-full bg-gray-400" />
+           <motion.div variants={variants.item} custom={2} initial="initial" animate="enter" className="rounded-md border border-border bg-cloud p-4">
+            <div className="text-xs text-gray-500">Collaboration</div>
+            <div className="mt-2 h-28 rounded-md border border-border bg-white p-3 relative">
+              <div className="text-[11px] text-gray-500">Presence</div>
+              <div className="mt-3 flex items-center gap-2">
+                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: selected === 'TEAM' ? 1 : 0.25 }} className="h-6 w-6 rounded-md bg-amber" />
+                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: selected === 'TEAM' ? 1 : 0.25 }} className="h-6 w-6 rounded-md bg-cyan" />
+                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: selected === 'TEAM' ? 1 : 0.25 }} className="h-6 w-6 rounded-md bg-gray-400" />
                </div>
              </div>
              <div className="mt-2 text-[11px] text-gray-500">

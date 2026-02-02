@@ -108,9 +108,9 @@ export default function AdminAIPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow border border-gray-100">
+        <div className="bg-white p-6 rounded-md shadow border border-gray-100">
             <div className="flex items-center gap-4">
-                <div className="p-3 bg-purple-100 text-purple-600 rounded-lg">
+                <div className="p-3 bg-purple-100 text-purple-600 rounded-md">
                     <Zap className="w-6 h-6" />
                 </div>
                 <div>
@@ -119,9 +119,9 @@ export default function AdminAIPage() {
                 </div>
             </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow border border-gray-100">
+        <div className="bg-white p-6 rounded-md shadow border border-gray-100">
             <div className="flex items-center gap-4">
-                <div className="p-3 bg-blue-100 text-blue-600 rounded-lg">
+                <div className="p-3 bg-blue-100 text-blue-600 rounded-md">
                     <Server className="w-6 h-6" />
                 </div>
                 <div>
@@ -130,9 +130,9 @@ export default function AdminAIPage() {
                 </div>
             </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow border border-gray-100">
+        <div className="bg-white p-6 rounded-md shadow border border-gray-100">
             <div className="flex items-center gap-4">
-                <div className="p-3 bg-green-100 text-green-600 rounded-lg">
+                <div className="p-3 bg-green-100 text-green-600 rounded-md">
                     <BarChart3 className="w-6 h-6" />
                 </div>
                 <div>
@@ -145,7 +145,7 @@ export default function AdminAIPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Top Teams */}
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="bg-white rounded-md shadow overflow-hidden">
             <div className="p-4 border-b border-gray-100 bg-gray-50">
                 <h3 className="font-semibold text-navy">Top Usage by Team</h3>
             </div>
@@ -175,11 +175,11 @@ export default function AdminAIPage() {
                                     <td className="px-4 py-3 text-right text-gray-600">{team.totalTokens.toLocaleString()}</td>
                                     <td className="px-4 py-3 text-center">
                                         {team.aiBlocked ? (
-                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
+                                            <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-red-100 text-red-700">
                                                 Blocked
                                             </span>
                                         ) : (
-                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                                            <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-100 text-green-700">
                                                 Active
                                             </span>
                                         )}
@@ -187,14 +187,14 @@ export default function AdminAIPage() {
                                     <td className="px-4 py-3 text-center flex justify-center gap-2">
                                         <button 
                                             onClick={() => setShowBlockConfirm({ isOpen: true, teamId: team.teamId, currentStatus: team.aiBlocked })}
-                                            className={`p-1 rounded hover:bg-gray-200 ${team.aiBlocked ? 'text-green-600' : 'text-red-600'}`}
+                                            className={`p-1 rounded-md hover:bg-gray-200 ${team.aiBlocked ? 'text-green-600' : 'text-red-600'}`}
                                             title={team.aiBlocked ? "Unblock AI" : "Block AI"}
                                         >
                                             {team.aiBlocked ? <CheckCircle className="w-4 h-4" /> : <Ban className="w-4 h-4" />}
                                         </button>
                                         <button 
                                             onClick={() => setShowResetConfirm({ isOpen: true, teamId: team.teamId })}
-                                            className="p-1 text-blue-600 rounded hover:bg-gray-200"
+                                            className="p-1 text-blue-600 rounded-md hover:bg-gray-200"
                                             title="Reset Usage"
                                         >
                                             <RotateCcw className="w-4 h-4" />
@@ -209,7 +209,7 @@ export default function AdminAIPage() {
           </div>
 
           {/* Recent Logs */}
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="bg-white rounded-md shadow overflow-hidden">
             <div className="p-4 border-b border-gray-100 bg-gray-50">
                 <h3 className="font-semibold text-navy">Recent Activity</h3>
             </div>

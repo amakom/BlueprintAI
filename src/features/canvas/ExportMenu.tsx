@@ -179,7 +179,7 @@ export function ExportMenu({ projectId }: ExportMenuProps) {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-2 w-56 bg-white border border-border rounded-lg shadow-lg z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+        <div className="absolute top-full right-0 mt-2 w-56 bg-white border border-border rounded-md shadow-lg z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100">
           <div className="p-1">
             <button onClick={handleExportMarkdown} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-navy hover:bg-cloud rounded-md text-left">
               <Download className="w-4 h-4 text-gray-500" />
@@ -205,7 +205,7 @@ export function ExportMenu({ projectId }: ExportMenuProps) {
       {/* Share Modal */}
       {isShareModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 m-4 animate-in fade-in zoom-in-95">
+          <div className="bg-white rounded-md shadow-2xl w-full max-w-md p-6 m-4 animate-in fade-in zoom-in-95">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-bold text-navy flex items-center gap-2">
                 <Globe className="w-5 h-5 text-cyan" />
@@ -231,11 +231,11 @@ export function ExportMenu({ projectId }: ExportMenuProps) {
                   <input 
                     readOnly 
                     value={shareLink} 
-                    className="flex-1 text-sm border border-border rounded px-3 py-2 bg-gray-50 text-gray-600 outline-none focus:ring-2 focus:ring-cyan/20"
+                    className="flex-1 text-sm border border-border rounded-md px-3 py-2 bg-gray-50 text-gray-600 outline-none focus:ring-2 focus:ring-cyan/20"
                   />
                   <button 
                     onClick={handleCopyLink}
-                    className="bg-navy text-white px-3 py-2 rounded hover:bg-navy/90 transition-colors flex items-center gap-2"
+                    className="bg-navy text-white px-3 py-2 rounded-md hover:bg-navy/90 transition-colors flex items-center gap-2"
                   >
                     {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                   </button>
@@ -254,7 +254,7 @@ export function ExportMenu({ projectId }: ExportMenuProps) {
               <div className="text-center py-2">
                 <button 
                   onClick={handleGenerateLink}
-                  className="bg-cyan text-navy font-bold px-4 py-2 rounded-lg hover:bg-cyan/90 transition-colors w-full"
+                  className="bg-cyan text-navy font-bold px-4 py-2 rounded-md hover:bg-cyan/90 transition-colors w-full"
                 >
                   Generate Public Link
                 </button>

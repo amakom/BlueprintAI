@@ -61,7 +61,7 @@ export function CanvasFlowAnimation() {
         </button>
       </div>
 
-      <div className="rounded-3xl border border-white/10 bg-navy overflow-hidden">
+      <div className="rounded-md border border-white/10 bg-navy overflow-hidden">
         <div className="overflow-x-auto">
           <div className="relative h-72 min-w-[700px] flex items-center justify-center">
             <AnimatePresence>
@@ -72,7 +72,7 @@ export function CanvasFlowAnimation() {
                   exit={{ opacity: 0 }}
                   className="absolute top-4 left-1/2 -translate-x-1/2 z-10"
                 >
-                  <div className="rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm text-white">
+                  <div className="rounded-md border border-white/10 bg-white/10 px-4 py-2 text-sm text-white">
                     Create a booking flow
                   </div>
                 </motion.div>
@@ -116,7 +116,7 @@ export function CanvasFlowAnimation() {
                         key={n.id}
                         initial={{ opacity: 0, y: 8, scale: 0.98 }}
                         animate={{ opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, delay: i * 0.12 } }}
-                        className="absolute w-[140px] h-[52px] rounded-xl border border-white/10 bg-white/10 backdrop-blur-sm overflow-hidden"
+                        className="absolute w-[140px] h-[52px] rounded-md border border-white/10 bg-white/10 backdrop-blur-sm overflow-hidden"
                         style={{ left: n.x, top: n.y }}
                       >
                         <div className="flex h-full items-center gap-3 px-3">

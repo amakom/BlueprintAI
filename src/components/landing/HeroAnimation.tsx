@@ -77,7 +77,7 @@ export function HeroAnimation() {
         </button>
       </div>
 
-      <div className="mx-auto w-full max-w-xl rounded-2xl border border-white/10 bg-white/5 px-6 py-4 backdrop-blur-sm relative overflow-hidden">
+      <div className="mx-auto w-full max-w-xl rounded-md border border-white/10 bg-white/5 px-6 py-4 backdrop-blur-sm relative overflow-hidden">
         {/* Your Idea Label */}
         <AnimatePresence>
           {(phase === 'entrance' || phase === 'typing' || phase === 'streams' || phase === 'merge') && (
@@ -123,50 +123,50 @@ export function HeroAnimation() {
                variants={streamVariants}
                initial="initial"
                animate="enter"
-               className="rounded-2xl border border-white/10 bg-white/5 p-4"
-             >
-               <div className="text-xs font-bold text-cyan">Strategy</div>
-               <div className="mt-3 space-y-3">
-                 <motion.div
-                   custom={0}
-                   variants={blockVariants}
-                   initial="initial"
-                   animate="enter"
-                   className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3"
-                 >
-                   <div className="h-8 w-8 rounded-full bg-cyan/20" />
-                   <div className="flex-1">
-                     <div className="text-sm">Persona: Busy Buyer</div>
-                     <div className="text-xs text-gray-400">Needs quick scheduling</div>
-                   </div>
-                 </motion.div>
-                 <motion.div
-                   custom={1}
-                   variants={blockVariants}
-                   initial="initial"
-                   animate="enter"
-                   className="grid grid-cols-3 gap-2"
-                 >
-                   <div className="rounded-lg border border-white/10 bg-white/5 p-2 text-center">
-                     <div className="text-xs text-gray-400">KPI</div>
-                     <div className="text-sm font-bold">D7 Ret</div>
-                   </div>
-                   <div className="rounded-lg border border-white/10 bg-white/5 p-2 text-center">
-                     <div className="text-xs text-gray-400">KPI</div>
-                     <div className="text-sm font-bold">Conv%</div>
-                   </div>
-                   <div className="rounded-lg border border-white/10 bg-white/5 p-2 text-center">
-                     <div className="text-xs text-gray-400">KPI</div>
-                     <div className="text-sm font-bold">NPS</div>
-                   </div>
-                 </motion.div>
-                 <motion.div
-                   custom={2}
-                   variants={blockVariants}
-                   initial="initial"
-                   animate="enter"
-                   className="rounded-xl border border-white/10 bg-white/5 p-3"
-                 >
+               className="rounded-md border border-white/10 bg-white/5 p-4"
+            >
+              <div className="text-xs font-bold text-cyan">Strategy</div>
+              <div className="mt-3 space-y-3">
+                <motion.div
+                  custom={0}
+                  variants={blockVariants}
+                  initial="initial"
+                  animate="enter"
+                  className="flex items-center gap-3 rounded-md border border-white/10 bg-white/5 p-3"
+                >
+                  <div className="h-8 w-8 rounded-md bg-cyan/20" />
+                  <div className="flex-1">
+                    <div className="text-sm">Persona: Busy Buyer</div>
+                    <div className="text-xs text-gray-400">Needs quick scheduling</div>
+                  </div>
+                </motion.div>
+                <motion.div
+                  custom={1}
+                  variants={blockVariants}
+                  initial="initial"
+                  animate="enter"
+                  className="grid grid-cols-3 gap-2"
+                >
+                  <div className="rounded-md border border-white/10 bg-white/5 p-2 text-center">
+                    <div className="text-xs text-gray-400">KPI</div>
+                    <div className="text-sm font-bold">D7 Ret</div>
+                  </div>
+                  <div className="rounded-md border border-white/10 bg-white/5 p-2 text-center">
+                    <div className="text-xs text-gray-400">KPI</div>
+                    <div className="text-sm font-bold">Conv%</div>
+                  </div>
+                  <div className="rounded-md border border-white/10 bg-white/5 p-2 text-center">
+                    <div className="text-xs text-gray-400">KPI</div>
+                    <div className="text-sm font-bold">NPS</div>
+                  </div>
+                </motion.div>
+                <motion.div
+                  custom={2}
+                  variants={blockVariants}
+                  initial="initial"
+                  animate="enter"
+                  className="rounded-md border border-white/10 bg-white/5 p-3"
+                >
                    <div className="text-sm">Competitors</div>
                    <div className="mt-2 grid grid-cols-3 gap-2">
                      <div className="rounded-md border border-white/10 bg-white/5 p-2 text-xs">Rover</div>
@@ -178,12 +178,12 @@ export function HeroAnimation() {
              </motion.div>
  
              <motion.div
-               variants={streamVariants}
-               initial="initial"
-               animate="enter"
-               className="rounded-2xl border border-white/10 bg-white/5 p-4"
-             >
-               <div className="text-xs font-bold text-cyan">Visual Canvas</div>
+              variants={streamVariants}
+              initial="initial"
+              animate="enter"
+              className="rounded-md border border-white/10 bg-white/5 p-4"
+            >
+              <div className="text-xs font-bold text-cyan">Visual Canvas</div>
               <div className="mt-3 relative h-40 w-full">
                 {/* SVG Connections */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
@@ -248,42 +248,42 @@ export function HeroAnimation() {
              </motion.div>
  
              <motion.div
-               variants={streamVariants}
-               initial="initial"
-               animate="enter"
-               className="rounded-2xl border border-white/10 bg-white/5 p-4"
-             >
-               <div className="text-xs font-bold text-cyan">Engineering Spec</div>
-               <div className="mt-3 space-y-2 font-mono">
-                 <motion.div
-                   custom={0}
-                   variants={blockVariants}
-                   initial="initial"
-                   animate="enter"
-                   className="rounded-lg border border-white/10 bg-white/5 p-3 text-xs"
-                 >
-                   model User {`{`} id String, email String {`}`}
-                 </motion.div>
-                 <motion.div
-                   custom={1}
-                   variants={blockVariants}
-                   initial="initial"
-                   animate="enter"
-                   className="rounded-lg border border-white/10 bg-white/5 p-3 text-xs"
-                 >
-                   POST /api/login
-                 </motion.div>
-                 <motion.div
-                   custom={2}
-                   variants={blockVariants}
-                   initial="initial"
-                   animate="enter"
-                   className="rounded-lg border border-white/10 bg-white/5 p-3 text-xs"
-                 >
-                   GET /api/bookings
-                 </motion.div>
-               </div>
-             </motion.div>
+              variants={streamVariants}
+              initial="initial"
+              animate="enter"
+              className="rounded-md border border-white/10 bg-white/5 p-4"
+            >
+              <div className="text-xs font-bold text-cyan">Engineering Spec</div>
+              <div className="mt-3 space-y-2 font-mono">
+                <motion.div
+                  custom={0}
+                  variants={blockVariants}
+                  initial="initial"
+                  animate="enter"
+                  className="rounded-md border border-white/10 bg-white/5 p-3 text-xs"
+                >
+                  model User {`{`} id String, email String {`}`}
+                </motion.div>
+                <motion.div
+                  custom={1}
+                  variants={blockVariants}
+                  initial="initial"
+                  animate="enter"
+                  className="rounded-md border border-white/10 bg-white/5 p-3 text-xs"
+                >
+                  POST /api/login
+                </motion.div>
+                <motion.div
+                  custom={2}
+                  variants={blockVariants}
+                  initial="initial"
+                  animate="enter"
+                  className="rounded-md border border-white/10 bg-white/5 p-3 text-xs"
+                >
+                  GET /api/bookings
+                </motion.div>
+              </div>
+            </motion.div>
            </motion.div>
          )}
        </AnimatePresence>
@@ -297,36 +297,36 @@ export function HeroAnimation() {
              className="mt-10 flex items-center justify-center"
            >
              <motion.div
-               initial={{ scale: 0.96, y: 8 }}
-               animate={{ scale: 1, y: 0, transition: { duration: 0.5 } }}
-               className="relative w-full max-w-3xl rounded-3xl border border-white/10 bg-white/5 p-6"
-             >
-               <div className="text-center">
-                 <div className="text-sm font-bold text-cyan">Product Blueprint</div>
-                 <div className="mt-2 text-2xl font-extrabold text-white">Strategy × Canvas × Spec</div>
-                 <div className="mt-3 text-sm text-gray-400">Unified, developer-ready output</div>
-               </div>
-               <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-xs">
-                  Personas, KPIs, Market
-                </div>
-                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-xs">
-                  Flow, Screens, Stories
-                </div>
-                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-xs">
-                  Models, APIs, Contracts
-                </div>
+              initial={{ scale: 0.96, y: 8 }}
+              animate={{ scale: 1, y: 0, transition: { duration: 0.5 } }}
+              className="relative w-full max-w-3xl rounded-md border border-white/10 bg-white/5 p-6"
+            >
+              <div className="text-center">
+                <div className="text-sm font-bold text-cyan">Product Blueprint</div>
+                <div className="mt-2 text-2xl font-extrabold text-white">Strategy × Canvas × Spec</div>
+                <div className="mt-3 text-sm text-gray-400">Unified, developer-ready output</div>
               </div>
-               <motion.div
-                 initial={{ opacity: 0 }}
-                 animate={{
-                   opacity: 1,
-                   boxShadow: '0 0 0.75rem rgba(46, 230, 214, 0.25)',
-                   transition: { duration: 0.8, delay: 0.2 },
-                 }}
-                 className="pointer-events-none absolute inset-0 rounded-3xl"
-               />
-             </motion.div>
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+               <div className="rounded-md border border-white/10 bg-white/5 p-4 text-xs">
+                 Personas, KPIs, Market
+               </div>
+               <div className="rounded-md border border-white/10 bg-white/5 p-4 text-xs">
+                 Flow, Screens, Stories
+               </div>
+               <div className="rounded-md border border-white/10 bg-white/5 p-4 text-xs">
+                 Models, APIs, Contracts
+               </div>
+             </div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: 1,
+                  boxShadow: '0 0 0.75rem rgba(46, 230, 214, 0.25)',
+                  transition: { duration: 0.8, delay: 0.2 },
+                }}
+                className="pointer-events-none absolute inset-0 rounded-md"
+              />
+            </motion.div>
            </motion.div>
          )}
        </AnimatePresence>

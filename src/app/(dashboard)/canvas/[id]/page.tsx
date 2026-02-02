@@ -124,21 +124,17 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
               <Skeleton className="h-6 w-32" />
             </div>
             <div className="flex items-center gap-2">
-              <Skeleton className="h-8 w-24 rounded-lg" />
-              <Skeleton className="h-8 w-8 rounded-full" />
+              <Skeleton className="h-8 w-24 rounded-md" />
+              <Skeleton className="h-8 w-8 rounded-md" />
             </div>
           </header>
           
           {/* Canvas Area Skeleton */}
-          <div className="flex-1 relative p-4">
-            <div className="absolute top-4 left-4 space-y-2">
-              <Skeleton className="h-10 w-32 rounded-lg" />
-              <Skeleton className="h-10 w-32 rounded-lg" />
-            </div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <div className="flex gap-8">
-                 <Skeleton className="h-32 w-48 rounded-xl" />
-                 <Skeleton className="h-32 w-48 rounded-xl" />
+          <div className="flex-1 relative bg-slate-50 overflow-hidden flex items-center justify-center">
+            <div className="flex flex-col items-center gap-4">
+              <div className="flex gap-4">
+                 <Skeleton className="h-32 w-48 rounded-md" />
+                 <Skeleton className="h-32 w-48 rounded-md" />
               </div>
             </div>
           </div>
@@ -187,9 +183,9 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
                             setNewName(project.name);
                           }
                         }}
-                        className="font-bold text-navy border border-cyan rounded px-2 py-1 outline-none focus:ring-2 focus:ring-cyan/20 w-48"
+                        className="font-bold text-navy border border-cyan rounded-md px-2 py-1 outline-none focus:ring-2 focus:ring-cyan/20 w-48"
                       />
-                      <button onClick={handleRenameSubmit} className="p-1 hover:bg-green-50 text-green-600 rounded">
+                      <button onClick={handleRenameSubmit} className="p-1 hover:bg-green-50 text-green-600 rounded-md">
                         <Check className="w-4 h-4" />
                       </button>
                       <button 
@@ -197,7 +193,7 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
                           setIsRenaming(false);
                           setNewName(project.name);
                         }} 
-                        className="p-1 hover:bg-red-50 text-red-600 rounded"
+                        className="p-1 hover:bg-red-50 text-red-600 rounded-md"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -207,14 +203,14 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
                       <h1 className="font-bold text-navy">{project.name}</h1>
                       <button 
                         onClick={() => setIsRenaming(true)}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-cloud rounded text-gray-400 hover:text-navy"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-cloud rounded-md text-gray-400 hover:text-navy"
                         title="Rename Project"
                       >
                         <Edit2 className="w-3 h-3" />
                       </button>
                       <button 
                         onClick={handleDeleteProject}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-red-50 rounded text-gray-400 hover:text-red-500"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-red-50 rounded-md text-gray-400 hover:text-red-500"
                         title="Delete Project"
                       >
                         <Trash2 className="w-3 h-3" />
@@ -222,10 +218,10 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
                     </div>
                   )}
                   
-                  <span className="px-2 py-0.5 bg-gray-100 text-gray-500 text-xs rounded-full">Draft</span>
+                  <span className="px-2 py-0.5 bg-gray-100 text-gray-500 text-xs rounded-md">Draft</span>
                   
                   {/* View Mode Toggle */}
-                  <div className="flex bg-slate-100 rounded-lg p-1 mx-2 md:mx-4 overflow-x-auto">
+                  <div className="flex bg-slate-100 rounded-md p-1 mx-2 md:mx-4 overflow-x-auto">
                     <button
                       onClick={() => setMode('canvas')}
                       className={`px-3 py-1 text-sm font-medium rounded-md transition-all whitespace-nowrap ${mode === 'canvas' ? 'bg-white shadow-sm text-navy' : 'text-slate-500 hover:text-navy'}`}
@@ -248,14 +244,14 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
               </div>
               <div className="flex items-center gap-2 shrink-0">
                   <div className="flex -space-x-2 mr-2 hidden md:flex">
-                      <div className="w-8 h-8 rounded-full bg-cyan border-2 border-white"></div>
-                      <div className="w-8 h-8 rounded-full bg-amber border-2 border-white"></div>
+                      <div className="w-8 h-8 rounded-md bg-cyan border-2 border-white"></div>
+                      <div className="w-8 h-8 rounded-md bg-amber border-2 border-white"></div>
                   </div>
                   
                   {/* Real-time Indicator (Mock) */}
                   {limits.canRealTimeEdit ? (
                       <div className="flex items-center gap-1 text-xs text-green-600 font-bold px-2 hidden md:flex">
-                          <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                          <span className="w-2 h-2 bg-green-500 rounded-md animate-pulse"></span>
                           LIVE
                       </div>
                   ) : (

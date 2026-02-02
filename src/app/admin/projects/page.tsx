@@ -77,12 +77,12 @@ export default function AdminProjectsPage() {
             placeholder="Search projects..." 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan/20 w-64"
+            className="pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-cyan/20 w-64"
           />
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden">
         <table className="w-full">
           <thead className="bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-100">
             <tr>

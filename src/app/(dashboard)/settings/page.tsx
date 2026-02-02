@@ -3,7 +3,7 @@ export default function SettingsPage() {
     <div className="flex-1 overflow-y-auto p-8">
       <h1 className="text-3xl font-bold text-navy mb-8">Settings</h1>
       
-      <div className="bg-white p-6 rounded-xl border border-border max-w-2xl">
+      <div className="bg-white p-6 rounded-md border border-border max-w-2xl">
         <h2 className="text-xl font-bold text-navy mb-4">Profile Settings</h2>
         <div className="space-y-4">
             <div>

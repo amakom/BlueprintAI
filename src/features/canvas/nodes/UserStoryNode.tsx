@@ -226,7 +226,7 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
   const displayName = rawName ? rawName.charAt(0).toUpperCase() + rawName.slice(1) : undefined;
 
   return (
-    <div className={`bg-white rounded-lg border-2 shadow-sm transition-all group/node min-w-[208px] h-full flex flex-col relative ${
+    <div className={`bg-white rounded-md border-2 shadow-sm transition-all group/node min-w-[208px] h-full flex flex-col relative ${
       selected ? 'border-cyan ring-2 ring-cyan/20' : 'border-border'
     }`}>
       <NodeResizer 

@@ -32,7 +32,7 @@ export function ActivityLogList({ projectId }: { projectId: string }) {
   if (isLoading) return <div className="p-4 text-center text-gray-500">Loading activity...</div>;
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-border">
+    <div className="bg-white rounded-md shadow-sm border border-border">
       <div className="p-4 border-b border-border">
         <h2 className="text-lg font-semibold text-navy flex items-center gap-2">
           <History className="w-5 h-5 text-cyan" />
@@ -47,7 +47,7 @@ export function ActivityLogList({ projectId }: { projectId: string }) {
             {logs.map((log) => (
               <div key={log.id} className="p-4 flex gap-3 hover:bg-gray-50 transition-colors">
                 <div className="mt-1">
-                  <div className="w-8 h-8 rounded-full bg-navy/10 flex items-center justify-center text-navy text-xs font-bold overflow-hidden">
+                  <div className="w-8 h-8 rounded-md bg-navy/10 flex items-center justify-center text-navy text-xs font-bold overflow-hidden">
                      {log.user.image ? (
                         <img src={log.user.image} alt={log.user.name || ''} className="w-full h-full object-cover" />
                       ) : (

@@ -19,10 +19,10 @@ export function CommentInput({ x, y, onSubmit, onCancel }: CommentInputProps) {
 
   return (
     <div 
-        className="absolute z-50 p-3 bg-white rounded-lg shadow-xl border border-gray-200 w-64 animate-in fade-in zoom-in-95 duration-200"
-        style={{ left: x, top: y }}
-        onClick={e => e.stopPropagation()}
-    >
+            className="absolute z-50 p-3 bg-white rounded-md shadow-xl border border-gray-200 w-64 animate-in fade-in zoom-in-95 duration-200"
+            style={{ left: x, top: y }}
+            onClick={e => e.stopPropagation()}
+        >
         <textarea 
             className="w-full h-24 text-sm p-2 border border-gray-200 rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none font-sans"
             placeholder="Write a comment..."
@@ -44,7 +44,7 @@ export function CommentInput({ x, y, onSubmit, onCancel }: CommentInputProps) {
             <button 
                 onClick={handleSubmit} 
                 disabled={!text.trim()}
-                className="bg-navy text-white px-3 py-1.5 rounded text-xs font-bold hover:bg-navy/90 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="bg-navy text-white px-3 py-1.5 rounded-md text-xs font-bold hover:bg-navy/90 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
                 Post <Send size={12} />
             </button>

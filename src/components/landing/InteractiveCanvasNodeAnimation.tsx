@@ -20,7 +20,7 @@ export function InteractiveCanvasNodeAnimation() {
   const gray = '#94a3b8'
 
   return (
-    <div className="h-40 w-full relative mb-6 overflow-hidden rounded-xl bg-navy/50 border border-white/10 flex items-center justify-center">
+    <div className="h-40 w-full relative mb-6 overflow-hidden rounded-md bg-navy/50 border border-white/10 flex items-center justify-center">
       {/* Grid Background */}
       <div 
         className="absolute inset-0 opacity-20"
@@ -52,7 +52,7 @@ export function InteractiveCanvasNodeAnimation() {
       {/* Node 1 (Left) */}
       <motion.div
         key={`node1-${key}`}
-        className="absolute left-[35%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/10 backdrop-blur-sm border border-cyan rounded-lg flex items-center justify-center z-10 shadow-lg shadow-cyan/10"
+        className="absolute left-[35%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/10 backdrop-blur-sm border border-cyan rounded-md flex items-center justify-center z-10 shadow-lg shadow-cyan/10"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ 
           scale: [0, 1, 1.1, 1], 
@@ -65,13 +65,16 @@ export function InteractiveCanvasNodeAnimation() {
           ease: "easeOut"
         }}
       >
-        <div className="w-6 h-1 bg-cyan/50 rounded-full" />
+        <div className="flex justify-between items-center mt-2">
+          <div className="h-2 w-8 rounded-md bg-white/10" />
+          <div className="w-3 h-3 rounded-md bg-cyan shadow-[0_0_10px_rgba(46,230,214,0.5)]" />
+        </div>
       </motion.div>
 
       {/* Node 2 (Right) */}
       <motion.div
         key={`node2-${key}`}
-        className="absolute left-[65%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-navy border border-white/20 rounded-lg flex items-center justify-center z-10"
+        className="absolute left-[65%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-navy border border-white/20 rounded-md flex items-center justify-center z-10"
         initial={{ scale: 0, opacity: 0, x: -20 }}
         animate={{ 
           scale: 1, 
@@ -86,7 +89,7 @@ export function InteractiveCanvasNodeAnimation() {
         }}
       >
         <motion.div 
-          className="w-2 h-2 bg-cyan rounded-full"
+          className="w-2 h-2 bg-cyan rounded-sm"
           animate={{ scale: [1, 1.5, 1] }}
           transition={{ delay: 2.5, duration: 2, repeat: Infinity }}
         />

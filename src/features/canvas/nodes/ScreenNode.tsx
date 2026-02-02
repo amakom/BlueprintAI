@@ -29,7 +29,7 @@ export function ScreenNode({ id, data, selected }: NodeProps<Node<ScreenNodeData
   const hasImage = !!data.image;
 
   return (
-    <div className={`bg-white rounded-xl border-2 shadow-md transition-all group/node flex flex-col min-w-[224px] min-h-[256px] h-full ${
+    <div className={`bg-white rounded-md border-2 shadow-md transition-all group/node flex flex-col min-w-[224px] min-h-[256px] h-full ${
       selected ? 'border-cyan ring-4 ring-cyan/10' : 'border-gray-200'
     }`}
     style={{ backgroundColor: data.backgroundColor as string }}

@@ -101,7 +101,7 @@ export function PropertiesPanel() {
                   onClick={() => {
                     setNodes(nds => nds.map(n => n.id === selectedNode.id ? { ...n, style: { ...n.style, width: 390, height: 844 } } : n));
                   }}
-                  className="flex flex-col items-center justify-center p-2 border border-slate-200 rounded hover:border-cyan hover:bg-cyan/5 transition-colors"
+                  className="flex flex-col items-center justify-center p-2 border border-slate-200 rounded-md hover:border-cyan hover:bg-cyan/5 transition-colors"
                 >
                   <Smartphone className="w-4 h-4 mb-1 text-slate-600" />
                   <span className="text-[10px] text-slate-500">iPhone</span>
@@ -110,7 +110,7 @@ export function PropertiesPanel() {
                   onClick={() => {
                     setNodes(nds => nds.map(n => n.id === selectedNode.id ? { ...n, style: { ...n.style, width: 1440, height: 900 } } : n));
                   }}
-                  className="flex flex-col items-center justify-center p-2 border border-slate-200 rounded hover:border-cyan hover:bg-cyan/5 transition-colors"
+                  className="flex flex-col items-center justify-center p-2 border border-slate-200 rounded-md hover:border-cyan hover:bg-cyan/5 transition-colors"
                 >
                   <Monitor className="w-4 h-4 mb-1 text-slate-600" />
                   <span className="text-[10px] text-slate-500">Desktop</span>
@@ -125,7 +125,7 @@ export function PropertiesPanel() {
                     type="color" 
                     value={selectedNode.style?.backgroundColor || '#ffffff'}
                     onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                    className="w-8 h-8 rounded cursor-pointer border-none p-0"
+                    className="w-8 h-8 rounded-md cursor-pointer border-none p-0"
                  />
                  <span className="text-xs text-slate-500 font-mono">{selectedNode.style?.backgroundColor || '#ffffff'}</span>
                </div>
@@ -133,7 +133,7 @@ export function PropertiesPanel() {
 
             <div className="space-y-3">
                <label className="text-xs font-semibold text-slate-500 uppercase">Image</label>
-               <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center hover:bg-slate-50 transition-colors relative">
+               <div className="border-2 border-dashed border-slate-200 rounded-md p-4 text-center hover:bg-slate-50 transition-colors relative">
                  <input 
                     type="file" 
                     accept="image/*"

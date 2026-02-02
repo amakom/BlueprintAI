@@ -58,7 +58,7 @@ export default function AdminSystemPage() {
     const style = styles[level] || 'bg-gray-100 text-gray-800';
 
     return (
-        <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${style}`}>
+        <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${style}`}>
             {level}
         </span>
     );
@@ -73,7 +73,7 @@ export default function AdminSystemPage() {
         </h1>
         <button 
             onClick={fetchLogs} 
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 hover:bg-gray-100 rounded-md transition-colors"
             title="Refresh"
         >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -81,7 +81,7 @@ export default function AdminSystemPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex gap-4 bg-white p-4 rounded-lg shadow-sm">
+      <div className="flex gap-4 bg-white p-4 rounded-md shadow-sm">
         <select 
             value={levelFilter}
             onChange={(e) => setLevelFilter(e.target.value)}
@@ -108,7 +108,7 @@ export default function AdminSystemPage() {
       </div>
 
       {/* Logs Table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-white rounded-md shadow overflow-hidden">
         <table className="w-full">
             <thead className="bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               <tr>

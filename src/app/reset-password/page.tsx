@@ -19,7 +19,7 @@ function ResetPasswordContent() {
   if (!token || !email) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-cloud p-4">
-        <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
+        <div className="bg-white p-8 rounded-md shadow-md max-w-md w-full text-center">
           <h1 className="text-xl font-bold text-red-500 mb-2">Invalid Link</h1>
           <p className="text-gray-600 mb-6">This password reset link is invalid or incomplete.</p>
           <Link href="/login" className="text-navy font-medium hover:underline">
@@ -67,7 +67,7 @@ function ResetPasswordContent() {
   if (status === 'success') {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-cloud p-4">
-        <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
+        <div className="bg-white p-8 rounded-md shadow-md max-w-md w-full text-center">
           <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-navy mb-2">Password Reset!</h1>
           <p className="text-gray-600 mb-6">Your password has been successfully updated.</p>
@@ -84,7 +84,7 @@ function ResetPasswordContent() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-cloud p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
+      <div className="bg-white p-8 rounded-md shadow-md max-w-md w-full">
         <div className="text-center mb-8">
           <Lock className="w-12 h-12 text-cyan mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-navy">Set New Password</h1>

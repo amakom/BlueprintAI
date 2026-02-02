@@ -137,7 +137,7 @@ export function Sidebar() {
       <div className="p-4 border-t border-white/10 mt-auto">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-cyan text-navy flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-md bg-cyan text-navy flex items-center justify-center font-bold">
               {user?.name?.[0]?.toUpperCase() || 'U'}
             </div>
             <div className="text-sm">
@@ -149,7 +149,7 @@ export function Sidebar() {
                     {isSubLoading ? 'Loading...' : (isOwner ? 'Owner Access' : `${plan} Plan`)}
                   </p>
                  {plan === 'FREE' && !isOwner && (
-                     <Link href="/pricing" className="text-[10px] bg-cyan text-navy px-1.5 py-0.5 rounded font-bold hover:bg-cyan/90">
+                     <Link href="/pricing" className="text-[10px] bg-cyan text-navy px-1.5 py-0.5 rounded-md font-bold hover:bg-cyan/90">
                         UPGRADE
                      </Link>
                  )}

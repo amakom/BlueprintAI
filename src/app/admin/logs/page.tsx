@@ -19,7 +19,7 @@ export default function AdminLogsPage() {
 
   if (loading) return (
     <div className="flex items-center justify-center h-64 text-navy">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-navy"></div>
+        <div className="animate-spin rounded-md h-8 w-8 border-b-2 border-navy"></div>
     </div>
   );
 
@@ -66,7 +66,7 @@ export default function AdminLogsPage() {
           </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
                 <thead className="bg-gray-50 border-b border-gray-100">
@@ -102,10 +102,11 @@ export default function AdminLogsPage() {
                                 {new Date(log.createdAt).toLocaleString()}
                             </td>
                             <td className="px-6 py-4">
-                                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-bold ${
-                                    log.level === 'ERROR' ? 'bg-red-100 text-red-700' : 
-                                    log.level === 'WARN' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'
-                                }`}>
+                                <span className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-bold ${
+                        log.level === 'ERROR' ? 'bg-red-100 text-red-700' :
+                        log.level === 'WARN' ? 'bg-amber-100 text-amber-700' :
+                        'bg-blue-100 text-blue-700'
+                      }`}>
                                     {log.level}
                                 </span>
                             </td>
@@ -121,7 +122,7 @@ export default function AdminLogsPage() {
                             </td>
                             <td className="px-6 py-4 font-medium text-navy">{log.provider}</td>
                             <td className="px-6 py-4">
-                                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-bold ${
+                                <span className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-bold ${
                                     log.status === 'SUCCESS' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                                 }`}>
                                     {log.status}

@@ -46,12 +46,12 @@ function BillingContent() {
 
   if (loading) return (
     <div className="flex items-center justify-center min-h-[400px]">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-navy"></div>
+      <div className="animate-spin rounded-md h-8 w-8 border-b-2 border-navy"></div>
     </div>
   );
 
   if (error) return (
-    <div className="p-8 text-red-500 bg-red-50 rounded-xl border border-red-100">
+    <div className="p-8 text-red-500 bg-red-50 rounded-md border border-red-100">
       <AlertTriangle className="w-6 h-6 mb-2" />
       {error}
     </div>
@@ -65,7 +65,7 @@ function BillingContent() {
         <h1 className="text-2xl font-bold text-navy">Billing & Subscription</h1>
         <Link 
           href="/pricing" 
-          className="px-4 py-2 bg-navy text-white rounded-lg text-sm font-bold hover:bg-navy/90 flex items-center gap-2"
+          className="px-4 py-2 bg-navy text-white rounded-md text-sm font-bold hover:bg-navy/90 flex items-center gap-2"
         >
           <CreditCard className="w-4 h-4" />
           View Plans
@@ -73,7 +73,7 @@ function BillingContent() {
       </div>
 
       {status === 'success' && (
-        <div className="mb-8 p-4 bg-green-50 text-green-700 rounded-lg border border-green-200 flex items-center gap-3">
+        <div className="mb-8 p-4 bg-green-50 text-green-700 rounded-md border border-green-200 flex items-center gap-3">
           <CheckCircle className="w-5 h-5" />
           <div>
             <p className="font-bold">Payment Successful!</p>
@@ -83,7 +83,7 @@ function BillingContent() {
       )}
 
       {/* Current Plan Card */}
-      <div className="bg-white rounded-xl border border-border p-6 mb-8 shadow-sm">
+      <div className="bg-white rounded-md border border-border p-6 mb-8 shadow-sm">
         <div className="flex justify-between items-start mb-6">
           <div>
             <h2 className="text-lg font-bold text-navy mb-1">Current Plan</h2>
@@ -91,7 +91,7 @@ function BillingContent() {
               You are currently on the <span className="font-bold text-cyan capitalize">{subscription?.plan || 'Free'}</span> plan.
             </p>
           </div>
-          <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+          <span className={`px-3 py-1 rounded-md text-xs font-bold ${
             subscription?.status === 'ACTIVE' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
           }`}>
             {subscription?.status || 'Active'}
@@ -99,7 +99,7 @@ function BillingContent() {
         </div>
 
         {!isProOrTeam ? (
-           <div className="bg-cloud p-4 rounded-lg flex items-center justify-between">
+           <div className="bg-cloud p-4 rounded-md flex items-center justify-between">
              <div className="flex items-center gap-3">
                <AlertTriangle className="w-5 h-5 text-amber" />
                <span className="text-navy text-sm">Upgrade to unlock AI features and unlimited projects.</span>
@@ -110,11 +110,11 @@ function BillingContent() {
            </div>
         ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="p-4 bg-cloud rounded-lg">
+                <div className="p-4 bg-cloud rounded-md">
                     <span className="text-xs text-gray-500 block mb-1">Billing Period</span>
                     <span className="text-navy font-bold capitalize">{subscription?.interval || 'Monthly'}</span>
                 </div>
-                <div className="p-4 bg-cloud rounded-lg">
+                <div className="p-4 bg-cloud rounded-md">
                     <span className="text-xs text-gray-500 block mb-1">Next Payment</span>
                     <span className="text-navy font-bold">
                         {subscription?.currentPeriodEnd 
@@ -128,18 +128,18 @@ function BillingContent() {
 
       {/* Invoices */}
       {subscription?.invoices?.length > 0 && (
-          <div className="bg-white rounded-xl border border-border p-6 shadow-sm">
+          <div className="bg-white rounded-md border border-border p-6 shadow-sm">
             <h2 className="text-lg font-bold text-navy mb-4 flex items-center gap-2">
                 <FileText className="w-5 h-5" />
                 Invoice History
             </h2>
             <div className="space-y-2">
                 {subscription.invoices.map((inv: any) => (
-                    <div key={inv.id} className="flex items-center justify-between p-3 hover:bg-cloud rounded-lg transition-colors border border-transparent hover:border-border">
+                    <div key={inv.id} className="flex items-center justify-between p-3 hover:bg-cloud rounded-md transition-colors border border-transparent hover:border-border">
                         <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                                <CheckCircle className="w-4 h-4" />
-                            </div>
+                          <div className="w-8 h-8 rounded-md bg-green-100 flex items-center justify-center text-green-600">
+                            <CreditCard size={14} />
+                          </div>
                             <div>
                                 <div className="text-sm font-bold text-navy">
                                     {inv.currency} {inv.amount.toLocaleString()}

@@ -55,21 +55,21 @@ export function SpecConversionAnimation() {
         </button>
       </div>
 
-      <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-white/5 p-6">
+      <div className="relative rounded-md overflow-hidden border border-white/10 bg-white/5 p-6">
         <AnimatePresence>
           {phase !== 'doc' && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="relative h-56 rounded-2xl border border-white/10 bg-navy overflow-hidden"
+              className="relative h-56 rounded-md border border-white/10 bg-navy overflow-hidden"
             >
               <div className="overflow-x-auto h-full">
                 <div className="relative min-w-[600px] h-full mx-auto">
                   <motion.div
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0, transition: { duration: 0.4 } }}
-                    className="absolute top-4 left-4 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs text-white"
+                    className="absolute top-4 left-4 rounded-md border border-white/10 bg-white/10 px-3 py-1 text-xs text-white"
                   >
                     Product Canvas
                   </motion.div>
@@ -77,7 +77,7 @@ export function SpecConversionAnimation() {
                   variants={appear}
                   initial="initial"
                   animate="enter"
-                  className="absolute w-[140px] h-[52px] rounded-xl border border-white/10 bg-white/10 backdrop-blur-sm overflow-hidden"
+                  className="absolute w-[140px] h-[52px] rounded-md border border-white/10 bg-white/10 backdrop-blur-sm overflow-hidden"
                   style={{ left: 70, top: 86 }}
                 >
                   <div className="flex h-full items-center gap-3 px-3">
@@ -93,7 +93,7 @@ export function SpecConversionAnimation() {
                   custom={1}
                   initial="initial"
                   animate="enter"
-                  className="absolute w-[140px] h-[52px] rounded-xl border border-white/10 bg-white/10 backdrop-blur-sm overflow-hidden"
+                  className="absolute w-[140px] h-[52px] rounded-md border border-white/10 bg-white/10 backdrop-blur-sm overflow-hidden"
                   style={{ left: 230, top: 86 }}
                 >
                   <div className="flex h-full items-center gap-3 px-3">
@@ -109,7 +109,7 @@ export function SpecConversionAnimation() {
                   custom={2}
                   initial="initial"
                   animate="enter"
-                  className="absolute w-[140px] h-[52px] rounded-xl border border-white/10 bg-white/10 backdrop-blur-sm overflow-hidden"
+                  className="absolute w-[140px] h-[52px] rounded-md border border-white/10 bg-white/10 backdrop-blur-sm overflow-hidden"
                   style={{ left: 390, top: 86 }}
                 >
                   <div className="flex h-full items-center gap-3 px-3">
@@ -154,7 +154,7 @@ export function SpecConversionAnimation() {
                 variants={appear}
                 initial="initial"
                 animate="enter"
-                className="rounded-2xl border border-white/10 bg-white/5 p-3 font-mono text-[10px] overflow-hidden"
+                className="rounded-md border border-white/10 bg-white/5 p-3 font-mono text-[10px] overflow-hidden"
               >
                 <div className="text-cyan text-[10px] font-bold mb-2 truncate">Data Model (Prisma)</div>
                 <pre className="text-gray-300 leading-tight scrollbar-none overflow-x-auto">
@@ -174,7 +174,7 @@ model Booking {
                 variants={appear}
                 initial="initial"
                 animate="enter"
-                className="rounded-2xl border border-white/10 bg-white/5 p-3 font-mono text-[10px] overflow-hidden"
+                className="rounded-md border border-white/10 bg-white/5 p-3 font-mono text-[10px] overflow-hidden"
               >
                 <div className="text-cyan text-[10px] font-bold mb-2 truncate">API Routes (Next.js)</div>
                 <div className="space-y-2 text-gray-300">
@@ -187,7 +187,7 @@ model Booking {
                 variants={appear}
                 initial="initial"
                 animate="enter"
-                className="rounded-2xl border border-white/10 bg-white/5 p-3 font-mono text-[10px] overflow-hidden"
+                className="rounded-md border border-white/10 bg-white/5 p-3 font-mono text-[10px] overflow-hidden"
               >
                 <div className="text-cyan text-[10px] font-bold mb-2 truncate">UI Components (React)</div>
                 <div className="space-y-2 text-gray-300">

@@ -50,7 +50,7 @@ export function DeletableEdge({
           className="nodrag nopan"
         >
           <button
-            className="w-5 h-5 bg-white border border-gray-200 rounded-full text-gray-400 hover:text-red-500 hover:border-red-500 hover:bg-red-50 flex items-center justify-center shadow-sm transition-all duration-200 z-50"
+            className="w-5 h-5 bg-white border border-gray-200 rounded-md text-gray-400 hover:text-red-500 hover:border-red-500 hover:bg-red-50 flex items-center justify-center shadow-sm transition-all duration-200 z-50"
             onClick={onEdgeClick}
             aria-label="Delete Edge"
             title="Unlink"

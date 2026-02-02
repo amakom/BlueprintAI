@@ -110,7 +110,7 @@ export function TeamMembersList({ teamId, currentUserRole }: TeamMembersListProp
   const canManage = currentUserRole === 'OWNER' || currentUserRole === 'ADMIN';
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-border">
+    <div className="bg-white rounded-md shadow-sm border border-border">
       <div className="p-6 border-b border-border flex justify-between items-center">
         <div>
           <h2 className="text-lg font-semibold text-navy">Team Members</h2>
@@ -130,24 +130,24 @@ export function TeamMembersList({ teamId, currentUserRole }: TeamMembersListProp
         {/* Members */}
         {members.map((member) => (
           <div key={member.id} className="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-navy/10 flex items-center justify-center text-navy font-bold overflow-hidden">
-                {member.user.image ? (
-                  <img src={member.user.image} alt={member.user.name || ''} className="w-full h-full object-cover" />
-                ) : (
-                  (member.user.name?.[0] || member.user.email[0]).toUpperCase()
-                )}
-              </div>
+            <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-md bg-navy/10 flex items-center justify-center text-navy font-bold overflow-hidden">
+                  {member.user.image ? (
+                    <img src={member.user.image} alt={member.user.name || 'User'} className="w-full h-full object-cover" />
+                  ) : (
+                    (member.user.name?.[0] || member.user.email[0]).toUpperCase()
+                  )}
+                </div>
               <div>
                 <p className="font-medium text-navy">{member.user.name || 'User'}</p>
                 <p className="text-xs text-gray-500">{member.user.email}</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <span className={`px-2 py-1 rounded-full text-xs font-medium border ${
-                member.role === 'OWNER' ? 'bg-amber/10 text-amber-700 border-amber/20' :
-                member.role === 'ADMIN' ? 'bg-purple-100 text-purple-700 border-purple-200' :
-                'bg-gray-100 text-gray-600 border-gray-200'
+              <span className={`text-[10px] px-2 py-0.5 rounded-md border ${
+                member.role === 'OWNER' ? 'bg-amber-50 text-amber-700 border-amber-200' : 
+                member.role === 'ADMIN' ? 'bg-purple-50 text-purple-700 border-purple-200' :
+                'bg-slate-50 text-slate-600 border-slate-200'
               }`}>
                 {member.role}
               </span>
@@ -168,7 +168,7 @@ export function TeamMembersList({ teamId, currentUserRole }: TeamMembersListProp
         {invitations.map((invite) => (
           <div key={invite.id} className="p-4 flex items-center justify-between bg-gray-50/50">
              <div className="flex items-center gap-3 opacity-70">
-              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
+              <div className="w-10 h-10 rounded-md bg-gray-200 flex items-center justify-center text-gray-500">
                 <Clock className="w-5 h-5" />
               </div>
               <div>
@@ -177,7 +177,7 @@ export function TeamMembersList({ teamId, currentUserRole }: TeamMembersListProp
               </div>
             </div>
             <div className="flex items-center gap-4">
-               <span className="px-2 py-1 rounded-full text-xs font-medium border bg-gray-100 text-gray-500 border-gray-200">
+               <span className="px-2 py-1 rounded-md text-xs font-medium border bg-gray-100 text-gray-500 border-gray-200">
                 {invite.role}
               </span>
               <button className="text-xs text-gray-400 hover:text-red-500">Revoke</button>

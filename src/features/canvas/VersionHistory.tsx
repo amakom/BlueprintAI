@@ -64,13 +64,13 @@ export function VersionHistory({ onClose }: { onClose: () => void }) {
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {loading ? (
             <div className="flex justify-center py-8">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-cyan-500"></div>
+                <div className="animate-spin rounded-md h-6 w-6 border-b-2 border-cyan-500"></div>
             </div>
         ) : versions.length === 0 ? (
             <p className="text-center text-gray-400 text-sm py-8">No versions found.</p>
         ) : (
             versions.map(v => (
-                <div key={v.id} className="p-3 rounded-lg border border-gray-100 hover:border-cyan-200 hover:bg-cyan-50/30 group transition-all">
+                <div key={v.id} className="p-3 rounded-md border border-gray-100 hover:border-cyan-200 hover:bg-cyan-50/30 group transition-all">
                     <div className="flex justify-between items-start mb-1">
                         <span className="text-xs font-medium text-gray-900">
                             {new Date(v.createdAt).toLocaleDateString()}

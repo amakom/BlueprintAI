@@ -170,7 +170,7 @@ export function ProductDemoAnimation() {
   }, [])
 
   return (
-    <div ref={containerRef} className="w-full max-w-6xl mx-auto aspect-[16/10] bg-[#F6F8FB] rounded-xl border border-slate-200 overflow-hidden relative shadow-2xl ring-1 ring-slate-900/5 font-sans select-none">
+    <div ref={containerRef} className="w-full max-w-6xl mx-auto aspect-[16/10] bg-[#F6F8FB] rounded-md border border-slate-200 overflow-hidden relative shadow-2xl ring-1 ring-slate-900/5 font-sans select-none">
       <div 
         className="absolute inset-0 origin-top-left"
         style={{ 
@@ -210,16 +210,16 @@ export function ProductDemoAnimation() {
           {/* Menu */}
           <div className="p-4 space-y-2 mt-2">
             <div className="text-[10px] font-bold text-slate-500 mb-4 px-2 uppercase tracking-wider">Menu</div>
-            <div className="flex items-center gap-3 px-3 py-2.5 text-sm text-slate-400 hover:bg-white/5 rounded-lg">
+            <div className="flex items-center gap-3 px-3 py-2.5 text-sm text-slate-400 hover:bg-white/5 rounded-md">
               <Home size={18} /> Home
             </div>
-            <div className={`flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg font-medium transition-colors ${step < 3 ? 'bg-cyan text-navy' : 'text-slate-400'}`}>
+            <div className={`flex items-center gap-3 px-3 py-2.5 text-sm rounded-md font-medium transition-colors ${step < 3 ? 'bg-cyan text-navy' : 'text-slate-400'}`}>
               <Folder size={18} /> Projects
             </div>
-            <div className="flex items-center gap-3 px-3 py-2.5 text-sm text-slate-400 hover:bg-white/5 rounded-lg">
+            <div className="flex items-center gap-3 px-3 py-2.5 text-sm text-slate-400 hover:bg-white/5 rounded-md">
               <Users size={18} /> Team
             </div>
-            <div className="flex items-center gap-3 px-3 py-2.5 text-sm text-slate-400 hover:bg-white/5 rounded-lg">
+            <div className="flex items-center gap-3 px-3 py-2.5 text-sm text-slate-400 hover:bg-white/5 rounded-md">
               <Settings size={18} /> Settings
             </div>
             
@@ -230,19 +230,19 @@ export function ProductDemoAnimation() {
                 <Plus size={14} className="text-cyan" />
               </div>
               <div className="space-y-1">
-                <div className="px-3 py-2 text-sm text-cyan bg-white/5 rounded-lg flex items-center gap-2 cursor-pointer">
+                <div className="px-3 py-2 text-sm text-cyan bg-white/5 rounded-md flex items-center gap-2 cursor-pointer">
                    <div className="w-4 h-4 rounded-sm border border-cyan/30 flex items-center justify-center bg-cyan/10">
                      <span className="text-[8px] font-bold">M</span>
                    </div>
                    Monra
                 </div>
-                <div className="px-3 py-2 text-sm text-slate-400 hover:text-white cursor-pointer hover:bg-white/5 rounded-lg flex items-center gap-2">
+                <div className="px-3 py-2 text-sm text-slate-400 hover:text-white cursor-pointer hover:bg-white/5 rounded-md flex items-center gap-2">
                    <div className="w-4 h-4 rounded-sm border border-slate-700 flex items-center justify-center bg-slate-800">
                      <span className="text-[8px] font-bold">F</span>
                    </div>
                    Fintech App
                 </div>
-                <div className="px-3 py-2 text-sm text-slate-400 hover:text-white cursor-pointer hover:bg-white/5 rounded-lg flex items-center gap-2">
+                <div className="px-3 py-2 text-sm text-slate-400 hover:text-white cursor-pointer hover:bg-white/5 rounded-md flex items-center gap-2">
                    <div className="w-4 h-4 rounded-sm border border-slate-700 flex items-center justify-center bg-slate-800">
                      <span className="text-[8px] font-bold">E</span>
                    </div>
@@ -255,7 +255,7 @@ export function ProductDemoAnimation() {
           {/* User Profile */}
           <div className="p-4 border-t border-white/10 mt-auto">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-cyan text-navy flex items-center justify-center font-bold text-xs">L</div>
+              <div className="w-8 h-8 rounded-md bg-cyan text-navy flex items-center justify-center font-bold text-xs">L</div>
               <div className="flex-1 overflow-hidden">
                 <div className="text-sm font-medium text-white truncate">Lotanna</div>
               </div>
@@ -283,22 +283,22 @@ export function ProductDemoAnimation() {
                 <h1 className="text-2xl font-bold text-slate-900">Projects</h1>
                 <p className="text-sm text-slate-500">Manage and organize your product blueprints</p>
               </div>
-              <button className="bg-[#0B1F33] text-white px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 shadow-lg shadow-navy/20">
+              <button className="bg-[#0B1F33] text-white px-4 py-2.5 rounded-md text-sm font-medium flex items-center gap-2 shadow-lg shadow-navy/20">
                 <Plus size={16} /> New Project
               </button>
             </div>
 
             {/* Dashboard Empty State */}
             <div className="flex-1 p-8 flex items-center justify-center">
-              <div className="w-full h-full border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-white/50">
-                <div className="w-16 h-16 bg-cyan/10 rounded-full flex items-center justify-center mb-6">
+              <div className="w-full h-full border-2 border-dashed border-slate-200 rounded-md flex flex-col items-center justify-center bg-white/50">
+                <div className="w-16 h-16 bg-cyan/10 rounded-md flex items-center justify-center mb-6">
                   <Sparkles className="w-8 h-8 text-cyan" />
                 </div>
                 <h2 className="text-xl font-bold text-slate-900 mb-2">Start Your First Blueprint</h2>
                 <p className="text-slate-500 max-w-md text-center mb-8">
                   Create a new project to start visualizing your product requirements. Use our AI assistant to generate your initial structure in seconds.
                 </p>
-                <button className="bg-cyan text-navy px-6 py-3 rounded-lg font-bold flex items-center gap-2 hover:bg-cyan/90 transition-colors">
+                <button className="bg-cyan text-navy px-6 py-3 rounded-md font-bold flex items-center gap-2 hover:bg-cyan/90 transition-colors">
                   Create Project <ChevronRight size={16} />
                 </button>
               </div>
@@ -318,7 +318,7 @@ export function ProductDemoAnimation() {
                   initial={{ scale: 0.95, opacity: 0, y: 10 }}
                   animate={{ scale: 1, opacity: 1, y: 0 }}
                   exit={{ scale: 0.95, opacity: 0, y: 10 }}
-                  className="bg-white rounded-xl shadow-2xl w-[500px] overflow-hidden"
+                  className="bg-white rounded-md shadow-2xl w-[500px] overflow-hidden"
                 >
                   {/* Modal Header */}
                   <div className="p-6 border-b border-slate-100 flex justify-between items-center">
@@ -335,13 +335,13 @@ export function ProductDemoAnimation() {
                     >
                       <div>
                         <label className="block text-xs font-bold text-slate-700 mb-1.5">Project Name <span className="text-red-500">*</span></label>
-                        <div className="h-10 px-3 rounded-lg border border-cyan shadow-[0_0_0_1px_rgba(46,230,214,1)] flex items-center text-sm text-slate-900">
+                        <div className="h-10 px-3 rounded-md border border-cyan shadow-[0_0_0_1px_rgba(46,230,214,1)] flex items-center text-sm text-slate-900">
                           {projectName}<span className="animate-pulse">|</span>
                         </div>
                       </div>
                       <div>
                         <label className="block text-xs font-bold text-slate-700 mb-1.5">Description <span className="text-slate-400 font-normal">(Optional)</span></label>
-                        <div className="h-24 p-3 rounded-lg border border-slate-200 bg-slate-50 text-sm text-slate-900">
+                        <div className="h-24 p-3 rounded-md border border-slate-200 bg-slate-50 text-sm text-slate-900">
                           {projectDesc}
                         </div>
                       </div>
@@ -358,28 +358,28 @@ export function ProductDemoAnimation() {
                       <h4 className="text-sm font-bold text-slate-900 mb-4">What are you building?</h4>
                       <div className="grid grid-cols-2 gap-3">
                         {/* Web App */}
-                        <div className="p-3 border border-slate-200 rounded-xl hover:border-cyan hover:bg-cyan/5 transition-colors cursor-pointer group">
+                        <div className="p-3 border border-slate-200 rounded-md hover:border-cyan hover:bg-cyan/5 transition-colors cursor-pointer group">
                           <Globe className="w-5 h-5 text-slate-400 group-hover:text-cyan mb-2" />
                           <div className="font-bold text-sm text-slate-900">Web App</div>
                           <div className="text-[10px] text-slate-500">SaaS, Dashboard</div>
                         </div>
 
                         {/* Mobile App */}
-                        <div className={`p-3 border rounded-xl transition-all cursor-pointer ${selectedPlatform === 'mobile' ? 'border-cyan bg-cyan/5 ring-1 ring-cyan' : 'border-slate-200'}`}>
+                        <div className={`p-3 border rounded-md transition-all cursor-pointer ${selectedPlatform === 'mobile' ? 'border-cyan bg-cyan/5 ring-1 ring-cyan' : 'border-slate-200'}`}>
                           <Smartphone className={`w-5 h-5 mb-2 ${selectedPlatform === 'mobile' ? 'text-cyan' : 'text-slate-400'}`} />
                           <div className="font-bold text-sm text-slate-900">Mobile App</div>
                           <div className="text-[10px] text-slate-500">iOS, Android</div>
                         </div>
 
                         {/* Platform */}
-                        <div className="p-3 border border-slate-200 rounded-xl hover:border-cyan hover:bg-cyan/5 transition-colors cursor-pointer group">
+                        <div className="p-3 border border-slate-200 rounded-md hover:border-cyan hover:bg-cyan/5 transition-colors cursor-pointer group">
                           <Layout className="w-5 h-5 text-slate-400 group-hover:text-cyan mb-2" />
                           <div className="font-bold text-sm text-slate-900">Platform</div>
                           <div className="text-[10px] text-slate-500">Multi-sided, API</div>
                         </div>
 
                          {/* Other */}
-                        <div className="p-3 border border-slate-200 rounded-xl hover:border-cyan hover:bg-cyan/5 transition-colors cursor-pointer group">
+                        <div className="p-3 border border-slate-200 rounded-md hover:border-cyan hover:bg-cyan/5 transition-colors cursor-pointer group">
                           <Box className="w-5 h-5 text-slate-400 group-hover:text-cyan mb-2" />
                           <div className="font-bold text-sm text-slate-900">Other</div>
                           <div className="text-[10px] text-slate-500">Custom, Hardware</div>
@@ -391,7 +391,7 @@ export function ProductDemoAnimation() {
                   {/* Modal Footer */}
                   <div className="p-6 border-t border-slate-100 flex justify-between items-center bg-slate-50/50">
                     <button className="text-sm font-medium text-slate-500 hover:text-slate-900">Cancel</button>
-                    <button className="bg-[#0B1F33] text-white px-6 py-2 rounded-lg text-sm font-bold flex items-center gap-2">
+                    <button className="bg-[#0B1F33] text-white px-6 py-2 rounded-md text-sm font-bold flex items-center gap-2">
                       {step === 1 ? 'Next' : 'Create Project'} <ChevronRight size={14} />
                     </button>
                   </div>
@@ -416,20 +416,20 @@ export function ProductDemoAnimation() {
                 <span className="text-slate-500">Projects</span>
                 <span className="text-slate-300">/</span>
                 <span className="font-bold text-slate-900">Monra</span>
-                <span className="ml-2 px-2 py-0.5 bg-slate-100 text-[10px] font-bold uppercase rounded-full text-slate-500">Draft</span>
+                <span className="ml-2 px-2 py-0.5 bg-slate-100 text-[10px] font-bold uppercase rounded-md text-slate-500">Draft</span>
               </div>
               
-              <div className="flex bg-slate-100 p-1 rounded-lg">
+              <div className="flex bg-slate-100 p-1 rounded-md">
                 <div className="px-4 py-1.5 rounded-md text-xs font-bold bg-white text-slate-900 shadow-sm">Canvas</div>
                 <div className="px-4 py-1.5 rounded-md text-xs font-medium text-slate-500">Strategy</div>
                 <div className="px-4 py-1.5 rounded-md text-xs font-medium text-slate-500">Specs</div>
               </div>
 
               <div className="flex items-center gap-3">
-                 <div className="flex items-center gap-1.5 px-2 py-1 bg-green-50 text-green-600 rounded-full text-[10px] font-bold border border-green-200">
-                  <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" /> LIVE
+                 <div className="flex items-center gap-1.5 px-2 py-1 bg-green-50 text-green-600 rounded-md text-[10px] font-bold border border-green-200">
+                  <div className="w-1.5 h-1.5 rounded-md bg-green-500 animate-pulse" /> LIVE
                 </div>
-                <button className="bg-[#0B1F33] text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2">
+                <button className="bg-[#0B1F33] text-white px-3 py-1.5 rounded-md text-xs font-bold flex items-center gap-2">
                   <Share2 size={12} /> Share
                 </button>
               </div>
@@ -496,7 +496,7 @@ export function ProductDemoAnimation() {
                                   animate={{ scale: 1, opacity: 1 }}
                                   transition={{ delay: edge.delay + 0.8, type: "spring" }}
                                 >
-                                  <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-md border border-slate-100 cursor-pointer hover:bg-slate-50">
+                                  <div className="w-5 h-5 bg-white rounded-md flex items-center justify-center shadow-md border border-slate-100 cursor-pointer hover:bg-slate-50">
                                     <X size={12} className="text-slate-400" />
                                   </div>
                                 </motion.foreignObject>
@@ -509,10 +509,10 @@ export function ProductDemoAnimation() {
                             initial={{ scale: 0, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ type: "spring", delay: 0.1 }}
-                            className="absolute top-1/2 left-[20px] -translate-y-1/2 w-64 bg-white rounded-lg shadow-xl border-2 border-cyan overflow-hidden z-10"
+                            className="absolute top-1/2 left-[20px] -translate-y-1/2 w-64 bg-white rounded-md shadow-xl border-2 border-cyan overflow-hidden z-10"
                           >
                             <div className="h-8 bg-slate-50 border-b border-slate-100 flex items-center px-3 gap-2">
-                              <div className="w-4 h-4 bg-amber-100 rounded text-amber-600 flex items-center justify-center"><User size={10} /></div>
+                              <div className="w-4 h-4 bg-amber-100 rounded-md text-amber-600 flex items-center justify-center"><User size={10} /></div>
                               <span className="text-xs font-bold text-slate-700">Lotenna Story</span>
                             </div>
                             <div className="p-3">
@@ -539,11 +539,11 @@ export function ProductDemoAnimation() {
                               initial={{ scale: 0, opacity: 0, x: 50 }}
                               animate={{ scale: 1, opacity: 1, x: 0 }}
                               transition={{ type: "spring", delay: node.delay }}
-                              className="absolute left-[600px] w-64 bg-white rounded-lg shadow-lg border border-slate-200 overflow-hidden z-10"
+                              className="absolute left-[600px] w-64 bg-white rounded-md shadow-lg border border-slate-200 overflow-hidden z-10"
                               style={{ top: node.y, marginTop: -40 }}
                             >
                                <div className="h-8 bg-slate-50 border-b border-slate-100 flex items-center px-3 gap-2">
-                                 <div className="w-4 h-4 bg-amber-100 rounded text-amber-600 flex items-center justify-center"><User size={10} /></div>
+                                 <div className="w-4 h-4 bg-amber-100 rounded-md text-amber-600 flex items-center justify-center"><User size={10} /></div>
                                  <span className="text-xs font-bold text-slate-700">Lotenna Story</span>
                                </div>
                                <div className="p-3">
@@ -551,7 +551,7 @@ export function ProductDemoAnimation() {
                                  <div className="text-[10px] text-slate-400">Edit this description...</div>
                                </div>
                                {/* Handles */}
-                               <div className="absolute top-1/2 -left-1 w-2 h-2 bg-slate-300 rounded-full -translate-x-1/2 -translate-y-1/2" />
+                               <div className="absolute top-1/2 -left-1 w-2 h-2 bg-slate-300 rounded-md -translate-x-1/2 -translate-y-1/2" />
                             </motion.div>
                          ))}
                       </motion.div>
@@ -564,7 +564,7 @@ export function ProductDemoAnimation() {
              <div className="w-72 bg-white border-l border-slate-200 flex flex-col">
                 <div className="h-12 border-b border-slate-100 flex items-center px-4 justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 bg-cyan rounded flex items-center justify-center text-navy font-bold text-[10px]">B</div>
+                    <div className="w-5 h-5 bg-cyan rounded-md flex items-center justify-center text-navy font-bold text-[10px]">B</div>
                     <span className="font-bold text-slate-900 text-sm">BlueprintAI</span>
                   </div>
                   <PanelRight size={16} className="text-slate-400" />
@@ -573,10 +573,10 @@ export function ProductDemoAnimation() {
                 <div className="flex-1 p-4 space-y-4">
                   {/* Bot Welcome */}
                   <div className="flex gap-3">
-                    <div className="w-6 h-6 rounded bg-cyan/10 flex items-center justify-center shrink-0 mt-1">
+                    <div className="w-6 h-6 rounded-md bg-cyan/10 flex items-center justify-center shrink-0 mt-1">
                       <Sparkles size={12} className="text-cyan" />
                     </div>
-                    <div className="bg-slate-50 rounded-lg rounded-tl-none p-3 text-xs text-slate-600">
+                    <div className="bg-slate-50 rounded-md rounded-tl-none p-3 text-xs text-slate-600">
                       Hi! I can help you draft your Mobile App PRD. Try asking me to "Generate user stories for login".
                     </div>
                   </div>
@@ -584,10 +584,10 @@ export function ProductDemoAnimation() {
                   {/* User Message */}
                   {aiInput && (
                     <div className="flex gap-3 flex-row-reverse">
-                      <div className="w-6 h-6 rounded bg-purple-100 flex items-center justify-center shrink-0 mt-1">
+                      <div className="w-6 h-6 rounded-md bg-purple-100 flex items-center justify-center shrink-0 mt-1">
                         <User size={12} className="text-purple-600" />
                       </div>
-                      <div className="bg-purple-50 rounded-lg rounded-tr-none p-3 text-xs text-purple-900">
+                      <div className="bg-purple-50 rounded-md rounded-tr-none p-3 text-xs text-purple-900">
                         {aiInput}
                       </div>
                     </div>
@@ -600,10 +600,10 @@ export function ProductDemoAnimation() {
                         animate={{ opacity: 1, y: 0 }}
                         className="flex gap-3"
                       >
-                        <div className="w-6 h-6 rounded bg-cyan/10 flex items-center justify-center shrink-0 mt-1">
+                        <div className="w-6 h-6 rounded-md bg-cyan/10 flex items-center justify-center shrink-0 mt-1">
                           <Sparkles size={12} className="text-cyan" />
                         </div>
-                        <div className="bg-slate-50 rounded-lg rounded-tl-none p-3 text-xs text-slate-600">
+                        <div className="bg-slate-50 rounded-md rounded-tl-none p-3 text-xs text-slate-600">
                           Generating user flow and screens for authentication module...
                         </div>
                       </motion.div>
@@ -612,13 +612,13 @@ export function ProductDemoAnimation() {
 
                 {/* Input Area */}
                 <div className="p-4 border-t border-slate-100">
-                  <div className="bg-slate-50 rounded-lg p-2 flex items-center gap-2 border border-slate-200">
+                  <div className="bg-slate-50 rounded-md p-2 flex items-center gap-2 border border-slate-200">
                     <input 
                       readOnly
                       placeholder="Describe what you want to build..."
                       className="bg-transparent border-none text-xs text-slate-900 placeholder:text-slate-400 flex-1 focus:outline-none"
                     />
-                    <button className={`p-1.5 rounded transition-colors ${aiInput ? 'bg-cyan text-navy' : 'bg-slate-200 text-slate-400'}`}>
+                    <button className={`p-1.5 rounded-md transition-colors ${aiInput ? 'bg-cyan text-navy' : 'bg-slate-200 text-slate-400'}`}>
                       <Send size={12} />
                     </button>
                   </div>

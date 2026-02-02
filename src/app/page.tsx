@@ -312,6 +312,9 @@ export default function LandingPage() {
           </FadeUp>
         </section>
 
+        {/* 🔵 TESTIMONIALS SECTION */}
+        <Testimonials />
+
         {/* 🔵 FINAL CTA */}
         <section className="container mx-auto px-6 py-32 text-center">
           <FadeUp>

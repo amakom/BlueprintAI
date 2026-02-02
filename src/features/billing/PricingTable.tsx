@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Check, Loader2 } from 'lucide-react';
 import { SUBSCRIPTION_PLANS } from '@/lib/plans';
 import { AlertModal } from '@/components/ui/AlertModal';
+import { PricingPreview } from './PricingPreview';
 
 interface PricingTableProps {
     initialTeamId?: string;
@@ -15,6 +16,7 @@ export function PricingTable({ initialTeamId, initialUserEmail, initialUserName 
   const [currency, setCurrency] = useState<'USD' | 'NGN'>('USD');
   const [loading, setLoading] = useState<string | null>(null);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [selectedPreview, setSelectedPreview] = useState<'FREE' | 'PRO' | 'TEAM'>('FREE');
 
   // Use provided data or fall back to mock for demo
   const userEmail = initialUserEmail || 'demo@blueprint.ai';
@@ -23,6 +25,8 @@ export function PricingTable({ initialTeamId, initialUserEmail, initialUserName 
 
   const handleSubscribe = async (planId: string) => {
     setLoading(planId);
+    if (planId === 'PRO') setSelectedPreview('PRO');
+    if (planId === 'TEAM') setSelectedPreview('TEAM');
     try {
       const res = await fetch('/api/billing/subscribe', {
         method: 'POST',
@@ -86,7 +90,12 @@ export function PricingTable({ initialTeamId, initialUserEmail, initialUserName 
 
       <div className="grid md:grid-cols-3 gap-8">
         {plans.map((plan) => (
-          <div key={plan.id} className={`bg-white rounded-xl p-8 border ${plan.highlight ? 'border-cyan shadow-lg ring-1 ring-cyan' : 'border-border'}`}>
+          <div 
+            key={plan.id} 
+            className={`bg-white rounded-xl p-8 border ${plan.highlight ? 'border-cyan shadow-lg ring-1 ring-cyan' : 'border-border'}`}
+            onMouseEnter={() => setSelectedPreview(plan.id as 'FREE' | 'PRO' | 'TEAM')}
+            onFocus={() => setSelectedPreview(plan.id as 'FREE' | 'PRO' | 'TEAM')}
+          >
             <h3 className="text-xl font-bold text-navy mb-2">{plan.name}</h3>
             <div className="flex items-baseline gap-1 mb-6">
               <span className="text-4xl font-bold text-navy">{plan.priceDisplay}</span>
@@ -118,6 +127,8 @@ export function PricingTable({ initialTeamId, initialUserEmail, initialUserName 
           </div>
         ))}
       </div>
+      
+      <PricingPreview selected={selectedPreview} />
 
       <AlertModal
         isOpen={!!alertMessage}

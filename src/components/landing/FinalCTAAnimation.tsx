@@ -1,0 +1,107 @@
+ 'use client'
+ import { useEffect, useState } from 'react'
+ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+ import Link from 'next/link'
+ 
+ type Phase = 'messy' | 'align' | 'cta'
+ 
+ export function FinalCTAAnimation() {
+   const reduce = useReducedMotion()
+   const [phase, setPhase] = useState<Phase>('messy')
+ 
+   useEffect(() => {
+     const t1 = window.setTimeout(() => setPhase('align'), reduce ? 0 : 1400)
+     const t2 = window.setTimeout(() => setPhase('cta'), reduce ? 0 : 2600)
+     return () => {
+       clearTimeout(t1)
+       clearTimeout(t2)
+     }
+   }, [reduce])
+ 
+   const chips = [
+     { id: 'idea-1', text: 'Features?', x: 40, y: 28 },
+     { id: 'idea-2', text: 'Users', x: 220, y: 70 },
+     { id: 'idea-3', text: 'Edge cases', x: 120, y: 140 },
+     { id: 'idea-4', text: 'Data', x: 360, y: 36 },
+     { id: 'idea-5', text: 'Flows', x: 460, y: 120 },
+     { id: 'idea-6', text: 'KPIs', x: 300, y: 180 },
+   ]
+ 
+   return (
+     <div className="relative mx-auto max-w-6xl">
+       <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-white/5 p-6">
+         <div className="text-center">
+           <div className="text-sm font-bold text-cyan">From idea to blueprint</div>
+           <div className="mt-1 text-xl font-extrabold text-white">Clarity without the noise</div>
+         </div>
+ 
+         <div className="relative mt-6 h-56 rounded-2xl border border-white/10 bg-navy overflow-hidden">
+           <div
+             className="absolute inset-0 opacity-[0.10]"
+             style={{
+               backgroundImage:
+                 'linear-gradient(#334155 1px, transparent 1px), linear-gradient(90deg, #334155 1px, transparent 1px)',
+               backgroundSize: '40px 40px',
+             }}
+           />
+ 
+           <AnimatePresence>
+             {phase !== 'cta' && (
+               <motion.div
+                 initial={{ opacity: 0 }}
+                 animate={{ opacity: 1 }}
+                 exit={{ opacity: 0 }}
+                 className="absolute inset-0"
+               >
+                 {chips.map((c, i) => (
+                   <motion.div
+                     key={c.id}
+                     initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                     animate={{
+                       opacity: 1,
+                       y: 0,
+                       scale: 1,
+                       left: phase === 'messy' ? c.x : 40 + i * 100,
+                       top: phase === 'messy' ? c.y : 40 + (i % 2) * 60,
+                       transition: { duration: 0.5, delay: i * 0.08 },
+                     }}
+                     className="absolute rounded-full border border-white/10 bg-white/10 text-white text-xs px-3 py-1 backdrop-blur-sm"
+                   >
+                     {c.text}
+                   </motion.div>
+                 ))}
+               </motion.div>
+             )}
+           </AnimatePresence>
+ 
+           <AnimatePresence>
+             {phase === 'cta' && (
+               <motion.div
+                 initial={{ opacity: 0 }}
+                 animate={{ opacity: 1, transition: { duration: 0.6 } }}
+                 exit={{ opacity: 0 }}
+                 className="absolute inset-0 flex items-center justify-center"
+               >
+                 <motion.div
+                   initial={{ scale: 0.98, y: 8 }}
+                   animate={{ scale: 1, y: 0, transition: { duration: 0.5 } }}
+                   className="w-full max-w-2xl rounded-2xl border border-white/10 bg-white/5 p-6 text-center"
+                 >
+                   <div className="text-sm font-bold text-cyan">Product Blueprint</div>
+                   <div className="mt-2 text-2xl font-extrabold text-white">Everything connected and ready</div>
+                   <div className="mt-3 text-sm text-gray-300">Strategy, flows, and specs unified.</div>
+                   <div className="mt-6 flex items-center justify-center gap-4">
+                     <Link href="/dashboard" className="bg-cyan text-navy px-6 py-2 rounded-full font-bold hover:bg-cyan/90 transition-colors">
+                       Turn your idea into an engineering blueprint
+                     </Link>
+                   </div>
+                 </motion.div>
+               </motion.div>
+             )}
+           </AnimatePresence>
+         </div>
+       </div>
+     </div>
+   )
+ }
+ 

@@ -1,5 +1,10 @@
 import Link from 'next/link';
 import { Testimonials } from '@/components/landing/Testimonials';
+import { HeroAnimation } from '@/components/landing/HeroAnimation';
+import { StrategyThinkingAnimation } from '@/components/landing/StrategyThinkingAnimation';
+import { CanvasFlowAnimation } from '@/components/landing/CanvasFlowAnimation';
+import { SpecConversionAnimation } from '@/components/landing/SpecConversionAnimation';
+import { FinalCTAAnimation } from '@/components/landing/FinalCTAAnimation';
 
 export default function LandingPage() {
   return (
@@ -38,6 +43,21 @@ export default function LandingPage() {
             <Link href="/dashboard" className="bg-cyan text-navy px-8 py-4 rounded-full font-bold text-lg hover:bg-white transition-all">Start Free</Link>
             <Link href="/pricing" className="border border-white/20 text-white px-8 py-4 rounded-full font-bold text-lg hover:border-white transition-all">See Plans</Link>
           </div>
+        </section>
+        <section className="container mx-auto">
+          <HeroAnimation />
+        </section>
+        <section className="container mx-auto mt-16">
+          <StrategyThinkingAnimation />
+        </section>
+        <section className="container mx-auto mt-16">
+          <CanvasFlowAnimation />
+        </section>
+        <section className="container mx-auto mt-16">
+          <SpecConversionAnimation />
+        </section>
+        <section className="container mx-auto mt-24">
+          <FinalCTAAnimation />
         </section>
 
         <section className="container mx-auto grid md:grid-cols-3 gap-6">

@@ -59,7 +59,7 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="mt-24 border-t border-white/10">
+      <footer className="mt-24 border-t border-white/10 relative z-10">
         <div className="container mx-auto px-6 py-16 text-center">
           <div className="text-6xl md:text-8xl font-extrabold tracking-tight">BlueprintAI</div>
           <p className="mt-6 text-sm text-gray-500">© 2025 BlueprintAI</p>

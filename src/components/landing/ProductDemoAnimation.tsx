@@ -44,17 +44,27 @@ export function ProductDemoAnimation() {
   const [aiInput, setAiInput] = useState('')
   const [canvasNodes, setCanvasNodes] = useState<boolean>(false)
 
+  const [isMobile, setIsMobile] = useState(false)
+
   // Constants
   const NAME_TEXT = "Monra"
   const DESC_TEXT = "P2P Crypto Exchange"
   const AI_PROMPT = "Generate user stories for login"
+  
+  const BASE_WIDTH = isMobile ? 600 : 1200
+  const BASE_HEIGHT = 750
 
   // Handle Scaling
   useEffect(() => {
     const handleResize = () => {
       if (containerRef.current) {
         const width = containerRef.current.offsetWidth
-        setScale(width / 1200)
+        const mobile = window.innerWidth < 768
+        setIsMobile(mobile)
+        
+        // Use the appropriate base width for scaling calculation
+        const targetBaseWidth = mobile ? 600 : 1200
+        setScale(width / targetBaseWidth)
       }
     }
     
@@ -170,12 +180,12 @@ export function ProductDemoAnimation() {
   }, [])
 
   return (
-    <div ref={containerRef} className="w-full max-w-6xl mx-auto aspect-[16/10] bg-[#F6F8FB] rounded-md border border-slate-200 overflow-hidden relative shadow-2xl ring-1 ring-slate-900/5 font-sans select-none">
+    <div ref={containerRef} className="w-full max-w-6xl mx-auto aspect-[4/5] md:aspect-[16/10] bg-[#F6F8FB] rounded-md border border-slate-200 overflow-hidden relative shadow-2xl ring-1 ring-slate-900/5 font-sans select-none">
       <div 
         className="absolute inset-0 origin-top-left"
         style={{ 
-          width: 1200, 
-          height: 750, 
+          width: BASE_WIDTH, 
+          height: BASE_HEIGHT, 
           transform: `scale(${scale})` 
         }}
       >
@@ -200,7 +210,7 @@ export function ProductDemoAnimation() {
 
       {/* === LAYOUT: SIDEBAR (Persistent) === */}
       <div className="absolute inset-0 flex">
-        <div className="w-64 bg-[#0B1F33] flex flex-col z-20">
+        <div className="hidden md:flex w-64 bg-[#0B1F33] flex-col z-20">
            {/* Logo */}
            <div className="h-16 flex items-center px-6 gap-3">
             <div className="w-8 h-8 bg-cyan rounded-md flex items-center justify-center text-navy font-bold text-lg">B</div>

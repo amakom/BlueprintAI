@@ -4,8 +4,17 @@ import { Testimonials } from '@/components/landing/Testimonials';
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-navy text-white selection:bg-cyan selection:text-navy">
+      {/* Grid Background */}
+      <div 
+        className="fixed inset-0 z-0 pointer-events-none opacity-10"
+        style={{
+          backgroundImage: 'linear-gradient(#334155 1px, transparent 1px), linear-gradient(90deg, #334155 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+          maskImage: 'radial-gradient(circle at center, black 60%, transparent 100%)'
+        }}
+      />
 
-      <nav className="container mx-auto px-6 py-6 flex items-center justify-between">
+      <nav className="container mx-auto px-6 py-6 flex items-center justify-between relative z-10">
         <Link href="/" className="text-2xl font-bold flex items-center gap-2 hover:opacity-90 transition-opacity">
           <div className="w-8 h-8 bg-cyan rounded-md flex items-center justify-center text-navy text-lg font-bold">
             B
@@ -49,6 +58,23 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* Video Player Section */}
+        <section className="container mx-auto mt-24 mb-24 px-6">
+          <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-cyan/10 bg-white/5 aspect-video flex items-center justify-center group cursor-pointer">
+            <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-transparent to-transparent opacity-60"></div>
+            {/* Play Button */}
+            <div className="w-20 h-20 bg-cyan/90 rounded-full flex items-center justify-center pl-1 group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm shadow-lg shadow-cyan/20 z-10">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-navy">
+                <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="absolute bottom-8 left-8 right-8 z-10 text-left">
+               <h3 className="text-2xl font-bold text-white mb-2">See how it works</h3>
+               <p className="text-gray-300">Watch the full demo (2:14)</p>
+            </div>
+          </div>
+        </section>
+
         <section className="mt-20 text-center overflow-hidden">
           <div className="container mx-auto px-6 mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full">
@@ -60,7 +86,7 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="mt-24 border-t border-white/10">
+      <footer className="mt-24 border-t border-white/10 relative z-10">
         <div className="container mx-auto px-6 py-16 text-center">
           <div className="text-6xl md:text-8xl font-extrabold tracking-tight">BlueprintAI</div>
           <p className="mt-6 text-sm text-gray-500">© 2025 BlueprintAI</p>

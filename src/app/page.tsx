@@ -4,6 +4,19 @@ import { Testimonials } from '@/components/landing/Testimonials';
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-navy text-white selection:bg-cyan selection:text-navy">
+      {/* Grid Lines and Dots Background */}
+      <div 
+        className="fixed inset-0 z-0 pointer-events-none" 
+        style={{
+          backgroundImage: `
+            radial-gradient(circle at 1px 1px, #334155 2px, transparent 0),
+            linear-gradient(to right, #334155 1px, transparent 1px),
+            linear-gradient(to bottom, #334155 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px',
+          maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)' // Subtle fade out at bottom for polish
+        }}
+      />
       <nav className="container mx-auto px-6 py-6 flex items-center justify-between">
         <Link href="/" className="text-2xl font-bold flex items-center gap-2 hover:opacity-90 transition-opacity">
           <div className="w-8 h-8 bg-cyan rounded-md flex items-center justify-center text-navy text-lg font-bold">

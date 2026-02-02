@@ -27,7 +27,7 @@ export function FadeUp({ children, className = '', delay = 0, duration = 0.5 }: 
       transition: {
         duration,
         delay,
-        ease: [0.21, 0.47, 0.32, 0.98] // Smooth easing
+        ease: [0.21, 0.47, 0.32, 0.98] as const // Smooth easing
       }
     }
   }
@@ -60,7 +60,7 @@ export function SlideIn({ children, className = '', direction = 'left', delay = 
       transition: {
         duration,
         delay,
-        ease: [0.21, 0.47, 0.32, 0.98]
+        ease: [0.21, 0.47, 0.32, 0.98] as const
       }
     }
   }
@@ -92,7 +92,7 @@ export function ScaleIn({ children, className = '', delay = 0, duration = 0.4 }:
       transition: {
         duration,
         delay,
-        ease: [0.21, 0.47, 0.32, 0.98]
+        ease: [0.21, 0.47, 0.32, 0.98] as const
       }
     }
   }
@@ -147,7 +147,7 @@ export function StaggerItem({ children, className = '' }: { children: ReactNode,
       y: 0,
       transition: {
         duration: 0.5,
-        ease: [0.21, 0.47, 0.32, 0.98]
+        ease: [0.21, 0.47, 0.32, 0.98] as const
       }
     }
   }

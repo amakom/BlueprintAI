@@ -496,13 +496,27 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
             edgeTypes={edgeTypes}
             defaultEdgeOptions={{ type: 'deletable' }}
             fitView
-            className={`${isDarkMode ? 'bg-[#0b1f33]' : 'bg-white'} ${isCommentMode ? 'cursor-crosshair' : ''}`}
+            className={`w-full h-full ${isDarkMode ? 'dark-mode-canvas' : 'light-mode-canvas'} ${isCommentMode ? 'cursor-crosshair' : ''}`}
+            style={{ backgroundColor: isDarkMode ? '#0b1f33' : '#ffffff' }}
             >
             <Background 
+                variant="dots"
                 color={isDarkMode ? "#334155" : "#cbd5e1"} 
                 gap={20} 
+                size={1}
             />
-            {!readOnly && !isPlayMode && <Controls className={isDarkMode ? 'bg-white/10 text-white border-white/20' : ''} />}
+            {!readOnly && !isPlayMode && (
+              <Controls 
+                position="bottom-left"
+                className={isDarkMode ? '[&>button]:!bg-transparent [&>button]:!border-none [&>button:hover]:!bg-white/20 [&_svg]:!fill-white' : ''} 
+                style={isDarkMode ? { 
+                    backgroundColor: 'rgba(255,255,255,0.1)', 
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    borderRadius: '4px',
+                    overflow: 'hidden'
+                } : undefined}
+              />
+            )}
             </ReactFlow>
         </div>
 

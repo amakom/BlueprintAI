@@ -207,6 +207,7 @@ function KPISection({ projectId }: { projectId: string }) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [kpis, setKpis] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   // Fetch KPIs on mount
   useEffect(() => {
@@ -243,7 +244,7 @@ function KPISection({ projectId }: { projectId: string }) {
       }
     } catch (e) {
       console.error("Failed to generate KPIs:", e);
-      alert(e instanceof Error ? e.message : "Failed to generate KPIs");
+      setError(e instanceof Error ? e.message : "Failed to generate KPIs");
     } finally {
       setIsGenerating(false);
     }
@@ -520,7 +521,7 @@ function CompetitorSection({ projectId }: { projectId: string }) {
       }
     } catch (e) {
       console.error("Failed to generate Competitors:", e);
-      alert(e instanceof Error ? e.message : "Failed to generate Competitors");
+      setError(e instanceof Error ? e.message : "Failed to generate Competitors");
     } finally {
       setIsGenerating(false);
     }

@@ -1,16 +1,19 @@
  'use client'
- import { useEffect, useState } from 'react'
- import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
- import Link from 'next/link'
- 
- type Phase = 'messy' | 'align' | 'cta'
- 
- export function FinalCTAAnimation() {
-   const reduce = useReducedMotion()
-   const [phase, setPhase] = useState<Phase>('messy')
- 
-   useEffect(() => {
-     const t1 = window.setTimeout(() => setPhase('align'), reduce ? 0 : 1400)
+ import { useEffect, useState, useRef } from 'react'
+import { motion, AnimatePresence, useReducedMotion, useInView } from 'framer-motion'
+import Link from 'next/link'
+
+type Phase = 'messy' | 'align' | 'cta'
+
+export function FinalCTAAnimation() {
+  const reduce = useReducedMotion()
+  const containerRef = useRef(null)
+  const isInView = useInView(containerRef, { once: true, margin: "-100px" })
+  const [phase, setPhase] = useState<Phase>('messy')
+
+  useEffect(() => {
+    if (!isInView) return
+    const t1 = window.setTimeout(() => setPhase('align'), reduce ? 0 : 1400)
      const t2 = window.setTimeout(() => setPhase('cta'), reduce ? 0 : 2600)
      return () => {
        clearTimeout(t1)

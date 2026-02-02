@@ -165,7 +165,12 @@ Generate a detailed user flow including key screens and user actions.`;
 
     } catch (aiError) {
         console.error('OpenAI generation failed:', aiError);
-        const errorMsg = aiError instanceof Error ? aiError.message : 'Unknown AI error';
+        let errorMsg = aiError instanceof Error ? aiError.message : 'Unknown AI error';
+
+        if (errorMsg.includes('429') || errorMsg.includes('quota')) {
+            errorMsg = "System OpenAI API Key Quota Exceeded. Please check billing at platform.openai.com.";
+        }
+
         return NextResponse.json({ error: `AI Generation Failed: ${errorMsg}` }, { status: 500 });
     }
 

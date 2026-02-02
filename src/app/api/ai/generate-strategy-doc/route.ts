@@ -173,6 +173,12 @@ To become the leading platform in the industry, empowering users to achieve more
 
   } catch (error) {
     console.error('Error generating strategy doc:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    
+    let errorMsg = error instanceof Error ? error.message : 'Unknown AI error';
+    if (errorMsg.includes('429') || errorMsg.includes('quota')) {
+        errorMsg = "System OpenAI API Key Quota Exceeded. Please check billing at platform.openai.com.";
+    }
+
+    return NextResponse.json({ error: `AI Generation Failed: ${errorMsg}` }, { status: 500 });
   }
 }

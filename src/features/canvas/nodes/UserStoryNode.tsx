@@ -73,6 +73,9 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
   // Adjust height on initial render and when local description changes
   // We do NOT call setNodes here to avoid re-rendering loop while typing
   // Instead we just adjust the textarea height visually
+  /* 
+  DISABLE LIVE RESIZE to prevent "jumping" issues reported by user.
+  Height will be updated onBlur via commitChanges.
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
@@ -82,7 +85,8 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
         textarea.style.height = `${Math.max(scrollHeight, 60)}px`;
         textarea.style.minHeight = '60px';
     }
-  }, [localDescription]);
+  }, [localDescription]); 
+  */
 
   const onLabelChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setLocalLabel(evt.target.value);

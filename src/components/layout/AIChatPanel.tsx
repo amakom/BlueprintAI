@@ -95,11 +95,7 @@ export function AIChatPanel() {
             message: error instanceof Error ? error.message : 'Something went wrong during AI generation.' 
         });
         
-        // Also add to chat history for record
-        setMessages(prev => [...prev, { 
-            role: 'assistant', 
-            content: `Error: ${error instanceof Error ? error.message : 'Something went wrong'}` 
-        }]);
+        // Removed chat message error to prevent duplication and satisfy user request for centered alerts only
     } finally {
         setIsGenerating(false);
     }

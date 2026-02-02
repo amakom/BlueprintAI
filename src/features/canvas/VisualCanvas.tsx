@@ -4,6 +4,7 @@ import {
   ReactFlow, 
   Controls, 
   Background, 
+  BackgroundVariant,
   Panel,
   NodeTypes,
   EdgeTypes,

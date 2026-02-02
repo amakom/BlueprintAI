@@ -178,14 +178,14 @@ export function HeroAnimation() {
              </motion.div>
  
              <motion.div
-              variants={streamVariants}
-              initial="initial"
-              animate="enter"
-              className="rounded-md border border-white/10 bg-white/5 p-4"
-            >
-              <div className="text-xs font-bold text-cyan">Visual Canvas</div>
-              <div className="mt-3 relative h-40 w-full overflow-hidden">
-                <div className="w-full h-full origin-top-left sm:scale-100 scale-[0.85]">
+               variants={streamVariants}
+               initial="initial"
+               animate="enter"
+               className="rounded-md border border-white/10 bg-white/5 p-4"
+             >
+               <div className="text-xs font-bold text-cyan">Visual Flow</div>
+               <div className="mt-3 relative h-40 w-full overflow-hidden">
+                 <div className="w-full h-full origin-top-left sm:scale-100 scale-[0.85]">
                 {/* SVG Connections */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
                   <motion.path
@@ -255,7 +255,7 @@ export function HeroAnimation() {
               animate="enter"
               className="rounded-md border border-white/10 bg-white/5 p-4"
             >
-              <div className="text-xs font-bold text-cyan">Engineering Spec</div>
+              <div className="text-xs font-bold text-cyan">Technical Plan</div>
               <div className="mt-3 space-y-2 font-mono">
                 <motion.div
                   custom={0}
@@ -304,9 +304,9 @@ export function HeroAnimation() {
               className="relative w-full max-w-3xl rounded-md border border-white/10 bg-white/5 p-6"
             >
               <div className="text-center">
-                <div className="text-sm font-bold text-cyan">Product Blueprint</div>
-                <div className="mt-2 text-2xl font-extrabold text-white">Strategy × Canvas × Spec</div>
-                <div className="mt-3 text-sm text-gray-400">Unified, developer-ready output</div>
+                <div className="text-sm font-bold text-cyan">Complete Plan</div>
+                <div className="mt-2 text-2xl font-extrabold text-white">Strategy × Visuals × Tasks</div>
+                <div className="mt-3 text-sm text-gray-400">Ready for handoff</div>
               </div>
               <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
                <div className="rounded-md border border-white/10 bg-white/5 p-4 text-xs">
@@ -316,7 +316,7 @@ export function HeroAnimation() {
                  Flow, Screens, Stories
                </div>
                <div className="rounded-md border border-white/10 bg-white/5 p-4 text-xs">
-                 Models, APIs, Contracts
+                 Data, APIs, Logic
                </div>
              </div>
               <motion.div

@@ -71,7 +71,7 @@ export function SpecConversionAnimation() {
                     animate={{ opacity: 1, y: 0, transition: { duration: 0.4 } }}
                     className="absolute top-4 left-4 rounded-md border border-white/10 bg-white/10 px-3 py-1 text-xs text-white"
                   >
-                    Product Canvas
+                    Product Plan
                   </motion.div>
                 <motion.div
                   variants={appear}
@@ -189,7 +189,7 @@ model Booking {
                 animate="enter"
                 className="rounded-md border border-white/10 bg-white/5 p-3 font-mono text-[10px] overflow-hidden"
               >
-                <div className="text-cyan text-[10px] font-bold mb-2 truncate">UI Components (React)</div>
+                <div className="text-cyan text-[10px] font-bold mb-2 truncate">Screen Components</div>
                 <div className="space-y-2 text-gray-300">
                   <div className="truncate">LoginForm</div>
                   <div className="truncate">BookingList</div>

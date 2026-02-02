@@ -8,13 +8,13 @@ const TESTIMONIALS = [
     name: "Sarah Chen",
     role: "Product Manager at TechFlow",
     image: "https://i.pravatar.cc/150?u=sarah",
-    content: "BlueprintAI has completely transformed how we write PRDs. The AI suggestions are spot on and save us hours of work every week."
+    content: "BlueprintAI has completely transformed how we plan products. The AI suggestions are spot on and save us hours of work every week."
   },
   {
     name: "Michael Ross",
     role: "Frontend Lead at Vercel",
     image: "https://i.pravatar.cc/150?u=michael",
-    content: "The visual canvas is a game changer. Being able to map out flows and generate tickets directly from them is exactly what we needed."
+    content: "The visual flow is a game changer. Being able to map out ideas and create tasks directly from them is exactly what we needed."
   },
   {
     name: "Jessica Stark",
@@ -26,7 +26,7 @@ const TESTIMONIALS = [
     name: "David Kim",
     role: "Senior PM at Growth.io",
     image: "https://i.pravatar.cc/150?u=david",
-    content: "I was skeptical about AI for documentation, but BlueprintAI proved me wrong. It's like having a senior PM pair writing with you."
+    content: "I was skeptical about AI for planning, but BlueprintAI proved me wrong. It's like having a senior partner writing with you."
   },
   {
     name: "Emily Watson",
@@ -38,7 +38,7 @@ const TESTIMONIALS = [
     name: "James Carter",
     role: "Engineering Manager at BuildIt",
     image: "https://i.pravatar.cc/150?u=james",
-    content: "Our sprint planning time has been cut in half. The automated ticket generation from user stories is a massive productivity boost."
+    content: "Our planning time has been cut in half. The automated task creation from user stories is a massive productivity boost."
   }
 ];
 

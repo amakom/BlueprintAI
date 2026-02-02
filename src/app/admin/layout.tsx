@@ -28,10 +28,18 @@ export default async function AdminLayout({
       {/* Admin Sidebar */}
       <aside className="w-64 bg-navy text-white flex flex-col">
         <div className="p-6 border-b border-white/10">
-            <h1 className="text-xl font-bold flex items-center gap-2">
-                <ShieldAlert className="text-amber" />
-                Admin Panel
-            </h1>
+            <Link href="/" className="block">
+              <h1 className="text-xl font-bold flex items-center gap-2 hover:opacity-90 transition-opacity">
+                  <div className="w-8 h-8 bg-cyan rounded-md flex items-center justify-center text-navy font-bold">
+                    B
+                  </div>
+                  BlueprintAI
+              </h1>
+            </Link>
+            <div className="mt-4 flex items-center gap-2 text-amber">
+               <ShieldAlert className="w-4 h-4" />
+               <span className="text-xs font-semibold uppercase tracking-wider">Admin Panel</span>
+            </div>
             <p className="text-xs text-cyan mt-1">System Owner</p>
         </div>
         

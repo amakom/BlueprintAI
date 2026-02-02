@@ -43,7 +43,15 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-cloud">
       <div className="bg-white p-8 rounded-xl shadow-sm border border-border w-full max-w-md">
-        <h1 className="text-2xl font-bold text-navy mb-6 text-center">Login to BlueprintAI</h1>
+        <div className="flex justify-center mb-6">
+          <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+            <div className="w-8 h-8 bg-cyan rounded-md flex items-center justify-center text-navy text-lg font-bold">
+              B
+            </div>
+            <span className="text-xl font-bold text-navy">BlueprintAI</span>
+          </Link>
+        </div>
+        <h1 className="text-2xl font-bold text-navy mb-6 text-center">Welcome Back</h1>
         
         {error && (
           <div className="mb-4 p-3 bg-red-100 border border-red-200 text-red-700 rounded-md text-sm">

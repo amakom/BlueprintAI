@@ -5,10 +5,12 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-navy text-white selection:bg-cyan selection:text-navy">
       <nav className="container mx-auto px-6 py-6 flex items-center justify-between">
-        <div className="text-2xl font-bold flex items-center gap-2">
-          <div className="w-8 h-8 bg-cyan rounded-md"></div>
+        <Link href="/" className="text-2xl font-bold flex items-center gap-2 hover:opacity-90 transition-opacity">
+          <div className="w-8 h-8 bg-cyan rounded-md flex items-center justify-center text-navy text-lg font-bold">
+            B
+          </div>
           BlueprintAI
-        </div>
+        </Link>
         <div className="flex items-center gap-6">
           <Link href="/login" className="text-gray-300 hover:text-white transition-colors">Login</Link>
           <Link href="/dashboard" className="bg-cyan text-navy px-5 py-2 rounded-full font-bold hover:bg-white transition-colors">Get Started</Link>

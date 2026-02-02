@@ -20,6 +20,16 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Local state for performance
+  const [localLabel, setLocalLabel] = useState(data.label);
+  const [localDescription, setLocalDescription] = useState(data.description || '');
+
+  // Sync local state with prop data (in case of external updates)
+  useEffect(() => {
+    setLocalLabel(data.label);
+    setLocalDescription(data.description || '');
+  }, [data.label, data.description]);
   
   // Auto-resize textarea and node height logic
   const adjustHeight = useCallback(() => {
@@ -63,26 +73,27 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
   // Adjust height on initial render and when value changes
   useEffect(() => {
     adjustHeight();
-  }, [data.description, adjustHeight]);
+  }, [localDescription, adjustHeight]);
 
-  const updateLabel = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
+  const onLabelChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setLocalLabel(evt.target.value);
+  };
+
+  const onDescriptionChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setLocalDescription(evt.target.value);
+  };
+
+  const commitChanges = useCallback(() => {
     setNodes((nodes) => nodes.map((node) => {
       if (node.id === id) {
-        return { ...node, data: { ...node.data, label: evt.target.value } };
+        if (node.data.label === localLabel && node.data.description === localDescription) {
+            return node;
+        }
+        return { ...node, data: { ...node.data, label: localLabel, description: localDescription } };
       }
       return node;
     }));
-  }, [id, setNodes]);
-
-  const updateDescription = useCallback((evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setNodes((nodes) => nodes.map((node) => {
-      if (node.id === id) {
-        return { ...node, data: { ...node.data, description: evt.target.value } };
-      }
-      return node;
-    }));
-    adjustHeight();
-  }, [id, setNodes, adjustHeight]);
+  }, [id, setNodes, localLabel, localDescription]);
 
   const handleDelete = useCallback(() => {
     deleteElements({ nodes: [{ id }] });
@@ -262,16 +273,18 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
       <div className="p-2 flex-1 flex flex-col">
         <input
             className="nodrag text-sm font-medium text-navy mb-1 w-full bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-cyan/50 rounded px-1 transition-colors"
-            value={data.label}
-            onChange={updateLabel}
+            value={localLabel}
+            onChange={onLabelChange}
+            onBlur={commitChanges}
             onKeyDown={(e) => e.stopPropagation()}
             placeholder="User Story Title"
         />
         <textarea
             ref={textareaRef}
             className="nodrag text-[10px] text-gray-500 w-full bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-cyan/50 rounded px-1 resize-none overflow-hidden flex-1 min-h-[60px] transition-colors"
-            value={data.description || ''}
-            onChange={updateDescription}
+            value={localDescription}
+            onChange={onDescriptionChange}
+            onBlur={commitChanges}
             onKeyDown={(e) => e.stopPropagation()}
             placeholder="As a user, I want to..."
             rows={3}

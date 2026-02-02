@@ -171,17 +171,21 @@ export function AIChatPanel() {
             </div>
         ) : (
             <div className="flex gap-2">
-                <input 
-                    type="text" 
+                <textarea 
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => {
                         e.stopPropagation();
-                        if (e.key === 'Enter') handleSend();
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSend();
+                        }
                     }}
                     placeholder="Describe what you want to build..."
-                    className="flex-1 bg-cloud border-none rounded-md px-3 py-2 text-sm focus:ring-1 focus:ring-cyan outline-none"
+                    className="flex-1 bg-cloud border-none rounded-md px-3 py-2 text-sm focus:ring-1 focus:ring-cyan outline-none resize-none"
                     disabled={isGenerating}
+                    rows={1}
+                    style={{ minHeight: '38px', maxHeight: '120px' }}
                 />
                 <button 
                     onClick={() => handleSend()}

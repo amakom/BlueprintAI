@@ -90,14 +90,16 @@ export async function POST(req: Request) {
       }, { status: 403 });
     }
 
-    // 5. Generate User Flow (Real AI with Mock Fallback)
+    // 5. Generate User Flow (Real AI Only)
     let nodes: any[] = [];
     let edges: any[] = [];
-    let usageLog = { inputTokens: 0, outputTokens: 0, model: 'gpt-mock-flow' };
-    let errorMessage = '';
+    let usageLog = { inputTokens: 0, outputTokens: 0, model: 'unknown' };
 
-    if (isAIConfigured()) {
-      try {
+    if (!isAIConfigured()) {
+        return NextResponse.json({ error: 'OPENAI_API_KEY is not configured in environment variables.' }, { status: 500 });
+    }
+
+    try {
         const systemPrompt = `You are an expert UX Designer and Product Manager.
 Create a user flow diagram for a software feature.
 
@@ -161,62 +163,10 @@ Generate a detailed user flow including key screens and user actions.`;
           model: completion.model
         };
 
-      } catch (aiError) {
-        console.error('OpenAI generation failed, falling back to mock:', aiError);
-        errorMessage = aiError instanceof Error ? aiError.message : 'Unknown AI error';
-        // Fallback to mock if AI fails
-      }
-    } else {
-        errorMessage = 'OPENAI_API_KEY is not configured';
-    }
-
-    // Fallback if AI not configured or failed (nodes empty)
-    if (nodes.length === 0) {
-      const startId = Math.random().toString(36).substr(2, 9);
-      const storyId = Math.random().toString(36).substr(2, 9);
-      const screenId = Math.random().toString(36).substr(2, 9);
-      
-      nodes = [
-        {
-          id: startId,
-          type: 'userStory',
-          position: { x: 100, y: 100 },
-          data: { label: 'Start: User logs in', description: 'User opens the app and enters credentials', userName: 'AI' }
-        },
-        {
-          id: storyId,
-          type: 'userStory',
-          position: { x: 400, y: 100 },
-          data: { label: 'Action: Authenticate', description: 'System validates credentials against database', userName: 'AI' }
-        },
-        {
-          id: screenId,
-          type: 'screen',
-          position: { x: 400, y: 300 },
-          data: { label: 'Dashboard Screen', description: 'Main user dashboard with overview metrics', userName: 'AI' }
-        }
-      ];
-
-      edges = [
-        { id: `e${startId}-${storyId}`, source: startId, target: storyId, type: 'deletable', animated: true },
-        { id: `e${storyId}-${screenId}`, source: storyId, target: screenId, type: 'deletable', animated: true }
-      ];
-
-      usageLog = {
-        inputTokens: 150,
-        outputTokens: 500,
-        model: 'gpt-mock-flow'
-      };
-      
-      return NextResponse.json({ 
-        nodes, 
-        edges, 
-        warning: `AI generation failed: ${errorMessage}. Showing example flow.`,
-        usage: {
-          used: monthlyUsage + 1,
-          limit: limits.maxAIGenerationsPerMonth
-        }
-      });
+    } catch (aiError) {
+        console.error('OpenAI generation failed:', aiError);
+        const errorMsg = aiError instanceof Error ? aiError.message : 'Unknown AI error';
+        return NextResponse.json({ error: `AI Generation Failed: ${errorMsg}` }, { status: 500 });
     }
 
     // 6. Log Usage

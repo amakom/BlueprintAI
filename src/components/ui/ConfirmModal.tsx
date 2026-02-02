@@ -9,6 +9,7 @@ interface ConfirmModalProps {
   title?: string;
   confirmText?: string;
   cancelText?: string;
+  isDanger?: boolean;
 }
 
 export function ConfirmModal({ 
@@ -18,7 +19,8 @@ export function ConfirmModal({
   message, 
   title = "Confirm Action",
   confirmText = "Confirm",
-  cancelText = "Cancel"
+  cancelText = "Cancel",
+  isDanger = false
 }: ConfirmModalProps) {
   if (!isOpen) return null;
 
@@ -55,7 +57,11 @@ export function ConfirmModal({
                 onConfirm();
                 onClose();
               }}
-              className="flex-1 bg-[#2ee6d6] text-[#0b1f33] font-bold py-2.5 px-4 rounded-lg hover:bg-[#2ee6d6]/90 transition-colors"
+              className={`flex-1 font-bold py-2.5 px-4 rounded-lg transition-colors ${
+                isDanger 
+                  ? 'bg-red-500 text-white hover:bg-red-600' 
+                  : 'bg-[#2ee6d6] text-[#0b1f33] hover:bg-[#2ee6d6]/90'
+              }`}
             >
               {confirmText}
             </button>

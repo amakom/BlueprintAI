@@ -168,6 +168,11 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to generate flow');
+
+      if (data.warning) {
+        alert(data.warning);
+      }
+
       if (data.nodes && data.edges) {
         setNodes((nds) => [...nds, ...data.nodes]);
         setEdges((eds) => [...eds, ...data.edges]);

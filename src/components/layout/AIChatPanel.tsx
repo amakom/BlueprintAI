@@ -1,6 +1,6 @@
 'use client';
 
-import { Send, Sparkles, Lock, Settings2 } from 'lucide-react';
+import { Send, Sparkles, Lock, Settings2, MessageSquare, X } from 'lucide-react';
 import { useSubscription } from '@/hooks/use-subscription';
 import Link from 'next/link';
 import { useCanvas } from '@/features/canvas/CanvasContext';
@@ -15,7 +15,7 @@ type Message = {
 
 export function AIChatPanel() {
   const { limits, isLoading } = useSubscription();
-  const { addNode, userName, aiSettings, setAiSettings } = useCanvas();
+  const { addNode, setNodes, setEdges, projectId, userName, aiSettings, setAiSettings } = useCanvas();
   
   const [messages, setMessages] = useState<Message[]>([
     { role: 'assistant', content: 'Hi! I can help you draft your Mobile App PRD. Try asking me to "Generate user stories for login".' }
@@ -23,6 +23,7 @@ export function AIChatPanel() {
   const [input, setInput] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const handleSend = async () => {
     if (!input.trim() || isGenerating) return;
@@ -40,53 +41,60 @@ export function AIChatPanel() {
     setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
     setIsGenerating(true);
 
-    // Simulate AI delay
-    setTimeout(() => {
-        const newNodes: Node[] = [];
-        const timestamp = Date.now();
-        
-        // Simple mock logic for MVP
-        if (userMsg.toLowerCase().includes('login')) {
-            newNodes.push({
-                id: `node-${timestamp}-1`,
-                type: 'userStory',
-                position: { x: Math.random() * 400, y: Math.random() * 400 },
-                data: { label: 'Login Screen', description: 'User enters email and password.', userName }
-            });
-            newNodes.push({
-                id: `node-${timestamp}-2`,
-                type: 'userStory',
-                position: { x: Math.random() * 400 + 50, y: Math.random() * 400 + 50 },
-                data: { label: 'Forgot Password', description: 'Flow to reset password via email.', userName }
-            });
-        } else if (userMsg.toLowerCase().includes('dashboard')) {
-             newNodes.push({
-                id: `node-${timestamp}-1`,
-                type: 'userStory',
-                position: { x: Math.random() * 400, y: Math.random() * 400 },
-                data: { label: 'Dashboard Overview', description: 'Main view showing key metrics.', userName }
-            });
-        } else {
-             newNodes.push({
-                id: `node-${timestamp}-1`,
-                type: 'userStory',
-                position: { x: Math.random() * 400, y: Math.random() * 400 },
-                data: { label: 'New Feature', description: `Generated for: "${userMsg}"`, userName }
-            });
+    try {
+        const res = await fetch('/api/ai/generate-user-flow', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                projectId, 
+                prompt: userMsg,
+                productType: aiSettings.productType, // Optional, if API supports it
+                tone: aiSettings.tone // Optional
+            })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.error || 'Failed to generate flow');
         }
 
-        newNodes.forEach(node => addNode(node));
+        if (data.warning) {
+            setMessages(prev => [...prev, { 
+                role: 'assistant', 
+                content: `⚠️ ${data.warning}` 
+            }]);
+        }
 
+        if (data.nodes && data.nodes.length > 0) {
+            // Append new nodes and edges
+            setNodes((nds) => [...nds, ...data.nodes]);
+            setEdges((eds) => [...eds, ...(data.edges || [])]);
+
+            setMessages(prev => [...prev, { 
+                role: 'assistant', 
+                content: `I've generated ${data.nodes.length} node(s) for your request.` 
+            }]);
+        } else {
+             setMessages(prev => [...prev, { 
+                role: 'assistant', 
+                content: `I couldn't generate a flow for that request. Please try again.` 
+            }]);
+        }
+
+    } catch (error) {
+        console.error('AI Generation Error:', error);
         setMessages(prev => [...prev, { 
             role: 'assistant', 
-            content: `I've generated ${newNodes.length} node(s) for your request.` 
+            content: `Error: ${error instanceof Error ? error.message : 'Something went wrong'}` 
         }]);
+    } finally {
         setIsGenerating(false);
-    }, 1500);
+    }
   };
 
-  return (
-    <div className="w-80 bg-white border-l border-border flex flex-col h-full shadow-lg">
+  const ChatContent = () => (
+    <div className="flex flex-col h-full bg-white shadow-lg w-full">
       <div className="p-4 border-b border-border bg-cloud/50">
         <div className="flex items-center justify-between">
           <h2 className="font-bold text-navy flex items-center gap-2">
@@ -183,5 +191,43 @@ export function AIChatPanel() {
         )}
       </div>
     </div>
+  );
+
+  return (
+    <>
+      {/* Mobile Toggle Button */}
+      <button 
+        onClick={() => setIsMobileOpen(true)}
+        className="lg:hidden fixed bottom-4 right-4 z-40 p-3 bg-cyan text-navy rounded-full shadow-lg hover:bg-cyan/90 transition-all hover:scale-105"
+      >
+        <MessageSquare className="w-6 h-6" />
+      </button>
+
+      {/* Desktop Panel */}
+      <div className="hidden lg:flex w-80 bg-white border-l border-border flex-col h-full shadow-lg">
+        <ChatContent />
+      </div>
+
+      {/* Mobile Drawer */}
+      {isMobileOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+           {/* Backdrop */}
+           <div 
+             className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
+             onClick={() => setIsMobileOpen(false)}
+           />
+           {/* Drawer Panel */}
+           <div className="absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl animate-in slide-in-from-right duration-200 flex flex-col">
+             <button 
+               onClick={() => setIsMobileOpen(false)}
+               className="absolute top-2 right-2 z-10 p-1 bg-white/50 rounded-full text-gray-500 hover:text-navy"
+             >
+               <X className="w-5 h-5" />
+             </button>
+             <ChatContent />
+           </div>
+        </div>
+      )}
+    </>
   );
 }

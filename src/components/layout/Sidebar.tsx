@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Home, Layers, Settings, FileText, PlusCircle, LogOut, Users } from 'lucide-react';
+import { Home, Layers, Settings, FileText, PlusCircle, LogOut, Users, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -22,6 +22,7 @@ export function Sidebar() {
   const { plan, isLoading: isSubLoading } = useSubscription();
   const [user, setUser] = useState<{name: string, email: string, role: string} | null>(null);
   const [recentProjects, setRecentProjects] = useState<any[]>([]);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   useEffect(() => {
     // Fetch user
@@ -55,8 +56,8 @@ export function Sidebar() {
   const isAdminOrOwner = user?.role === UserRole.ADMIN || user?.role === UserRole.OWNER;
   const isOwner = user?.role === UserRole.OWNER;
 
-  return (
-    <aside className="w-60 bg-navy text-white flex flex-col h-screen border-r border-navy/20">
+  const SidebarContent = () => (
+    <>
       <div className="p-6">
         <Link href="/" className="block">
           <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2 hover:opacity-90 transition-opacity">
@@ -68,7 +69,7 @@ export function Sidebar() {
         </Link>
       </div>
 
-      <nav className="flex-1 px-4 space-y-2">
+      <nav className="flex-1 px-4 space-y-2 overflow-y-auto">
         <div className="mb-6">
           <p className="px-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
             Menu
@@ -77,6 +78,7 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => setIsMobileOpen(false)}
               className={cn(
                 "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
                 "hover:bg-white/10 text-gray-300 hover:text-white"
@@ -89,6 +91,7 @@ export function Sidebar() {
           {isAdminOrOwner && (
             <Link
               href="/admin"
+              onClick={() => setIsMobileOpen(false)}
               className={cn(
                 "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
                 "hover:bg-white/10 text-amber hover:text-white"
@@ -115,6 +118,7 @@ export function Sidebar() {
                 <Link
                   key={project.id}
                   href={`/project/${project.id}`}
+                  onClick={() => setIsMobileOpen(false)}
                   className="flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors hover:bg-white/10 text-gray-300 hover:text-white"
                 >
                   <FileText className="w-4 h-4 text-cyan" />
@@ -130,7 +134,7 @@ export function Sidebar() {
         </div>
       </nav>
 
-      <div className="p-4 border-t border-white/10">
+      <div className="p-4 border-t border-white/10 mt-auto">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-cyan text-navy flex items-center justify-center font-bold">
@@ -143,7 +147,7 @@ export function Sidebar() {
               <div className="flex items-center gap-2">
                  <p className="text-xs text-gray-400">
                     {isSubLoading ? 'Loading...' : (isOwner ? 'Owner Access' : `${plan} Plan`)}
-                 </p>
+                  </p>
                  {plan === 'FREE' && !isOwner && (
                      <Link href="/pricing" className="text-[10px] bg-cyan text-navy px-1.5 py-0.5 rounded font-bold hover:bg-cyan/90">
                         UPGRADE
@@ -161,6 +165,44 @@ export function Sidebar() {
           </button>
         </div>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Mobile Menu Button */}
+      <button 
+        onClick={() => setIsMobileOpen(true)}
+        className="md:hidden fixed top-3 left-4 z-50 p-2 bg-navy text-white rounded-md shadow-lg hover:bg-navy/90 transition-colors"
+      >
+        <Menu className="w-5 h-5" />
+      </button>
+
+      {/* Desktop Sidebar */}
+      <aside className="hidden md:flex w-60 bg-navy text-white flex-col h-screen border-r border-navy/20">
+        <SidebarContent />
+      </aside>
+
+      {/* Mobile Drawer */}
+      {isMobileOpen && (
+        <div className="fixed inset-0 z-[60] md:hidden">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
+            onClick={() => setIsMobileOpen(false)}
+          />
+          {/* Drawer Panel */}
+          <div className="absolute left-0 top-0 h-full w-72 bg-navy text-white shadow-2xl animate-in slide-in-from-left duration-200 flex flex-col">
+            <button 
+              onClick={() => setIsMobileOpen(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <SidebarContent />
+          </div>
+        </div>
+      )}
+    </>
   );
 }

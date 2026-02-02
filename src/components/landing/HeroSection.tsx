@@ -76,7 +76,7 @@ export function HeroSection() {
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
         >
           <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold leading-tight max-w-5xl mx-auto tracking-tight px-2">
-            Turn Ideas Into Engineering-Ready Blueprints — <span className="text-cyan inline-block">In Minutes</span>
+            Turn Ideas Into Engineering-Ready Blueprints <span className="text-cyan inline-block">In Minutes</span>
           </h1>
         </motion.div>
 

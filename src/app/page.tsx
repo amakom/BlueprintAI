@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Testimonials } from '@/components/landing/Testimonials';
-import { HeroAnimation } from '@/components/landing/HeroAnimation';
+import { HeroSection } from '@/components/landing/HeroSection';
 import { StrategyThinkingAnimation } from '@/components/landing/StrategyThinkingAnimation';
 import { CanvasFlowAnimation } from '@/components/landing/CanvasFlowAnimation';
 import { SpecConversionAnimation } from '@/components/landing/SpecConversionAnimation';
@@ -34,29 +34,7 @@ export default function LandingPage() {
 
       <main className="relative z-10">
         {/* 🔵 HERO SECTION */}
-        <section className="container mx-auto px-6 pt-16 pb-20 text-center">
-          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight max-w-5xl mx-auto">
-            Turn Ideas Into Engineering-Ready Blueprints — <span className="text-cyan">In Minutes</span>
-          </h1>
-          <p className="mt-6 text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            BlueprintAI is an AI-powered product manager that transforms rough ideas into clear strategy, visual flows, and developer-ready specifications — without writing a single PRD manually.
-          </p>
-          <div className="mt-10 flex flex-col md:flex-row items-center justify-center gap-4">
-            <Link href="/dashboard" className="bg-cyan text-navy px-8 py-4 rounded-full font-bold text-lg hover:bg-white transition-all w-full md:w-auto">
-              Start Free — Build Your First Blueprint
-            </Link>
-            <Link href="#demo" className="border border-white/20 text-white px-8 py-4 rounded-full font-bold text-lg hover:border-white transition-all w-full md:w-auto">
-              Watch 90-Second Demo
-            </Link>
-          </div>
-          <p className="mt-6 text-sm text-gray-500 font-medium">
-            No credit card required · Built for founders, PMs, and teams
-          </p>
-
-          <div className="mt-16">
-            <HeroAnimation />
-          </div>
-        </section>
+        <HeroSection />
 
         {/* 🔵 PROBLEM SECTION */}
         <section className="container mx-auto px-6 py-20 border-t border-white/5">

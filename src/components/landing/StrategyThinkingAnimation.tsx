@@ -1,13 +1,16 @@
  'use client'
- import { useEffect, useState, useMemo } from 'react'
- import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
- 
- export function StrategyThinkingAnimation() {
-   const reduce = useReducedMotion()
-   const [phase, setPhase] = useState<'idea' | 'personas' | 'kpis' | 'competitors' | 'complete'>('idea')
- 
-   useEffect(() => {
-     let timers: number[] = []
+ import { useEffect, useState, useMemo, useRef } from 'react'
+import { motion, AnimatePresence, useReducedMotion, useInView } from 'framer-motion'
+
+export function StrategyThinkingAnimation() {
+  const reduce = useReducedMotion()
+  const containerRef = useRef(null)
+  const isInView = useInView(containerRef, { once: true, margin: "-100px" })
+  const [phase, setPhase] = useState<'idea' | 'personas' | 'kpis' | 'competitors' | 'complete'>('idea')
+
+  useEffect(() => {
+    if (!isInView) return
+    let timers: number[] = []
      timers.push(window.setTimeout(() => setPhase('personas'), reduce ? 0 : 800))
      timers.push(window.setTimeout(() => setPhase('kpis'), reduce ? 0 : 1800))
      timers.push(window.setTimeout(() => setPhase('competitors'), reduce ? 0 : 2800))
@@ -32,8 +35,8 @@
    )
  
    return (
-     <div className="relative mx-auto max-w-6xl">
-       <div className="grid md:grid-cols-3 gap-6">
+    <div ref={containerRef} className="relative mx-auto max-w-6xl">
+      <div className="grid md:grid-cols-3 gap-6">
          <div className="md:col-span-1">
            <AnimatePresence>
              {phase && (

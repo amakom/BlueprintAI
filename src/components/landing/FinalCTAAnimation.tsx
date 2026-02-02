@@ -28,51 +28,44 @@
    ]
  
    return (
-     <div className="relative mx-auto max-w-6xl">
-       <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-white/5 p-6">
-         <div className="text-center">
-           <div className="text-sm font-bold text-cyan">From idea to blueprint</div>
-           <div className="mt-1 text-xl font-extrabold text-white">Clarity without the noise</div>
-         </div>
- 
-         <div className="relative mt-6 h-56 rounded-2xl border border-white/10 bg-navy overflow-hidden">
-           <div
-             className="absolute inset-0 opacity-[0.10]"
-             style={{
-               backgroundImage:
-                 'linear-gradient(#334155 1px, transparent 1px), linear-gradient(90deg, #334155 1px, transparent 1px)',
-               backgroundSize: '40px 40px',
-             }}
-           />
- 
-           <AnimatePresence>
-             {phase !== 'cta' && (
-               <motion.div
-                 initial={{ opacity: 0 }}
-                 animate={{ opacity: 1 }}
-                 exit={{ opacity: 0 }}
-                 className="absolute inset-0"
-               >
-                 {chips.map((c, i) => (
-                   <motion.div
-                     key={c.id}
-                     initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                     animate={{
-                       opacity: 1,
-                       y: 0,
-                       scale: 1,
-                       left: phase === 'messy' ? c.x : 40 + i * 100,
-                       top: phase === 'messy' ? c.y : 40 + (i % 2) * 60,
-                       transition: { duration: 0.5, delay: i * 0.08 },
-                     }}
-                     className="absolute rounded-full border border-white/10 bg-white/10 text-white text-xs px-3 py-1 backdrop-blur-sm"
-                   >
-                     {c.text}
-                   </motion.div>
-                 ))}
-               </motion.div>
-             )}
-           </AnimatePresence>
+    <div ref={containerRef} className="relative mx-auto max-w-6xl">
+      <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-white/5 p-6">
+        <div className="text-center">
+          <div className="text-sm font-bold text-cyan">From idea to blueprint</div>
+          <div className="mt-1 text-xl font-extrabold text-white">Clarity without the noise</div>
+        </div>
+
+        <div className="relative mt-6 h-56 rounded-2xl border border-white/10 bg-navy overflow-hidden flex items-center justify-center">
+          <AnimatePresence>
+            {phase !== 'cta' && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 flex items-center justify-center"
+              >
+                <div className="relative w-full max-w-[600px] h-full">
+                  {chips.map((c, i) => (
+                    <motion.div
+                      key={c.id}
+                      initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        left: phase === 'messy' ? c.x : 40 + i * 100,
+                        top: phase === 'messy' ? c.y : 40 + (i % 2) * 60,
+                        transition: { duration: 0.5, delay: i * 0.08 },
+                      }}
+                      className="absolute rounded-full border border-white/10 bg-white/10 text-white text-xs px-3 py-1 backdrop-blur-sm"
+                    >
+                      {c.text}
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
  
            <AnimatePresence>
              {phase === 'cta' && (

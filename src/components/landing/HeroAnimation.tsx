@@ -1,16 +1,18 @@
  'use client'
- import { useEffect, useMemo, useState } from 'react'
- import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
- 
- export function HeroAnimation() {
-   const reduce = useReducedMotion()
-   const [typed, setTyped] = useState('')
-   const [phase, setPhase] = useState<'typing' | 'streams' | 'merge'>('typing')
-   const target = 'An Uber for dog walkers'
- 
-   useEffect(() => {
-     if (phase !== 'typing') return
-     let i = 0
+ import { useEffect, useMemo, useState, useRef } from 'react'
+import { motion, AnimatePresence, useReducedMotion, useInView } from 'framer-motion'
+
+export function HeroAnimation() {
+  const reduce = useReducedMotion()
+  const containerRef = useRef(null)
+  const isInView = useInView(containerRef, { once: true, margin: "-100px" })
+  const [typed, setTyped] = useState('')
+  const [phase, setPhase] = useState<'typing' | 'streams' | 'merge'>('typing')
+  const target = 'An Uber for dog walkers'
+
+  useEffect(() => {
+    if (!isInView || phase !== 'typing') return
+    let i = 0
      const interval = setInterval(() => {
        i += 1
        setTyped(target.slice(0, i))
@@ -49,8 +51,8 @@
    )
  
    return (
-     <div className="relative mx-auto max-w-6xl">
-       <div className="mx-auto w-full max-w-xl rounded-2xl border border-white/10 bg-white/5 px-6 py-4 backdrop-blur-sm">
+    <div ref={containerRef} className="relative mx-auto max-w-6xl">
+      <div className="mx-auto w-full max-w-xl rounded-2xl border border-white/10 bg-white/5 px-6 py-4 backdrop-blur-sm">
          <div className="flex items-center gap-3">
            <div className="h-6 w-6 rounded-md bg-cyan/80 text-navy flex items-center justify-center text-xs font-bold">AI</div>
            <div className="flex-1">

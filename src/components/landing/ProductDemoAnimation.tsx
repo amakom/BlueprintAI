@@ -10,12 +10,20 @@ import {
   FileText, 
   Zap, 
   CreditCard, 
-  Search, 
   User,
-  ArrowRight,
-  Code2,
-  Database,
-  Lock
+  Home,
+  Settings,
+  Folder,
+  Share2,
+  Play,
+  Clock,
+  Download,
+  ChevronRight,
+  MoreHorizontal,
+  Plus,
+  Moon,
+  PanelRight,
+  Code2
 } from 'lucide-react'
 
 export function ProductDemoAnimation() {
@@ -32,7 +40,7 @@ export function ProductDemoAnimation() {
         setStep(0)
         setText('')
         
-        // Step 1: Typing (0s - 3s)
+        // Step 1: Typing (0s - 2.5s)
         await new Promise(r => setTimeout(r, 800))
         for (let i = 0; i <= fullText.length; i++) {
           if (!mounted) return
@@ -43,18 +51,18 @@ export function ProductDemoAnimation() {
         if (!mounted) return
         setStep(1) // Sent
         
-        // Step 2: Personas (3s - 6.5s)
+        // Step 2: Processing/Personas (2.5s - 6s)
         await new Promise(r => setTimeout(r, 600))
         if (!mounted) return
         setStep(2)
         
-        // Step 3: Canvas (6.5s - 11s)
+        // Step 3: Canvas Building (6s - 10s)
         await new Promise(r => setTimeout(r, 3500))
         if (!mounted) return
         setStep(3)
         
-        // Step 4: Specs (11s - 15s)
-        await new Promise(r => setTimeout(r, 4500))
+        // Step 4: Specs/Final (10s - 15s)
+        await new Promise(r => setTimeout(r, 4000))
         if (!mounted) return
         setStep(4) // CTA
 
@@ -69,240 +77,324 @@ export function ProductDemoAnimation() {
   }, [])
 
   return (
-    <div className="w-full max-w-5xl mx-auto aspect-[16/9] md:aspect-[21/9] bg-[#0B1F33] rounded-xl border border-white/10 overflow-hidden relative shadow-2xl ring-1 ring-white/5 font-sans">
-      {/* Background Grid (Matches Canvas) */}
-      <div 
-        className="absolute inset-0 opacity-20"
-        style={{
-          backgroundImage: 'radial-gradient(#475569 1px, transparent 1px)',
-          backgroundSize: '24px 24px'
-        }}
-      />
+    <div className="w-full max-w-6xl mx-auto aspect-[16/10] bg-[#0B1F33] rounded-xl border border-white/10 overflow-hidden relative shadow-2xl ring-1 ring-white/5 font-sans flex text-slate-300">
+      
+      {/* LEFT SIDEBAR */}
+      <div className="w-64 border-r border-white/10 flex flex-col bg-[#0B1F33]">
+        {/* Logo */}
+        <div className="h-14 flex items-center px-4 gap-2 border-b border-white/5">
+          <div className="w-8 h-8 bg-cyan rounded-md flex items-center justify-center text-navy font-bold text-lg">B</div>
+          <span className="font-bold text-white tracking-tight">BlueprintAI</span>
+        </div>
 
-      <div className="relative z-10 h-full flex flex-col">
-        
-        {/* App Header (Fake Navigation) */}
-        <div className="h-12 border-b border-white/10 bg-[#0B1F33]/90 backdrop-blur-sm flex items-center px-4 justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-cyan rounded-md flex items-center justify-center text-navy text-xs font-bold">B</div>
-            <span className="text-sm font-bold text-white">BlueprintAI</span>
-            <span className="text-xs text-slate-500 ml-2">/ Fintech App</span>
+        {/* Menu */}
+        <div className="p-4 space-y-1">
+          <div className="text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-wider">Menu</div>
+          <div className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:bg-white/5 rounded-lg cursor-pointer">
+            <Home size={16} /> Home
           </div>
-          <div className="flex gap-2">
-            <div className="w-2 h-2 rounded-full bg-red-500/50" />
-            <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
-            <div className="w-2 h-2 rounded-full bg-green-500/50" />
+          <div className="flex items-center gap-3 px-3 py-2 text-sm text-white bg-white/10 rounded-lg font-medium cursor-pointer">
+            <Folder size={16} className="text-cyan" /> Projects
+          </div>
+          <div className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:bg-white/5 rounded-lg cursor-pointer">
+            <Users size={16} /> Team
+          </div>
+          <div className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:bg-white/5 rounded-lg cursor-pointer">
+            <Settings size={16} /> Settings
           </div>
         </div>
 
-        <div className="flex-1 flex min-h-0">
-          {/* Sidebar (Fake) */}
-          <div className="w-12 border-r border-white/10 flex flex-col items-center py-4 gap-4 bg-[#0B1F33]/50">
-            <div className={`p-2 rounded-lg ${step >= 2 ? 'bg-cyan/10 text-cyan' : 'text-slate-500'}`}><Users size={18} /></div>
-            <div className={`p-2 rounded-lg ${step >= 3 ? 'bg-cyan/10 text-cyan' : 'text-slate-500'}`}><Layout size={18} /></div>
-            <div className={`p-2 rounded-lg ${step >= 4 ? 'bg-cyan/10 text-cyan' : 'text-slate-500'}`}><FileText size={18} /></div>
+        {/* Recent Projects */}
+        <div className="p-4 pt-0 mt-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Recent Projects</div>
+            <Plus size={12} className="text-cyan cursor-pointer" />
+          </div>
+          <div className="flex items-center gap-3 px-3 py-2 text-sm text-cyan/80 bg-cyan/5 rounded-lg cursor-pointer border border-cyan/10">
+            <FileText size={16} /> Monra
+          </div>
+        </div>
+
+        <div className="flex-1" />
+
+        {/* User Profile */}
+        <div className="p-4 border-t border-white/10">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-cyan text-navy flex items-center justify-center font-bold text-xs">L</div>
+            <div className="flex-1 overflow-hidden">
+              <div className="text-sm font-medium text-white truncate">Lota</div>
+              <div className="text-xs text-slate-500 truncate">TEAM Plan</div>
+            </div>
+            <div className="text-slate-500"><MoreHorizontal size={16} /></div>
+          </div>
+        </div>
+      </div>
+
+      {/* MAIN CONTENT */}
+      <div className="flex-1 flex flex-col min-w-0 bg-[#061424]">
+        
+        {/* TOP HEADER */}
+        <div className="h-14 border-b border-white/10 flex items-center justify-between px-4 bg-[#0B1F33]">
+          <div className="flex items-center gap-2 text-sm">
+            <span className="text-slate-500">Projects</span>
+            <span className="text-slate-600">/</span>
+            <span className="font-bold text-white">Monra</span>
+            <span className="ml-2 px-2 py-0.5 bg-white/5 text-xs rounded-full text-slate-400">Draft</span>
           </div>
 
-          {/* Main Content Area */}
-          <div className="flex-1 relative p-6 overflow-hidden">
-            
-            {/* AI Input Overlay (Disappears after step 1) */}
-            <AnimatePresence>
-              {step < 2 && (
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                  className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
-                >
-                  <div className="w-full max-w-lg bg-[#0B1F33] border border-white/20 rounded-xl shadow-2xl p-4 flex flex-col gap-3">
-                    <div className="flex items-center gap-2 text-cyan text-xs font-bold uppercase tracking-wider">
-                      <Sparkles size={12} />
-                      AI Product Manager
-                    </div>
-                    <div className="flex gap-3 items-center">
-                      <span className="text-lg text-white font-medium min-h-[28px]">
-                        {text}<span className="animate-pulse text-cyan">|</span>
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center border-t border-white/10 pt-3">
-                       <span className="text-xs text-slate-500">Press Enter to generate blueprint</span>
-                       <div className={`p-2 rounded-lg transition-colors ${step >= 1 ? 'bg-cyan text-navy' : 'bg-white/10 text-slate-400'}`}>
-                         <Send size={16} />
-                       </div>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+          {/* Center Tabs */}
+          <div className="flex bg-white/5 p-1 rounded-lg">
+            <div className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${step < 4 ? 'bg-white/10 text-white shadow-sm' : 'text-slate-400'}`}>Canvas</div>
+            <div className="px-4 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-white transition-colors">Strategy</div>
+            <div className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${step >= 4 ? 'bg-white/10 text-white shadow-sm' : 'text-slate-400'}`}>Specs</div>
+          </div>
 
-            {/* Workspace Content */}
-            <div className="grid grid-cols-12 gap-6 h-full">
-              
-              {/* Personas Panel */}
-              <AnimatePresence>
-                {step >= 2 && (
+          {/* Right Actions */}
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 px-2 py-1 bg-green-500/10 text-green-400 rounded-full text-xs font-bold border border-green-500/20">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" /> LIVE
+            </div>
+            <div className="h-4 w-px bg-white/10 mx-1" />
+            <button className="p-2 text-slate-400 hover:text-white"><Clock size={16} /></button>
+            <button className="p-2 text-slate-400 hover:text-white"><Play size={16} /></button>
+            <button className="p-2 text-slate-400 hover:text-white"><Download size={16} /></button>
+            <button className="flex items-center gap-2 px-3 py-1.5 bg-white text-navy rounded-lg text-sm font-bold hover:bg-cyan transition-colors">
+              <Share2 size={14} /> Share
+            </button>
+          </div>
+        </div>
+
+        {/* WORKSPACE AREA */}
+        <div className="flex-1 flex min-h-0 relative">
+          
+          {/* CENTER CANVAS */}
+          <div className="flex-1 relative overflow-hidden">
+            {/* Grid Background */}
+            <div 
+              className="absolute inset-0 opacity-20"
+              style={{
+                backgroundImage: 'radial-gradient(#475569 1px, transparent 1px)',
+                backgroundSize: '24px 24px'
+              }}
+            />
+
+            {/* Animation Content Layer */}
+            <div className="absolute inset-0 flex items-center justify-center p-8">
+              <AnimatePresence mode="wait">
+                
+                {/* Stage 1: Empty State / Initial */}
+                {step < 2 && (
                   <motion.div 
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="col-span-4 flex flex-col gap-4"
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    exit={{ opacity: 0 }}
+                    className="text-center"
                   >
-                    <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-wider">
-                      <Users size={14} /> Target Personas
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 mb-4 border border-white/10">
+                      <Layout size={32} className="text-slate-600" />
                     </div>
-                    
+                    <p className="text-slate-500 text-sm">Canvas is empty. Use AI to generate a flow.</p>
+                  </motion.div>
+                )}
+
+                {/* Stage 2: Personas */}
+                {step === 2 && (
+                  <motion.div className="flex gap-6">
                     {[
-                      { name: 'Freelancer Fiona', role: 'Gig Worker', icon: User, color: 'bg-purple-500' },
-                      { name: 'Agency Alex', role: 'Business Owner', icon: Users, color: 'bg-blue-500' }
+                      { name: 'Freelancer Fiona', role: 'User', icon: User, color: 'text-purple-400' },
+                      { name: 'Agency Alex', role: 'Admin', icon: Users, color: 'text-blue-400' }
                     ].map((p, i) => (
                       <motion.div
                         key={p.name}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.2 }}
-                        className="bg-white/5 border border-white/10 p-4 rounded-xl flex gap-3 items-start"
+                        initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="w-48 bg-[#0B1F33] border border-white/10 rounded-xl p-4 shadow-xl relative group"
                       >
-                        <div className={`w-10 h-10 rounded-full ${p.color}/20 flex items-center justify-center text-white shrink-0`}>
-                          <p.icon size={18} />
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan/50 to-transparent rounded-t-xl" />
+                        <div className={`w-10 h-10 rounded-full bg-white/5 flex items-center justify-center mb-3 ${p.color}`}>
+                          <p.icon size={20} />
                         </div>
-                        <div>
-                          <div className="text-sm font-bold text-white">{p.name}</div>
-                          <div className="text-xs text-slate-400">{p.role}</div>
-                          <div className="mt-2 flex flex-wrap gap-1">
-                            <span className="text-[10px] bg-white/5 px-1.5 py-0.5 rounded text-slate-300">Income Tracking</span>
-                            <span className="text-[10px] bg-white/5 px-1.5 py-0.5 rounded text-slate-300">Invoices</span>
-                          </div>
+                        <div className="font-bold text-white text-sm">{p.name}</div>
+                        <div className="text-xs text-slate-500">{p.role}</div>
+                        <div className="mt-3 space-y-1">
+                          <div className="h-1.5 w-3/4 bg-white/10 rounded-full" />
+                          <div className="h-1.5 w-1/2 bg-white/10 rounded-full" />
                         </div>
                       </motion.div>
                     ))}
                   </motion.div>
                 )}
-              </AnimatePresence>
 
-              {/* Canvas Panel */}
-              <AnimatePresence>
-                {step >= 3 && (
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="col-span-4 relative bg-white/5 rounded-xl border border-white/10 overflow-hidden"
-                  >
-                    <div className="absolute top-3 left-3 flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-wider z-10">
-                      <Layout size={14} /> User Flow
-                    </div>
-                    
-                    {/* SVG Connections */}
+                {/* Stage 3: Visual Flow */}
+                {step === 3 && (
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    {/* Connecting Lines */}
                     <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
-                      <motion.path
-                        d="M 50 80 C 50 120, 100 120, 100 160"
+                       <motion.path
+                        d="M 300 200 L 450 200"
                         fill="transparent"
                         stroke="#2EE6D6"
                         strokeWidth="2"
-                        strokeOpacity="0.5"
-                        initial={{ pathLength: 0 }}
-                        animate={{ pathLength: 1 }}
-                        transition={{ duration: 0.8 }}
-                      />
-                      <motion.path
-                        d="M 150 160 C 150 120, 200 120, 200 80"
-                        fill="transparent"
-                        stroke="#2EE6D6"
-                        strokeWidth="2"
-                        strokeOpacity="0.5"
-                        initial={{ pathLength: 0 }}
-                        animate={{ pathLength: 1 }}
-                        transition={{ duration: 0.8, delay: 0.5 }}
+                        strokeDasharray="5 5"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: 1, opacity: 0.5 }}
+                        transition={{ duration: 1 }}
                       />
                     </svg>
 
-                    {/* Nodes */}
-                    <div className="absolute inset-0 p-4 pt-10">
-                      <motion.div 
-                        initial={{ scale: 0 }} animate={{ scale: 1 }}
-                        className="absolute top-16 left-8 w-28 bg-[#0B1F33] border border-cyan/50 p-2 rounded-lg shadow-lg z-10"
-                      >
-                        <div className="flex items-center gap-2 mb-1">
-                          <div className="w-4 h-4 rounded bg-cyan/20 flex items-center justify-center"><User size={10} className="text-cyan"/></div>
-                          <span className="text-[10px] font-bold text-white">Sign Up</span>
+                    {/* Main Node */}
+                    <motion.div 
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      className="relative z-10 w-64 bg-white rounded-lg shadow-2xl overflow-hidden border-2 border-cyan"
+                    >
+                      {/* Node Header */}
+                      <div className="h-10 bg-slate-50 border-b border-slate-100 flex items-center px-3 gap-2">
+                        <div className="w-6 h-6 rounded bg-orange-100 flex items-center justify-center text-orange-600">
+                          <User size={14} />
                         </div>
-                      </motion.div>
-
-                      <motion.div 
-                        initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.3 }}
-                        className="absolute bottom-12 left-1/2 -translate-x-1/2 w-32 bg-[#0B1F33] border border-cyan/50 p-2 rounded-lg shadow-lg z-10"
-                      >
-                         <div className="flex items-center gap-2 mb-1">
-                          <div className="w-4 h-4 rounded bg-cyan/20 flex items-center justify-center"><CreditCard size={10} className="text-cyan"/></div>
-                          <span className="text-[10px] font-bold text-white">Dashboard</span>
-                        </div>
-                        <div className="h-1 w-full bg-white/10 rounded mt-1"/>
-                        <div className="h-1 w-2/3 bg-white/10 rounded mt-1"/>
-                      </motion.div>
-
-                      <motion.div 
-                        initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.6 }}
-                        className="absolute top-16 right-8 w-28 bg-[#0B1F33] border border-cyan/50 p-2 rounded-lg shadow-lg z-10"
-                      >
-                         <div className="flex items-center gap-2 mb-1">
-                          <div className="w-4 h-4 rounded bg-cyan/20 flex items-center justify-center"><FileText size={10} className="text-cyan"/></div>
-                          <span className="text-[10px] font-bold text-white">Invoices</span>
-                        </div>
-                      </motion.div>
-                    </div>
-                  </motion.div>
+                        <span className="text-sm font-bold text-slate-800">Lota Story</span>
+                      </div>
+                      {/* Node Body */}
+                      <div className="p-4 bg-white">
+                        <h3 className="text-lg font-bold text-slate-900 mb-1">New userStory</h3>
+                        <p className="text-xs text-slate-400">Edit this description...</p>
+                      </div>
+                      {/* Handles */}
+                      <div className="absolute top-1/2 -left-1 w-2 h-2 bg-white border border-cyan rounded-full" />
+                      <div className="absolute top-1/2 -right-1 w-2 h-2 bg-white border border-cyan rounded-full" />
+                      <div className="absolute -top-1 left-1/2 w-2 h-2 bg-white border border-cyan rounded-full" />
+                      <div className="absolute -bottom-1 left-1/2 w-2 h-2 bg-white border border-cyan rounded-full" />
+                    </motion.div>
+                  </div>
                 )}
-              </AnimatePresence>
 
-              {/* Specs Panel */}
-              <AnimatePresence>
+                {/* Stage 4: Specs Overlay */}
                 {step >= 4 && (
                   <motion.div 
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="col-span-4 flex flex-col gap-4"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="absolute inset-4 bg-[#0B1F33]/95 backdrop-blur-sm border border-white/10 rounded-xl p-6 overflow-hidden flex flex-col"
                   >
-                     <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-wider">
-                      <Code2 size={14} /> Tech Specs
+                    <div className="flex items-center gap-2 mb-4 text-cyan font-bold">
+                      <Code2 size={18} /> Engineering Specs
                     </div>
-                    
-                    <div className="bg-[#0f172a] border border-white/10 rounded-xl p-4 font-mono text-[10px] text-slate-300 leading-relaxed overflow-hidden relative">
-                      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan to-blue-500" />
-                      <div className="space-y-2">
-                        <p><span className="text-purple-400">const</span> <span className="text-yellow-200">stack</span> = {'{'}</p>
-                        <p className="pl-4">frontend: <span className="text-green-400">'Next.js 14'</span>,</p>
-                        <p className="pl-4">ui: <span className="text-green-400">'Tailwind CSS'</span>,</p>
-                        <p className="pl-4">db: <span className="text-green-400">'PostgreSQL'</span>,</p>
-                        <p className="pl-4">payments: <span className="text-green-400">'Stripe Connect'</span></p>
-                        <p>{'};'}</p>
-                        <p className="text-slate-500">// Generated API Endpoints</p>
-                        <p><span className="text-blue-400">POST</span> /api/invoices/create</p>
-                        <p><span className="text-blue-400">GET</span> /api/analytics/revenue</p>
+                    <div className="flex-1 font-mono text-xs text-slate-300 space-y-2">
+                      <div className="flex gap-4 border-b border-white/5 pb-2 mb-2">
+                        <span className="text-white border-b border-cyan pb-2">Stack</span>
+                        <span className="text-slate-500">Database</span>
+                        <span className="text-slate-500">API</span>
                       </div>
+                      <p><span className="text-purple-400">const</span> <span className="text-yellow-200">config</span> = {'{'}</p>
+                      <p className="pl-4">framework: <span className="text-green-400">'Next.js 14'</span>,</p>
+                      <p className="pl-4">styling: <span className="text-green-400">'Tailwind CSS'</span>,</p>
+                      <p className="pl-4">auth: <span className="text-green-400">'Clerk'</span>,</p>
+                      <p className="pl-4">db: <span className="text-green-400">'PostgreSQL + Prisma'</span></p>
+                      <p>{'};'}</p>
                     </div>
                   </motion.div>
                 )}
-              </AnimatePresence>
 
+              </AnimatePresence>
+            </div>
+            
+            {/* Overlay Controls */}
+            <div className="absolute bottom-4 left-4 flex flex-col gap-2">
+              <div className="p-2 bg-[#0B1F33] border border-white/10 rounded-md text-slate-400 hover:text-white cursor-pointer"><Plus size={16} /></div>
+              <div className="p-2 bg-[#0B1F33] border border-white/10 rounded-md text-slate-400 hover:text-white cursor-pointer"><Layout size={16} /></div>
+            </div>
+
+          </div>
+
+          {/* RIGHT CHAT PANEL */}
+          <div className="w-80 border-l border-white/10 bg-[#0B1F33] flex flex-col">
+            <div className="h-12 border-b border-white/10 flex items-center justify-between px-4">
+               <div className="flex items-center gap-2">
+                 <div className="w-5 h-5 bg-cyan rounded flex items-center justify-center text-navy font-bold text-[10px]">B</div>
+                 <span className="font-bold text-white text-sm">BlueprintAI</span>
+               </div>
+               <PanelRight size={16} className="text-slate-500" />
+            </div>
+
+            <div className="flex-1 p-4 space-y-4 overflow-hidden">
+              {/* Initial Bot Message */}
+              <div className="flex gap-3">
+                <div className="w-6 h-6 rounded bg-cyan/10 flex items-center justify-center shrink-0 mt-1">
+                  <Sparkles size={12} className="text-cyan" />
+                </div>
+                <div className="bg-white/5 rounded-lg rounded-tl-none p-3 text-xs text-slate-300 leading-relaxed">
+                  Hi! I can help you draft your Mobile App PRD. Try asking me to "Generate user stories for login".
+                </div>
+              </div>
+
+              {/* User Typing Animation */}
+              {(text || step >= 1) && (
+                <div className="flex gap-3 flex-row-reverse">
+                  <div className="w-6 h-6 rounded bg-purple-500/20 flex items-center justify-center shrink-0 mt-1">
+                    <User size={12} className="text-purple-400" />
+                  </div>
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="bg-purple-500/10 rounded-lg rounded-tr-none p-3 text-xs text-purple-100"
+                  >
+                    {text}
+                  </motion.div>
+                </div>
+              )}
+
+              {/* Bot Response Animation */}
+              {step >= 2 && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex gap-3"
+                >
+                  <div className="w-6 h-6 rounded bg-cyan/10 flex items-center justify-center shrink-0 mt-1">
+                    <Sparkles size={12} className="text-cyan" />
+                  </div>
+                  <div className="bg-white/5 rounded-lg rounded-tl-none p-3 text-xs text-slate-300">
+                    {step === 2 && "Identifying key personas..."}
+                    {step === 3 && "Building user flow..."}
+                    {step >= 4 && "Generating technical specifications..."}
+                  </div>
+                </motion.div>
+              )}
+            </div>
+
+            {/* Input Area */}
+            <div className="p-4 border-t border-white/10">
+              <div className="bg-white/5 rounded-lg p-2 flex items-center gap-2 border border-white/5">
+                <input 
+                  disabled
+                  placeholder="Describe what you want to build..."
+                  className="bg-transparent border-none text-xs text-white placeholder:text-slate-500 flex-1 focus:outline-none"
+                />
+                <button className="p-1.5 bg-cyan rounded text-navy hover:bg-white transition-colors">
+                  <Send size={12} />
+                </button>
+              </div>
             </div>
           </div>
+
         </div>
 
-        {/* CTA Overlay */}
+        {/* CTA OVERLAY (Final Step) */}
         <AnimatePresence>
           {step >= 4 && (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute bottom-8 left-0 right-0 flex justify-center z-30"
+              className="absolute inset-0 bg-[#0B1F33]/60 backdrop-blur-[2px] z-50 flex items-center justify-center"
             >
               <motion.button
+                initial={{ scale: 0.9, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
                 whileHover={{ scale: 1.05 }}
-                animate={{ 
-                  boxShadow: ["0 0 0 0 rgba(46, 230, 214, 0)", "0 0 0 10px rgba(46, 230, 214, 0.1)", "0 0 0 20px rgba(46, 230, 214, 0)"] 
-                }}
-                transition={{ boxShadow: { duration: 2, repeat: Infinity } }}
-                className="bg-cyan text-navy font-bold text-lg px-8 py-3 rounded-full shadow-xl flex items-center gap-2 border border-white/20"
+                className="bg-cyan text-navy font-bold text-lg px-8 py-4 rounded-full shadow-[0_0_30px_rgba(46,230,214,0.3)] flex items-center gap-3 border border-white/20"
               >
                 <Zap className="w-5 h-5" />
                 Generate Your Blueprint
@@ -310,6 +402,7 @@ export function ProductDemoAnimation() {
             </motion.div>
           )}
         </AnimatePresence>
+
       </div>
     </div>
   )

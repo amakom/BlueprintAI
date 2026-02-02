@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Layout, 
@@ -32,6 +32,8 @@ import {
 
 export function ProductDemoAnimation() {
   const [step, setStep] = useState(0)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [scale, setScale] = useState(1)
   
   // Animation State
   const [cursorPos, setCursorPos] = useState({ x: '50%', y: '50%' })
@@ -46,6 +48,20 @@ export function ProductDemoAnimation() {
   const NAME_TEXT = "Monra"
   const DESC_TEXT = "P2P Crypto Exchange"
   const AI_PROMPT = "Generate user stories for login"
+
+  // Handle Scaling
+  useEffect(() => {
+    const handleResize = () => {
+      if (containerRef.current) {
+        const width = containerRef.current.offsetWidth
+        setScale(width / 1200)
+      }
+    }
+    
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   useEffect(() => {
     let mounted = true
@@ -63,7 +79,7 @@ export function ProductDemoAnimation() {
 
         // 1. Dashboard Idle -> Move to Create Project (0s - 3s)
         await wait(2000)
-        moveCursor('85%', '15%') // Position of New Project Button
+        moveCursor('88%', '6%') // Position of New Project Button (Corrected Y)
         await wait(1500)
         
         // 2. Click Button (3.5s)
@@ -90,14 +106,14 @@ export function ProductDemoAnimation() {
         
         // 6. Select Mobile App (15s - 18s)
         await wait(1000)
-        moveCursor('65%', '45%') // Mobile App Card (Right side)
+        moveCursor('60%', '42%') // Mobile App Card (Top Right in Grid)
         await wait(1500)
         click()
         setSelectedPlatform('mobile')
         
         // 7. Click Next/Create (18s - 21s)
         await wait(1000)
-        moveCursor('70%', '75%') // Next Button
+        moveCursor('70%', '82%') // Next Button (Lower due to more options)
         await wait(1500)
         click()
         await wait(500)
@@ -154,7 +170,15 @@ export function ProductDemoAnimation() {
   }, [])
 
   return (
-    <div className="w-full max-w-6xl mx-auto aspect-[16/10] bg-[#F6F8FB] rounded-xl border border-slate-200 overflow-hidden relative shadow-2xl ring-1 ring-slate-900/5 font-sans select-none">
+    <div ref={containerRef} className="w-full max-w-6xl mx-auto aspect-[16/10] bg-[#F6F8FB] rounded-xl border border-slate-200 overflow-hidden relative shadow-2xl ring-1 ring-slate-900/5 font-sans select-none">
+      <div 
+        className="absolute inset-0 origin-top-left"
+        style={{ 
+          width: 1200, 
+          height: 750, 
+          transform: `scale(${scale})` 
+        }}
+      >
       
       {/* GLOBAL CURSOR */}
       <motion.div
@@ -198,27 +222,26 @@ export function ProductDemoAnimation() {
             <div className="flex items-center gap-3 px-3 py-2.5 text-sm text-slate-400 hover:bg-white/5 rounded-lg">
               <Settings size={18} /> Settings
             </div>
-          </div>
-
-          {/* Recent Projects */}
-          <div className="p-6 mt-auto">
-            <div className="flex items-center justify-between mb-4">
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Recent Projects</div>
-              <Plus size={14} className="text-cyan" />
-            </div>
-            <div className="space-y-3">
-              <div className="text-sm text-slate-400 hover:text-white cursor-pointer">Fintech App</div>
-              <div className="text-sm text-slate-400 hover:text-white cursor-pointer">E-commerce Platform</div>
+            
+            {/* Recent Projects */}
+            <div className="pt-6">
+              <div className="flex items-center justify-between mb-3 px-2">
+                <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Recent Projects</div>
+                <Plus size={14} className="text-cyan" />
+              </div>
+              <div className="space-y-1">
+                <div className="px-3 py-2 text-sm text-slate-400 hover:text-white cursor-pointer hover:bg-white/5 rounded-lg">Fintech App</div>
+                <div className="px-3 py-2 text-sm text-slate-400 hover:text-white cursor-pointer hover:bg-white/5 rounded-lg">E-commerce Platform</div>
+              </div>
             </div>
           </div>
 
           {/* User Profile */}
-          <div className="p-4 border-t border-white/10">
+          <div className="p-4 border-t border-white/10 mt-auto">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-cyan text-navy flex items-center justify-center font-bold text-xs">L</div>
               <div className="flex-1 overflow-hidden">
                 <div className="text-sm font-medium text-white truncate">Lotanna</div>
-                <div className="text-xs text-slate-500 truncate">Owner Access</div>
               </div>
               <LogOut size={16} className="text-slate-500" />
             </div>
@@ -317,16 +340,33 @@ export function ProductDemoAnimation() {
                       className="p-6"
                     >
                       <h4 className="text-sm font-bold text-slate-900 mb-4">What are you building?</h4>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="p-4 border border-slate-200 rounded-xl hover:border-cyan hover:bg-cyan/5 transition-colors cursor-pointer group">
-                          <Globe className="w-6 h-6 text-slate-400 group-hover:text-cyan mb-3" />
+                      <div className="grid grid-cols-2 gap-3">
+                        {/* Web App */}
+                        <div className="p-3 border border-slate-200 rounded-xl hover:border-cyan hover:bg-cyan/5 transition-colors cursor-pointer group">
+                          <Globe className="w-5 h-5 text-slate-400 group-hover:text-cyan mb-2" />
                           <div className="font-bold text-sm text-slate-900">Web App</div>
-                          <div className="text-[10px] text-slate-500 mt-1">SaaS, Dashboard, Landing Page</div>
+                          <div className="text-[10px] text-slate-500">SaaS, Dashboard</div>
                         </div>
-                        <div className={`p-4 border rounded-xl transition-all cursor-pointer ${selectedPlatform === 'mobile' ? 'border-cyan bg-cyan/5 ring-1 ring-cyan' : 'border-slate-200'}`}>
-                          <Smartphone className={`w-6 h-6 mb-3 ${selectedPlatform === 'mobile' ? 'text-cyan' : 'text-slate-400'}`} />
+
+                        {/* Mobile App */}
+                        <div className={`p-3 border rounded-xl transition-all cursor-pointer ${selectedPlatform === 'mobile' ? 'border-cyan bg-cyan/5 ring-1 ring-cyan' : 'border-slate-200'}`}>
+                          <Smartphone className={`w-5 h-5 mb-2 ${selectedPlatform === 'mobile' ? 'text-cyan' : 'text-slate-400'}`} />
                           <div className="font-bold text-sm text-slate-900">Mobile App</div>
-                          <div className="text-[10px] text-slate-500 mt-1">iOS, Android, React Native</div>
+                          <div className="text-[10px] text-slate-500">iOS, Android</div>
+                        </div>
+
+                        {/* Platform */}
+                        <div className="p-3 border border-slate-200 rounded-xl hover:border-cyan hover:bg-cyan/5 transition-colors cursor-pointer group">
+                          <Layout className="w-5 h-5 text-slate-400 group-hover:text-cyan mb-2" />
+                          <div className="font-bold text-sm text-slate-900">Platform</div>
+                          <div className="text-[10px] text-slate-500">Multi-sided, API</div>
+                        </div>
+
+                         {/* Other */}
+                        <div className="p-3 border border-slate-200 rounded-xl hover:border-cyan hover:bg-cyan/5 transition-colors cursor-pointer group">
+                          <Box className="w-5 h-5 text-slate-400 group-hover:text-cyan mb-2" />
+                          <div className="font-bold text-sm text-slate-900">Other</div>
+                          <div className="text-[10px] text-slate-500">Custom, Hardware</div>
                         </div>
                       </div>
                     </motion.div>
@@ -525,6 +565,7 @@ export function ProductDemoAnimation() {
           </motion.div>
 
         </div>
+      </div>
       </div>
     </div>
   )

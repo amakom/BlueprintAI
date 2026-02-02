@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { AlertModal } from '@/components/ui/AlertModal';
 
 interface StrategyViewProps {
   projectId: string;
@@ -327,6 +328,7 @@ function KPISection({ projectId }: { projectId: string }) {
           <p className="text-slate-500 text-center py-8">No KPIs defined yet. Start by generating some!</p>
         </div>
       )}
+      <AlertModal isOpen={!!error} onClose={() => setError(null)} message={error || ''} title="Save Failed" />
     </div>
   );
 }
@@ -610,6 +612,7 @@ function CompetitorSection({ projectId }: { projectId: string }) {
           <p className="text-slate-500 text-center py-8">No competitors analyzed yet. Generate some with AI!</p>
         </div>
       )}
+      <AlertModal isOpen={!!error} onClose={() => setError(null)} message={error || ''} title="Save Failed" />
     </div>
   );
 }

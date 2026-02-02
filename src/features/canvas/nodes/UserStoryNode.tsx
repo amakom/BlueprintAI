@@ -261,16 +261,18 @@ export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryDa
       {/* Content */}
       <div className="p-2 flex-1 flex flex-col">
         <input
-            className="text-sm font-medium text-navy mb-1 w-full bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-cyan/50 rounded px-1 transition-colors"
+            className="nodrag text-sm font-medium text-navy mb-1 w-full bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-cyan/50 rounded px-1 transition-colors"
             value={data.label}
             onChange={updateLabel}
+            onKeyDown={(e) => e.stopPropagation()}
             placeholder="User Story Title"
         />
         <textarea
             ref={textareaRef}
-            className="text-[10px] text-gray-500 w-full bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-cyan/50 rounded px-1 resize-none overflow-hidden flex-1 min-h-[60px] transition-colors"
+            className="nodrag text-[10px] text-gray-500 w-full bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-cyan/50 rounded px-1 resize-none overflow-hidden flex-1 min-h-[60px] transition-colors"
             value={data.description || ''}
             onChange={updateDescription}
+            onKeyDown={(e) => e.stopPropagation()}
             placeholder="As a user, I want to..."
             rows={3}
         />

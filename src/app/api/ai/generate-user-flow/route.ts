@@ -94,6 +94,7 @@ export async function POST(req: Request) {
     let nodes: any[] = [];
     let edges: any[] = [];
     let usageLog = { inputTokens: 0, outputTokens: 0, model: 'gpt-mock-flow' };
+    let errorMessage = '';
 
     if (isAIConfigured()) {
       try {
@@ -162,8 +163,11 @@ Generate a detailed user flow including key screens and user actions.`;
 
       } catch (aiError) {
         console.error('OpenAI generation failed, falling back to mock:', aiError);
+        errorMessage = aiError instanceof Error ? aiError.message : 'Unknown AI error';
         // Fallback to mock if AI fails
       }
+    } else {
+        errorMessage = 'OPENAI_API_KEY is not configured';
     }
 
     // Fallback if AI not configured or failed (nodes empty)
@@ -207,7 +211,7 @@ Generate a detailed user flow including key screens and user actions.`;
       return NextResponse.json({ 
         nodes, 
         edges, 
-        warning: 'AI is not configured (OPENAI_API_KEY missing). Showing example flow.',
+        warning: `AI generation failed: ${errorMessage}. Showing example flow.`,
         usage: {
           used: monthlyUsage + 1,
           limit: limits.maxAIGenerationsPerMonth

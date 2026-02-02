@@ -175,7 +175,10 @@ export function AIChatPanel() {
                     type="text" 
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                    onKeyDown={(e) => {
+                        e.stopPropagation();
+                        if (e.key === 'Enter') handleSend();
+                    }}
                     placeholder="Describe what you want to build..."
                     className="flex-1 bg-cloud border-none rounded-md px-3 py-2 text-sm focus:ring-1 focus:ring-cyan outline-none"
                     disabled={isGenerating}

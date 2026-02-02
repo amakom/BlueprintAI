@@ -128,9 +128,10 @@ To become the leading platform in the industry, empowering users to achieve more
       await prisma.aIUsageLog.create({
         data: {
           teamId: team.id,
-          userId: session.userId,
+          // userId removed as it's not in schema
           action: 'GENERATE_STRATEGY_DOC',
-          tokens: 0,
+          inputTokens: 0,
+          outputTokens: 0,
           model: 'mock-gpt',
         },
       });

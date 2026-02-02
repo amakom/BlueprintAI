@@ -485,6 +485,7 @@ function CompetitorSection({ projectId }: { projectId: string }) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [competitors, setCompetitors] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   // Fetch Competitors on mount
   useEffect(() => {

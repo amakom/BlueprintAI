@@ -22,13 +22,13 @@ export function FinalCTAAnimation() {
    }, [reduce])
  
    const chips = [
-     { id: 'idea-1', text: 'Features?', x: 40, y: 28 },
-     { id: 'idea-2', text: 'Users', x: 220, y: 70 },
-     { id: 'idea-3', text: 'Edge cases', x: 120, y: 140 },
-     { id: 'idea-4', text: 'Data', x: 360, y: 36 },
-     { id: 'idea-5', text: 'Flows', x: 460, y: 120 },
-     { id: 'idea-6', text: 'KPIs', x: 300, y: 180 },
-   ]
+    { id: 'idea-1', text: 'Feature creep?', x: 40, y: 28 },
+    { id: 'idea-2', text: 'Target users?', x: 220, y: 70 },
+    { id: 'idea-3', text: 'Tech debt?', x: 120, y: 140 },
+    { id: 'idea-4', text: 'Monetization?', x: 360, y: 36 },
+    { id: 'idea-5', text: 'User flow?', x: 460, y: 120 },
+    { id: 'idea-6', text: 'Database?', x: 300, y: 180 },
+  ]
  
    return (
     <div ref={containerRef} className="relative mx-auto max-w-6xl">

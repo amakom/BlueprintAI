@@ -41,25 +41,25 @@ export function StrategyThinkingAnimation() {
            <AnimatePresence>
              {phase && (
                <motion.div
-                 variants={card}
-                 initial="initial"
-                 animate="enter"
-                 className="rounded-2xl border border-white/10 bg-white/5 p-5"
-               >
-                 <div className="text-xs font-bold text-cyan">Product Idea</div>
-                 <div className="mt-2 text-sm text-gray-300">“An Uber for dog walkers”</div>
-               </motion.div>
-             )}
-           </AnimatePresence>
-         </div>
- 
-         <div className="md:col-span-2">
-           <div className="grid gap-6">
-             <AnimatePresence>
-               {phase !== 'idea' && (
-                 <motion.div variants={card} initial="initial" animate="enter" className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                   <div className="text-xs font-bold text-cyan">User Personas</div>
-                   <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  variants={card}
+                  initial="initial"
+                  animate="enter"
+                  className="rounded-2xl border border-white/10 bg-white/5 p-5"
+                >
+                  <div className="text-xs font-bold text-cyan">Your Idea</div>
+                  <div className="mt-2 text-sm text-gray-300">“An Uber for dog walkers”</div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <div className="md:col-span-2">
+            <div className="grid gap-6">
+              <AnimatePresence>
+                {phase !== 'idea' && (
+                  <motion.div variants={card} initial="initial" animate="enter" className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                    <div className="text-xs font-bold text-cyan">Target Audience</div>
+                    <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
                      <motion.div custom={0} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4">
                        <div className="h-8 w-8 rounded-full bg-cyan/20 mb-2" />
                        <div className="text-sm">Busy Buyer</div>
@@ -81,32 +81,32 @@ export function StrategyThinkingAnimation() {
              </AnimatePresence>
  
              <AnimatePresence>
-               {phase === 'kpis' || phase === 'competitors' || phase === 'complete' ? (
-                 <motion.div variants={card} initial="initial" animate="enter" className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                   <div className="text-xs font-bold text-cyan">Business KPIs</div>
-                   <div className="mt-3 grid grid-cols-3 gap-3">
-                     <motion.div custom={0} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
-                       <div className="text-xs text-gray-400">D7 Retention</div>
-                       <div className="text-lg font-bold">42%</div>
-                     </motion.div>
-                     <motion.div custom={1} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
-                       <div className="text-xs text-gray-400">Conversion</div>
-                       <div className="text-lg font-bold">3.8%</div>
-                     </motion.div>
-                     <motion.div custom={2} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
-                       <div className="text-xs text-gray-400">NPS</div>
-                       <div className="text-lg font-bold">62</div>
-                     </motion.div>
-                   </div>
-                 </motion.div>
-               ) : null}
-             </AnimatePresence>
- 
-             <AnimatePresence>
-               {phase === 'competitors' || phase === 'complete' ? (
-                 <motion.div variants={card} initial="initial" animate="enter" className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                   <div className="text-xs font-bold text-cyan">Competitor Comparison</div>
-                   <div className="mt-3 overflow-hidden rounded-xl border border-white/10">
+                {phase === 'kpis' || phase === 'competitors' || phase === 'complete' ? (
+                  <motion.div variants={card} initial="initial" animate="enter" className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                    <div className="text-xs font-bold text-cyan">Success Metrics</div>
+                    <div className="mt-3 grid grid-cols-3 gap-3">
+                      <motion.div custom={0} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
+                        <div className="text-xs text-gray-400">Retention</div>
+                        <div className="text-lg font-bold">42%</div>
+                      </motion.div>
+                      <motion.div custom={1} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
+                        <div className="text-xs text-gray-400">Conversion</div>
+                        <div className="text-lg font-bold">3.8%</div>
+                      </motion.div>
+                      <motion.div custom={2} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
+                        <div className="text-xs text-gray-400">NPS</div>
+                        <div className="text-lg font-bold">62</div>
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
+
+              <AnimatePresence>
+                {phase === 'competitors' || phase === 'complete' ? (
+                  <motion.div variants={card} initial="initial" animate="enter" className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                    <div className="text-xs font-bold text-cyan">Market Analysis</div>
+                    <div className="mt-3 overflow-hidden rounded-xl border border-white/10">
                      <div className="grid grid-cols-4 bg-white/5">
                        <div className="p-3 text-xs text-gray-400">Feature</div>
                        <div className="p-3 text-xs text-gray-400">Rover</div>

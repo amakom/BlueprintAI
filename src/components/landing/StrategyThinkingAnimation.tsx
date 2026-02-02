@@ -78,17 +78,23 @@ export function StrategyThinkingAnimation() {
                     <div className="text-xs font-bold text-cyan">Target Audience</div>
                     <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
                      <motion.div custom={0} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4">
-                       <div className="h-8 w-8 rounded-full bg-cyan/20 mb-2" />
+                       <div className="h-8 w-8 rounded-full bg-amber-500/20 flex items-center justify-center mb-2">
+                         <User className="w-4 h-4 text-amber-500" />
+                       </div>
                        <div className="text-sm">Busy Buyer</div>
                        <div className="text-xs text-gray-400">Schedules in seconds</div>
                      </motion.div>
                      <motion.div custom={1} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4">
-                       <div className="h-8 w-8 rounded-full bg-cyan/20 mb-2" />
+                       <div className="h-8 w-8 rounded-full bg-emerald-500/20 flex items-center justify-center mb-2">
+                         <UserCheck className="w-4 h-4 text-emerald-500" />
+                       </div>
                        <div className="text-sm">Trusted Walker</div>
                        <div className="text-xs text-gray-400">Reliable earnings</div>
                      </motion.div>
                      <motion.div custom={2} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4">
-                       <div className="h-8 w-8 rounded-full bg-cyan/20 mb-2" />
+                       <div className="h-8 w-8 rounded-full bg-blue-500/20 flex items-center justify-center mb-2">
+                         <ShieldCheck className="w-4 h-4 text-blue-500" />
+                       </div>
                        <div className="text-sm">City Admin</div>
                        <div className="text-xs text-gray-400">Compliance oversight</div>
                      </motion.div>

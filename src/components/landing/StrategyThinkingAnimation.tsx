@@ -1,7 +1,7 @@
  'use client'
  import { useEffect, useState, useMemo, useRef } from 'react'
 import { motion, AnimatePresence, useReducedMotion, useInView } from 'framer-motion'
-import { RotateCcw } from 'lucide-react'
+import { RotateCcw, User, UserCheck, ShieldCheck } from 'lucide-react'
 
 export function StrategyThinkingAnimation() {
   const reduce = useReducedMotion()

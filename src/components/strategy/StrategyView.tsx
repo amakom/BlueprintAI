@@ -264,9 +264,12 @@ function KPISection({ projectId }: { projectId: string }) {
       if (res.ok) {
         const data = await res.json();
         setKpis(prev => [...prev.filter(k => k.id), ...data.kpis]);
+      } else {
+        throw new Error('Failed to save KPIs');
       }
     } catch (e) {
       console.error("Failed to save KPIs:", e);
+      setError("Failed to save KPIs. Please try again.");
     } finally {
       setIsSaving(false);
     }
@@ -538,10 +541,12 @@ function CompetitorSection({ projectId }: { projectId: string }) {
       if (res.ok) {
         const data = await res.json();
         setCompetitors(prev => [...prev.filter(c => c.id), ...data.competitors]);
+      } else {
+        throw new Error('Failed to save Competitors');
       }
     } catch (e) {
       console.error("Failed to save Competitors:", e);
-      alert("Failed to save Competitors. Please try again.");
+      setError("Failed to save Competitors. Please try again.");
     } finally {
       setIsSaving(false);
     }

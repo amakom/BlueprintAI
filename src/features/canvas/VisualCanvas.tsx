@@ -500,8 +500,8 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
             style={{ backgroundColor: isDarkMode ? '#0b1f33' : '#ffffff' }}
             >
             <Background 
-                variant="dots"
-                color={isDarkMode ? "#334155" : "#cbd5e1"} 
+                variant={BackgroundVariant.Dots}
+                color={isDarkMode ? "#334155" : "#cbd5e1"}  
                 gap={20} 
                 size={1}
             />

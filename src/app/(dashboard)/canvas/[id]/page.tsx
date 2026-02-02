@@ -12,6 +12,8 @@ import { SpecView } from '@/components/spec/SpecView';
 import { AIChatPanel } from '@/components/layout/AIChatPanel';
 import { ActivityLogModal } from '@/features/team/ActivityLogModal';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { AlertModal } from '@/components/ui/AlertModal';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 
 interface Project {
   id: string;

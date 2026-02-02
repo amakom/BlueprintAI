@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { HeroAnimation } from './HeroAnimation'
+import { ProductDemoAnimation } from './ProductDemoAnimation'
 import { useEffect, useState } from 'react'
 
 export function HeroSection() {
@@ -23,7 +23,7 @@ export function HeroSection() {
   }))
 
   return (
-    <section className="relative min-h-[90vh] flex flex-col items-center pt-20 pb-20 overflow-hidden">
+    <section className="relative min-h-[90vh] flex flex-col items-center pt-10 pb-20 overflow-hidden">
       {/* Dynamic Background Gradient */}
       <div className="absolute inset-0 z-0">
         <motion.div 
@@ -76,7 +76,7 @@ export function HeroSection() {
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
         >
           <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold leading-tight max-w-5xl mx-auto tracking-tight px-2">
-            Turn Ideas Into Engineering-Ready Blueprints <span className="text-cyan inline-block">In Minutes</span>
+            From Idea to Engineering-Ready Blueprint — <span className="text-cyan inline-block">In Minutes</span>
           </h1>
         </motion.div>
 
@@ -87,7 +87,7 @@ export function HeroSection() {
           transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="mt-6 text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            BlueprintAI is an AI-powered product manager that transforms rough ideas into clear strategy, visual flows, and developer-ready specifications — without writing a single PRD manually.
+            See your product drafted, diagrammed, and spec’d — with no manual planning.
           </p>
         </motion.div>
 
@@ -96,7 +96,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-10 flex flex-col md:flex-row items-center justify-center gap-4"
+          className="mt-8 flex flex-col md:flex-row items-center justify-center gap-4"
         >
           <motion.div 
             whileHover={{ scale: 1.05 }} 
@@ -146,9 +146,9 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-16"
+          className="mt-12"
         >
-          <HeroAnimation />
+          <ProductDemoAnimation />
         </motion.div>
       </div>
     </section>

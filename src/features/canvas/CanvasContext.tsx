@@ -41,6 +41,8 @@ interface CanvasContextType {
   aiSettings: AISettings;
   setAiSettings: (settings: AISettings) => void;
   onError: (message: string) => void;
+  error: string | null;
+  clearError: () => void;
 }
 
 const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
@@ -228,7 +230,9 @@ export function CanvasProvider({ children, initialData, readOnly = false }: { ch
       userName,
       aiSettings,
       setAiSettings,
-      onError
+      onError,
+      error,
+      clearError
     }}>
       {children}
       {/* We expose the error state via a getter in the context? No, we need to render the modal. 

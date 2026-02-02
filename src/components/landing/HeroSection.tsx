@@ -75,7 +75,7 @@ export function HeroSection() {
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
         >
           <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold leading-tight max-w-5xl mx-auto tracking-tight px-2">
-            From Idea to Engineering-Ready Blueprint — <span className="text-cyan inline-block">In Minutes</span>
+            Turn Ideas into Engineering Specs. <span className="text-cyan inline-block">Instantly.</span>
           </h1>
         </motion.div>
 
@@ -86,7 +86,7 @@ export function HeroSection() {
           transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="mt-6 text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            See your product drafted, diagrammed, and spec’d — with no manual planning.
+            Skip the planning grunt work. BlueprintAI generates your user personas, visual flows, and database schemas—so you can start building today.
           </p>
         </motion.div>
 
@@ -125,7 +125,7 @@ export function HeroSection() {
               }}
             />
             <Link href="/dashboard" className="relative block bg-cyan text-navy px-8 py-4 rounded-md font-bold text-lg hover:bg-white transition-all shadow-[0_0_20px_rgba(46,230,214,0.2)] hover:shadow-[0_0_30px_rgba(46,230,214,0.4)]">
-              Start Free — Build Your First Blueprint
+              Generate Your Blueprint — Free
             </Link>
           </motion.div>
           

@@ -5,6 +5,7 @@ import { StrategyThinkingAnimation } from '@/components/landing/StrategyThinking
 import { CanvasFlowAnimation } from '@/components/landing/CanvasFlowAnimation';
 import { SpecConversionAnimation } from '@/components/landing/SpecConversionAnimation';
 import { InteractiveCanvasNodeAnimation } from '@/components/landing/InteractiveCanvasNodeAnimation';
+import { PricingCard } from '@/components/landing/PricingCard';
 import { FadeUp, SlideIn, ScaleIn, StaggerContainer, StaggerItem } from '@/components/landing/ScrollAnimation';
 
 export default function LandingPage() {
@@ -267,58 +268,34 @@ export default function LandingPage() {
             <h2 className="text-3xl md:text-5xl font-bold">Simple pricing that scales with you</h2>
           </FadeUp>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {/* Free */}
-            <FadeUp delay={0} className="bg-white/5 rounded-2xl p-8 border border-white/10 hover:border-white/30 transition-all flex flex-col">
-              <div className="mb-4">
-                <h3 className="text-2xl font-bold">Free</h3>
-                <p className="text-gray-400 text-sm mt-1">For exploration & early ideas</p>
-              </div>
-              <ul className="space-y-4 mb-8 flex-1">
-                <li className="flex items-center gap-2 text-gray-300"><span className="text-cyan">✓</span> 1 project</li>
-                <li className="flex items-center gap-2 text-gray-300"><span className="text-cyan">✓</span> Limited AI usage</li>
-                <li className="flex items-center gap-2 text-gray-300"><span className="text-cyan">✓</span> Local drafts</li>
-                <li className="flex items-center gap-2 text-gray-300"><span className="text-cyan">✓</span> Basic canvas</li>
-              </ul>
-              <Link href="/signup" className="block w-full py-3 rounded-lg border border-white/20 hover:bg-white hover:text-navy text-center font-bold transition-all">
-                Start Free
-              </Link>
-            </FadeUp>
-
-            {/* Pro */}
-            <FadeUp delay={0.1} className="bg-navy rounded-2xl p-8 border-2 border-cyan relative flex flex-col transform md:-translate-y-4 shadow-2xl shadow-cyan/10">
-              <div className="absolute top-0 right-0 bg-cyan text-navy text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">RECOMMENDED</div>
-              <div className="mb-4">
-                <h3 className="text-2xl font-bold text-cyan">Pro</h3>
-                <p className="text-gray-400 text-sm mt-1">For solo founders & builders</p>
-              </div>
-              <ul className="space-y-4 mb-8 flex-1">
-                <li className="flex items-center gap-2 text-white"><span className="text-cyan">✓</span> Unlimited projects</li>
-                <li className="flex items-center gap-2 text-white"><span className="text-cyan">✓</span> Higher AI limits</li>
-                <li className="flex items-center gap-2 text-white"><span className="text-cyan">✓</span> Cloud sync</li>
-                <li className="flex items-center gap-2 text-white"><span className="text-cyan">✓</span> Full spec generation</li>
-              </ul>
-              <Link href="/signup?plan=pro" className="block w-full py-3 rounded-lg bg-cyan text-navy hover:bg-white text-center font-bold transition-all">
-                Upgrade to Pro
-              </Link>
-            </FadeUp>
-
-            {/* Team */}
-            <FadeUp delay={0.2} className="bg-white/5 rounded-2xl p-8 border border-white/10 hover:border-white/30 transition-all flex flex-col">
-              <div className="mb-4">
-                <h3 className="text-2xl font-bold text-amber">Team</h3>
-                <p className="text-gray-400 text-sm mt-1">For startups & agencies</p>
-              </div>
-              <ul className="space-y-4 mb-8 flex-1">
-                <li className="flex items-center gap-2 text-gray-300"><span className="text-amber">✓</span> Unlimited collaborators</li>
-                <li className="flex items-center gap-2 text-gray-300"><span className="text-amber">✓</span> Priority AI processing</li>
-                <li className="flex items-center gap-2 text-gray-300"><span className="text-amber">✓</span> Shared canvases</li>
-                <li className="flex items-center gap-2 text-gray-300"><span className="text-amber">✓</span> Advanced collaboration</li>
-              </ul>
-              <Link href="/signup?plan=team" className="block w-full py-3 rounded-lg border border-white/20 hover:bg-amber hover:text-navy hover:border-amber text-center font-bold transition-all">
-                Start Team Plan
-              </Link>
-            </FadeUp>
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto items-start">
+            <PricingCard
+              title="Free"
+              description="For exploration & early ideas"
+              features={["1 project", "Limited AI usage", "Local drafts", "Basic canvas"]}
+              ctaText="Start Free"
+              ctaLink="/signup"
+              variant="default"
+              delay={0}
+            />
+            <PricingCard
+              title="Pro"
+              description="For solo founders & builders"
+              features={["Unlimited projects", "Higher AI limits", "Cloud sync", "Full spec generation"]}
+              ctaText="Upgrade to Pro"
+              ctaLink="/signup?plan=pro"
+              variant="pro"
+              delay={0.1}
+            />
+            <PricingCard
+              title="Team"
+              description="For startups & agencies"
+              features={["Unlimited collaborators", "Priority AI processing", "Shared canvases", "Advanced collaboration"]}
+              ctaText="Start Team Plan"
+              ctaLink="/signup?plan=team"
+              variant="team"
+              delay={0.2}
+            />
           </div>
         </section>
 

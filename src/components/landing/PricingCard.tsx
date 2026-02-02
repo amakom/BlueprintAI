@@ -32,21 +32,21 @@ export function PricingCard({
       title: 'text-white',
       check: 'text-cyan',
       cta: 'border border-white/20 hover:bg-white hover:text-navy',
-      border: 'border-white/10 hover:border-white/30',
+      border: 'border-white/10 hover:border-cyan/50',
       bg: 'bg-white/5'
     },
     pro: {
       title: 'text-cyan',
       check: 'text-cyan',
       cta: 'bg-cyan text-navy hover:bg-white',
-      border: 'border-cyan',
+      border: 'border-cyan hover:border-white',
       bg: 'bg-navy'
     },
     team: {
       title: 'text-amber',
       check: 'text-amber',
       cta: 'border border-white/20 hover:bg-amber hover:text-navy hover:border-amber',
-      border: 'border-white/10 hover:border-white/30',
+      border: 'border-white/10 hover:border-amber/50',
       bg: 'bg-white/5'
     }
   };
@@ -89,7 +89,7 @@ export function PricingCard({
         transition: { duration: 0.3, ease: "easeOut" }
       }}
       className={`
-        relative flex flex-col p-8 rounded-2xl transition-colors duration-300
+        relative flex flex-col p-6 md:p-8 rounded-2xl transition-colors duration-300
         border ${theme.border} ${theme.bg}
         ${isPro ? 'border-2 shadow-2xl shadow-cyan/10 md:-mt-4 z-10' : ''}
       `}

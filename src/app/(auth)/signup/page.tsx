@@ -42,8 +42,8 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cloud">
-      <div className="bg-white p-8 rounded-xl shadow-sm border border-border w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-cloud p-4">
+      <div className="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-border w-full max-w-md">
         <div className="flex justify-center mb-6">
           <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
             <div className="w-8 h-8 bg-cyan rounded-md flex items-center justify-center text-navy text-lg font-bold">

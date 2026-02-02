@@ -116,7 +116,7 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-6 py-8 pt-16 md:pt-8">
         <div className="flex items-center justify-between mb-8">
           <div>
             <Skeleton className="h-8 w-32 mb-2" />
@@ -144,15 +144,15 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="container mx-auto px-6 py-8">
-      <div className="flex items-center justify-between mb-8">
+    <div className="container mx-auto px-6 py-8 pt-16 md:pt-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div>
           <h1 className="text-2xl font-bold text-navy">Projects</h1>
           <p className="text-gray-500">Manage and organize your product blueprints</p>
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-navy text-white rounded-lg hover:bg-navy/90 transition-colors font-medium shadow-lg shadow-navy/20"
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-navy text-white rounded-lg hover:bg-navy/90 transition-colors font-medium shadow-lg shadow-navy/20 w-full md:w-auto"
         >
           <Plus className="w-4 h-4" />
           New Project

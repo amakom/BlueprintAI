@@ -52,7 +52,7 @@ export function InteractiveCanvasNodeAnimation() {
       {/* Node 1 (Left) */}
       <motion.div
         key={`node1-${key}`}
-        className="absolute left-[35%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-sm border border-cyan rounded-lg flex items-center justify-center z-10 shadow-lg shadow-cyan/10"
+        className="absolute left-[35%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/10 backdrop-blur-sm border border-cyan rounded-lg flex items-center justify-center z-10 shadow-lg shadow-cyan/10"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ 
           scale: [0, 1, 1.1, 1], 
@@ -71,7 +71,7 @@ export function InteractiveCanvasNodeAnimation() {
       {/* Node 2 (Right) */}
       <motion.div
         key={`node2-${key}`}
-        className="absolute left-[65%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-navy border border-white/20 rounded-lg flex items-center justify-center z-10"
+        className="absolute left-[65%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-navy border border-white/20 rounded-lg flex items-center justify-center z-10"
         initial={{ scale: 0, opacity: 0, x: -20 }}
         animate={{ 
           scale: 1, 

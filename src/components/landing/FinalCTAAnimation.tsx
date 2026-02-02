@@ -29,12 +29,12 @@ export function FinalCTAAnimation() {
   }
 
   const chips = [
-    { id: 'idea-1', text: 'Feature creep?', x: 40, y: 28 },
-    { id: 'idea-2', text: 'Target users?', x: 220, y: 70 },
-    { id: 'idea-3', text: 'Tech debt?', x: 120, y: 140 },
-    { id: 'idea-4', text: 'Monetization?', x: 360, y: 36 },
-    { id: 'idea-5', text: 'User flow?', x: 460, y: 120 },
-    { id: 'idea-6', text: 'Database?', x: 300, y: 180 },
+    { id: 'idea-1', text: 'Feature creep?', x: '7%', y: 28 },
+    { id: 'idea-2', text: 'Target users?', x: '37%', y: 70 },
+    { id: 'idea-3', text: 'Tech debt?', x: '20%', y: 140 },
+    { id: 'idea-4', text: 'Monetization?', x: '60%', y: 36 },
+    { id: 'idea-5', text: 'User flow?', x: '77%', y: 120 },
+    { id: 'idea-6', text: 'Database?', x: '50%', y: 180 },
   ]
  
    return (
@@ -73,11 +73,11 @@ export function FinalCTAAnimation() {
                         opacity: 1,
                         y: 0,
                         scale: 1,
-                        left: phase === 'messy' ? c.x : 50 + i * 85,
+                        left: phase === 'messy' ? c.x : `${10 + i * 15}%`,
                         top: phase === 'messy' ? c.y : 70 + (i % 2) * 60,
                         transition: { duration: 0.5, delay: i * 0.08 },
                       }}
-                      className="absolute rounded-full border border-white/10 bg-white/10 text-white text-xs px-3 py-1 backdrop-blur-sm"
+                      className="absolute rounded-full border border-white/10 bg-white/10 text-white text-xs px-3 py-1 backdrop-blur-sm whitespace-nowrap"
                     >
                       {c.text}
                     </motion.div>

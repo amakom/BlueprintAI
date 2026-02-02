@@ -62,16 +62,17 @@ export function SpecConversionAnimation() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="relative h-56 rounded-2xl border border-white/10 bg-navy overflow-hidden flex items-center justify-center"
+              className="relative h-56 rounded-2xl border border-white/10 bg-navy overflow-hidden"
             >
-              <div className="relative w-full max-w-[600px] h-full">
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0, transition: { duration: 0.4 } }}
-                  className="absolute top-4 left-4 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs text-white"
-                >
-                  Product Canvas
-                </motion.div>
+              <div className="overflow-x-auto h-full">
+                <div className="relative min-w-[600px] h-full mx-auto">
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0, transition: { duration: 0.4 } }}
+                    className="absolute top-4 left-4 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs text-white"
+                  >
+                    Product Canvas
+                  </motion.div>
                 <motion.div
                   variants={appear}
                   initial="initial"
@@ -119,7 +120,6 @@ export function SpecConversionAnimation() {
                     </div>
                   </div>
                 </motion.div>
-              </div>
               <AnimatePresence>
                 {phase === 'morph' && (
                   <motion.div
@@ -136,6 +136,8 @@ export function SpecConversionAnimation() {
                   </motion.div>
                 )}
               </AnimatePresence>
+              </div>
+              </div>
             </motion.div>
           )}
          </AnimatePresence>

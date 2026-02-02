@@ -75,7 +75,7 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
         >
-          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight max-w-5xl mx-auto tracking-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold leading-tight max-w-5xl mx-auto tracking-tight px-2">
             Turn Ideas Into Engineering-Ready Blueprints — <span className="text-cyan inline-block">In Minutes</span>
           </h1>
         </motion.div>
@@ -101,9 +101,21 @@ export function HeroSection() {
           <motion.div 
             whileHover={{ scale: 1.05 }} 
             whileTap={{ scale: 0.95 }}
-            className="w-full md:w-auto"
+            className="w-full md:w-auto relative group"
           >
-            <Link href="/dashboard" className="block bg-cyan text-navy px-8 py-4 rounded-full font-bold text-lg hover:bg-white transition-all shadow-[0_0_20px_rgba(46,230,214,0.2)] hover:shadow-[0_0_30px_rgba(46,230,214,0.4)]">
+            <motion.div
+              className="absolute inset-0 bg-cyan rounded-full blur-lg opacity-20 group-hover:opacity-40 transition-opacity"
+              animate={{
+                scale: [1, 1.1, 1],
+                opacity: [0.2, 0.3, 0.2]
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+            <Link href="/dashboard" className="relative block bg-cyan text-navy px-8 py-4 rounded-full font-bold text-lg hover:bg-white transition-all shadow-[0_0_20px_rgba(46,230,214,0.2)] hover:shadow-[0_0_30px_rgba(46,230,214,0.4)]">
               Start Free — Build Your First Blueprint
             </Link>
           </motion.div>

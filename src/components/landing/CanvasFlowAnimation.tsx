@@ -59,8 +59,10 @@ export function CanvasFlowAnimation() {
         </button>
       </div>
 
-      <div className="relative h-72 rounded-3xl overflow-hidden border border-white/10 bg-navy flex items-center justify-center">
-        <AnimatePresence>
+      <div className="rounded-3xl border border-white/10 bg-navy overflow-hidden">
+        <div className="overflow-x-auto">
+          <div className="relative h-72 min-w-[700px] flex items-center justify-center">
+            <AnimatePresence>
           {phase !== 'blank' && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -129,6 +131,7 @@ export function CanvasFlowAnimation() {
               </motion.div>
             ) : null}
           </AnimatePresence>
+        </div>
         </div>
       </div>
     </div>

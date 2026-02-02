@@ -184,9 +184,31 @@ export function HeroAnimation() {
                className="rounded-2xl border border-white/10 bg-white/5 p-4"
              >
                <div className="text-xs font-bold text-cyan">Visual Canvas</div>
-               <div className="mt-3 relative h-40">
-                 <motion.div
-                   custom={0}
+              <div className="mt-3 relative h-40 w-full">
+                {/* SVG Connections */}
+                <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
+                  <motion.path
+                    d="M 120 28 C 140 28, 140 60, 160 60"
+                    fill="transparent"
+                    stroke="#ffffff33"
+                    strokeWidth="1.5"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={{ pathLength: 1, opacity: 1 }}
+                    transition={{ duration: 0.8, delay: 0.4, ease: "easeInOut" }}
+                  />
+                  <motion.path
+                    d="M 64 48 C 64 80, 96 80, 96 132"
+                    fill="transparent"
+                    stroke="#ffffff33"
+                    strokeWidth="1.5"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={{ pathLength: 1, opacity: 1 }}
+                    transition={{ duration: 0.8, delay: 0.6, ease: "easeInOut" }}
+                  />
+                </svg>
+
+                <motion.div
+                  custom={0}
                    variants={blockVariants}
                    initial="initial"
                    animate="enter"
@@ -284,17 +306,17 @@ export function HeroAnimation() {
                  <div className="mt-2 text-2xl font-extrabold text-white">Strategy × Canvas × Spec</div>
                  <div className="mt-3 text-sm text-gray-400">Unified, developer-ready output</div>
                </div>
-               <div className="mt-6 grid grid-cols-3 gap-3">
-                 <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-xs">
-                   Personas, KPIs, Market
-                 </div>
-                 <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-xs">
-                   Flow, Screens, Stories
-                 </div>
-                 <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-xs">
-                   Models, APIs, Contracts
-                 </div>
-               </div>
+               <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-xs">
+                  Personas, KPIs, Market
+                </div>
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-xs">
+                  Flow, Screens, Stories
+                </div>
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-xs">
+                  Models, APIs, Contracts
+                </div>
+              </div>
                <motion.div
                  initial={{ opacity: 0 }}
                  animate={{

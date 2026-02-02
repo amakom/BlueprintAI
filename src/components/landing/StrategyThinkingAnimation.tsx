@@ -101,7 +101,7 @@ export function StrategyThinkingAnimation() {
                 {phase === 'kpis' || phase === 'competitors' || phase === 'complete' ? (
                   <motion.div variants={card} initial="initial" animate="enter" className="rounded-2xl border border-white/10 bg-white/5 p-5">
                     <div className="text-xs font-bold text-cyan">Success Metrics</div>
-                    <div className="mt-3 grid grid-cols-3 gap-3">
+                    <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <motion.div custom={0} variants={item} initial="initial" animate="enter" className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
                         <div className="text-xs text-gray-400">Retention</div>
                         <div className="text-lg font-bold">42%</div>
@@ -124,32 +124,36 @@ export function StrategyThinkingAnimation() {
                   <motion.div variants={card} initial="initial" animate="enter" className="rounded-2xl border border-white/10 bg-white/5 p-5">
                     <div className="text-xs font-bold text-cyan">Market Analysis</div>
                     <div className="mt-3 overflow-hidden rounded-xl border border-white/10">
-                     <div className="grid grid-cols-4 bg-white/5">
-                       <div className="p-3 text-xs text-gray-400">Feature</div>
-                       <div className="p-3 text-xs text-gray-400">Rover</div>
-                       <div className="p-3 text-xs text-gray-400">Wag!</div>
-                       <div className="p-3 text-xs text-gray-400">Blueprint</div>
-                     </div>
-                     <motion.div custom={0} variants={item} initial="initial" animate="enter" className="grid grid-cols-4">
-                       <div className="p-3 text-xs border-t border-white/10">Background Checks</div>
-                       <div className="p-3 text-xs border-t border-white/10">Yes</div>
-                       <div className="p-3 text-xs border-t border-white/10">Yes</div>
-                       <div className="p-3 text-xs border-t border-white/10">Enhanced</div>
-                     </motion.div>
-                     <motion.div custom={1} variants={item} initial="initial" animate="enter" className="grid grid-cols-4">
-                       <div className="p-3 text-xs border-t border-white/10">Instant Booking</div>
-                       <div className="p-3 text-xs border-t border-white/10">Yes</div>
-                       <div className="p-3 text-xs border-t border-white/10">Yes</div>
-                       <div className="p-3 text-xs border-t border-white/10">Priority</div>
-                     </motion.div>
-                     <motion.div custom={2} variants={item} initial="initial" animate="enter" className="grid grid-cols-4">
-                       <div className="p-3 text-xs border-t border-white/10">Support Quality</div>
-                       <div className="p-3 text-xs border-t border-white/10">Good</div>
-                       <div className="p-3 text-xs border-t border-white/10">Good</div>
-                       <div className="p-3 text-xs border-t border-white/10">Premium</div>
-                     </motion.div>
-                   </div>
-                 </motion.div>
+                      <div className="overflow-x-auto">
+                        <div className="min-w-[400px]">
+                          <div className="grid grid-cols-4 bg-white/5">
+                            <div className="p-3 text-xs text-gray-400">Feature</div>
+                            <div className="p-3 text-xs text-gray-400">Rover</div>
+                            <div className="p-3 text-xs text-gray-400">Wag!</div>
+                            <div className="p-3 text-xs text-gray-400">Blueprint</div>
+                          </div>
+                          <motion.div custom={0} variants={item} initial="initial" animate="enter" className="grid grid-cols-4">
+                            <div className="p-3 text-xs border-t border-white/10">Background Checks</div>
+                            <div className="p-3 text-xs border-t border-white/10">Yes</div>
+                            <div className="p-3 text-xs border-t border-white/10">Yes</div>
+                            <div className="p-3 text-xs border-t border-white/10">Enhanced</div>
+                          </motion.div>
+                          <motion.div custom={1} variants={item} initial="initial" animate="enter" className="grid grid-cols-4">
+                            <div className="p-3 text-xs border-t border-white/10">Instant Booking</div>
+                            <div className="p-3 text-xs border-t border-white/10">Yes</div>
+                            <div className="p-3 text-xs border-t border-white/10">Yes</div>
+                            <div className="p-3 text-xs border-t border-white/10">Priority</div>
+                          </motion.div>
+                          <motion.div custom={2} variants={item} initial="initial" animate="enter" className="grid grid-cols-4">
+                            <div className="p-3 text-xs border-t border-white/10">Support Quality</div>
+                            <div className="p-3 text-xs border-t border-white/10">Good</div>
+                            <div className="p-3 text-xs border-t border-white/10">Good</div>
+                            <div className="p-3 text-xs border-t border-white/10">Premium</div>
+                          </motion.div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
                ) : null}
              </AnimatePresence>
  

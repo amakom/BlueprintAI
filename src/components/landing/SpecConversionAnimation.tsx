@@ -157,19 +157,19 @@ export function SpecConversionAnimation() {
                 variants={appear}
                 initial="initial"
                 animate="enter"
-                className="rounded-2xl border border-white/10 bg-white/5 p-4 font-mono text-xs"
+                className="rounded-2xl border border-white/10 bg-white/5 p-3 font-mono text-[10px] overflow-hidden"
               >
-                <div className="text-cyan text-[11px] font-bold mb-2">Data Model (Prisma)</div>
-                <pre className="text-gray-200">
+                <div className="text-cyan text-[10px] font-bold mb-2 truncate">Data Model (Prisma)</div>
+                <pre className="text-gray-300 leading-tight scrollbar-none overflow-x-auto">
 {`model User {
-  id        String  @id @default(cuid())
-  email     String  @unique
-  createdAt DateTime @default(now())
+  id    String @id @default(cuid())
+  email String @unique
+  created DateTime @default(now())
 }
 model Booking {
-  id        String  @id @default(cuid())
-  userId    String
-  date      DateTime
+  id     String @id @default(cuid())
+  userId String
+  date   DateTime
 }`}
                 </pre>
               </motion.div>
@@ -177,26 +177,26 @@ model Booking {
                 variants={appear}
                 initial="initial"
                 animate="enter"
-                className="rounded-2xl border border-white/10 bg-white/5 p-4 font-mono text-xs"
+                className="rounded-2xl border border-white/10 bg-white/5 p-3 font-mono text-[10px] overflow-hidden"
               >
-                <div className="text-cyan text-[11px] font-bold mb-2">API Routes (Next.js)</div>
-                <div className="space-y-1 text-gray-200">
-                  <div>GET /api/bookings</div>
-                  <div>POST /api/bookings</div>
-                  <div>POST /api/login</div>
+                <div className="text-cyan text-[10px] font-bold mb-2 truncate">API Routes (Next.js)</div>
+                <div className="space-y-2 text-gray-300">
+                  <div className="truncate">GET  /api/bookings</div>
+                  <div className="truncate">POST /api/bookings</div>
+                  <div className="truncate">POST /api/login</div>
                 </div>
               </motion.div>
               <motion.div
                 variants={appear}
                 initial="initial"
                 animate="enter"
-                className="rounded-2xl border border-white/10 bg-white/5 p-4 font-mono text-xs"
+                className="rounded-2xl border border-white/10 bg-white/5 p-3 font-mono text-[10px] overflow-hidden"
               >
-                <div className="text-cyan text-[11px] font-bold mb-2">UI Components (React)</div>
-                <div className="space-y-1 text-gray-200">
-                  <div>LoginForm</div>
-                  <div>BookingList</div>
-                  <div>PaymentSummary</div>
+                <div className="text-cyan text-[10px] font-bold mb-2 truncate">UI Components (React)</div>
+                <div className="space-y-2 text-gray-300">
+                  <div className="truncate">LoginForm</div>
+                  <div className="truncate">BookingList</div>
+                  <div className="truncate">PaymentSummary</div>
                 </div>
               </motion.div>
              </motion.div>

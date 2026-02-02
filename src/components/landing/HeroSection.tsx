@@ -91,6 +91,16 @@ export function HeroSection() {
           </p>
         </motion.div>
 
+        {/* Main Visualization */}
+        <motion.div
+          initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-12"
+        >
+          <ProductDemoAnimation />
+        </motion.div>
+
         {/* CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -140,16 +150,6 @@ export function HeroSection() {
         >
           No credit card required · Built for founders, PMs, and teams
         </motion.p>
-
-        {/* Main Visualization */}
-        <motion.div
-          initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-12"
-        >
-          <ProductDemoAnimation />
-        </motion.div>
       </div>
     </section>
   )

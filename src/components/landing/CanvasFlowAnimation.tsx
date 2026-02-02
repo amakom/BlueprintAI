@@ -30,11 +30,11 @@ export function CanvasFlowAnimation() {
   }
 
   const nodes = [
-     { id: 'login', label: 'Login', tag: 'Auth', x: 60, y: 40 },
-     { id: 'search', label: 'Search', tag: 'Discovery', x: 220, y: 90 },
-     { id: 'booking', label: 'Booking', tag: 'Flow', x: 380, y: 40 },
-     { id: 'payment', label: 'Payment', tag: 'Checkout', x: 540, y: 90 },
-   ]
+    { id: 'login', label: 'Login', tag: 'Auth', x: 40, y: 100 },
+    { id: 'search', label: 'Search', tag: 'Discovery', x: 200, y: 150 },
+    { id: 'booking', label: 'Booking', tag: 'Flow', x: 360, y: 100 },
+    { id: 'payment', label: 'Payment', tag: 'Checkout', x: 520, y: 150 },
+  ]
  
    const edges = [
      { from: 'login', to: 'search' },
@@ -112,16 +112,16 @@ export function CanvasFlowAnimation() {
                     key={n.id}
                     initial={{ opacity: 0, y: 8, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, delay: i * 0.12 } }}
-                    className="absolute w-[140px] h-[52px] rounded-xl border border-white/10 bg-white/10 backdrop-blur-sm"
+                    className="absolute w-[140px] h-[52px] rounded-xl border border-white/10 bg-white/10 backdrop-blur-sm overflow-hidden"
                     style={{ left: n.x, top: n.y }}
                   >
                     <div className="flex h-full items-center gap-3 px-3">
-                      <div className="h-7 w-7 rounded-md bg-cyan/30 flex items-center justify-center text-[10px] text-navy font-bold">
+                      <div className="h-7 w-7 rounded-md bg-cyan/30 flex items-center justify-center text-[10px] text-navy font-bold flex-shrink-0">
                         {n.tag.slice(0, 2).toUpperCase()}
                       </div>
-                      <div className="flex-1">
-                        <div className="text-sm text-white">{n.label}</div>
-                        <div className="text-[10px] text-gray-300">{n.tag}</div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm text-white truncate">{n.label}</div>
+                        <div className="text-[10px] text-gray-300 truncate">{n.tag}</div>
                       </div>
                     </div>
                   </motion.div>

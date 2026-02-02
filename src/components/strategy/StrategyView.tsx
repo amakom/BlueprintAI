@@ -539,6 +539,7 @@ function CompetitorSection({ projectId }: { projectId: string }) {
       }
     } catch (e) {
       console.error("Failed to save Competitors:", e);
+      alert("Failed to save Competitors. Please try again.");
     } finally {
       setIsSaving(false);
     }

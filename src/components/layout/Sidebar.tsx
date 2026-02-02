@@ -98,20 +98,22 @@ export function Sidebar() {
             </button>
           </div>
           <div className="space-y-1">
-            <Link
-              href="#"
-              className="flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors hover:bg-white/10 text-gray-300 hover:text-white"
-            >
-              <FileText className="w-4 h-4 text-cyan" />
-              <span>Mobile App PRD</span>
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors hover:bg-white/10 text-gray-300 hover:text-white"
-            >
-              <FileText className="w-4 h-4 text-amber" />
-              <span>Website Redesign</span>
-            </Link>
+            {recentProjects.length > 0 ? (
+              recentProjects.map((project) => (
+                <Link
+                  key={project.id}
+                  href={`/project/${project.id}`}
+                  className="flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors hover:bg-white/10 text-gray-300 hover:text-white"
+                >
+                  <FileText className="w-4 h-4 text-cyan" />
+                  <span className="truncate">{project.name}</span>
+                </Link>
+              ))
+            ) : (
+              <div className="px-3 py-2 text-xs text-gray-500 italic">
+                No recent projects
+              </div>
+            )}
           </div>
         </div>
       </nav>

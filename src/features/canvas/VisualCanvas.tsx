@@ -79,7 +79,16 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
   const [showHistory, setShowHistory] = useState(false);
   const [isLibraryCollapsed, setIsLibraryCollapsed] = useState(false);
   const [isPropertiesCollapsed, setIsPropertiesCollapsed] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('blueprint_theme') === 'dark';
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('blueprint_theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
   
   // Comment Input State
   const [tempCommentPos, setTempCommentPos] = useState<{x: number, y: number} | null>(null);

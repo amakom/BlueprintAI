@@ -184,7 +184,8 @@ export function HeroAnimation() {
               className="rounded-md border border-white/10 bg-white/5 p-4"
             >
               <div className="text-xs font-bold text-cyan">Visual Canvas</div>
-              <div className="mt-3 relative h-40 w-full">
+              <div className="mt-3 relative h-40 w-full overflow-hidden">
+                <div className="w-full h-full origin-top-left sm:scale-100 scale-[0.85]">
                 {/* SVG Connections */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
                   <motion.path
@@ -243,9 +244,10 @@ export function HeroAnimation() {
                    initial={{ opacity: 0 }}
                    animate={{ opacity: 1, transition: { delay: 0.8 } }}
                    className="absolute left-16 top-28 h-px w-16 bg-white/20"
-                 />
-               </div>
-             </motion.div>
+                />
+              </div>
+            </div>
+          </motion.div>
  
              <motion.div
               variants={streamVariants}

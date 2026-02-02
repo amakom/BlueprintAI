@@ -7,20 +7,19 @@ import { useEffect, useState } from 'react'
 
 export function HeroSection() {
   const [mounted, setMounted] = useState(false)
+  const [particles, setParticles] = useState<Array<{id: number, x: number, y: number, size: number, duration: number, delay: number}>>([])
 
   useEffect(() => {
     setMounted(true)
+    setParticles(Array.from({ length: 20 }).map((_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 3 + 1,
+      duration: 15 + Math.random() * 20,
+      delay: Math.random() * 5,
+    })))
   }, [])
-
-  // Floating particles
-  const particles = Array.from({ length: 20 }).map((_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 3 + 1,
-    duration: 15 + Math.random() * 20,
-    delay: Math.random() * 5,
-  }))
 
   return (
     <section className="relative min-h-[90vh] flex flex-col items-center pt-10 pb-20 overflow-hidden">

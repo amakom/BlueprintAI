@@ -76,35 +76,30 @@ export function SpecConversionAnimation() {
                   variants={appear}
                   initial="initial"
                   animate="enter"
-                  className="absolute left-28 top-24 w-[140px] h-[52px] rounded-xl border border-white/10 bg-white/10 backdrop-blur-sm"
+                  className="absolute w-[140px] h-[52px] rounded-xl border border-white/10 bg-white/10 backdrop-blur-sm overflow-hidden"
+                  style={{ left: 70, top: 86 }}
                 >
                   <div className="flex h-full items-center gap-3 px-3">
-                    <div className="h-7 w-7 rounded-md bg-cyan/30 flex items-center justify-center text-[10px] text-navy font-bold">UI</div>
-                    <div className="flex-1">
-                      <div className="text-sm text-white">Search</div>
-                      <div className="text-[10px] text-gray-300">Discovery</div>
+                    <div className="h-7 w-7 rounded-md bg-cyan/30 flex items-center justify-center text-[10px] text-navy font-bold flex-shrink-0">UI</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm text-white truncate">Search</div>
+                      <div className="text-[10px] text-gray-300 truncate">Discovery</div>
                     </div>
                   </div>
                 </motion.div>
-                <motion.div
-                  variants={appear}
-                  initial="initial"
-                  animate="enter"
-                  className="absolute left-220 top-60 hidden"
-                />
                 <motion.div
                   variants={stagger}
                   custom={1}
                   initial="initial"
                   animate="enter"
-                  className="absolute w-[140px] h-[52px] rounded-xl border border-white/10 bg-white/10 backdrop-blur-sm"
-                  style={{ left: 220, top: 80 }}
+                  className="absolute w-[140px] h-[52px] rounded-xl border border-white/10 bg-white/10 backdrop-blur-sm overflow-hidden"
+                  style={{ left: 230, top: 86 }}
                 >
                   <div className="flex h-full items-center gap-3 px-3">
-                    <div className="h-7 w-7 rounded-md bg-cyan/30 flex items-center justify-center text-[10px] text-navy font-bold">ST</div>
-                    <div className="flex-1">
-                      <div className="text-sm text-white">Story</div>
-                      <div className="text-[10px] text-gray-300">User Flow</div>
+                    <div className="h-7 w-7 rounded-md bg-cyan/30 flex items-center justify-center text-[10px] text-navy font-bold flex-shrink-0">ST</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm text-white truncate">Story</div>
+                      <div className="text-[10px] text-gray-300 truncate">User Flow</div>
                     </div>
                   </div>
                 </motion.div>
@@ -113,14 +108,14 @@ export function SpecConversionAnimation() {
                   custom={2}
                   initial="initial"
                   animate="enter"
-                  className="absolute w-[140px] h-[52px] rounded-xl border border-white/10 bg-white/10 backdrop-blur-sm"
-                  style={{ left: 380, top: 120 }}
+                  className="absolute w-[140px] h-[52px] rounded-xl border border-white/10 bg-white/10 backdrop-blur-sm overflow-hidden"
+                  style={{ left: 390, top: 86 }}
                 >
                   <div className="flex h-full items-center gap-3 px-3">
-                    <div className="h-7 w-7 rounded-md bg-cyan/30 flex items-center justify-center text-[10px] text-navy font-bold">DB</div>
-                    <div className="flex-1">
-                      <div className="text-sm text-white">Data Model</div>
-                      <div className="text-[10px] text-gray-300">Entity</div>
+                    <div className="h-7 w-7 rounded-md bg-cyan/30 flex items-center justify-center text-[10px] text-navy font-bold flex-shrink-0">DB</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm text-white truncate">Data Model</div>
+                      <div className="text-[10px] text-gray-300 truncate">Entity</div>
                     </div>
                   </div>
                 </motion.div>

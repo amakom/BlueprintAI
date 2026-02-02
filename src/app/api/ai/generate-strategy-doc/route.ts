@@ -160,9 +160,10 @@ To become the leading platform in the industry, empowering users to achieve more
     await prisma.aIUsageLog.create({
       data: {
         teamId: team.id,
-        userId: session.userId,
+        // userId is not in the schema for AIUsageLog
         action: 'GENERATE_STRATEGY_DOC',
-        tokens: completion.usage?.total_tokens || 0,
+        inputTokens: completion.usage?.prompt_tokens || 0,
+        outputTokens: completion.usage?.completion_tokens || 0,
         model: completion.model,
       },
     });

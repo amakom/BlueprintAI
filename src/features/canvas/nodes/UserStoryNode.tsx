@@ -16,7 +16,7 @@ type UserStoryData = {
 
 export function UserStoryNode({ id, data, selected }: NodeProps<Node<UserStoryData>>) {
   const { setNodes, deleteElements } = useReactFlow();
-  const { userName, aiSettings, projectId } = useCanvas();
+  const { userName, aiSettings, projectId, onError } = useCanvas();
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);

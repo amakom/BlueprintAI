@@ -73,8 +73,8 @@ export function FinalCTAAnimation() {
                         opacity: 1,
                         y: 0,
                         scale: 1,
-                        left: phase === 'messy' ? c.x : 40 + i * 100,
-                        top: phase === 'messy' ? c.y : 40 + (i % 2) * 60,
+                        left: phase === 'messy' ? c.x : 50 + i * 85,
+                        top: phase === 'messy' ? c.y : 70 + (i % 2) * 60,
                         transition: { duration: 0.5, delay: i * 0.08 },
                       }}
                       className="absolute rounded-full border border-white/10 bg-white/10 text-white text-xs px-3 py-1 backdrop-blur-sm"

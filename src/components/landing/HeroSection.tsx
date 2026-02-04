@@ -11,12 +11,12 @@ export function HeroSection() {
 
   useEffect(() => {
     setMounted(true)
-    setParticles(Array.from({ length: 20 }).map((_, i) => ({
+    setParticles(Array.from({ length: 30 }).map((_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: Math.random() * 3 + 1,
-      duration: 15 + Math.random() * 20,
+      size: Math.random() * 4 + 1,
+      duration: 12 + Math.random() * 18,
       delay: Math.random() * 5,
     })))
   }, [])
@@ -25,7 +25,7 @@ export function HeroSection() {
     <section className="relative min-h-[90vh] flex flex-col items-center pt-10 pb-20 overflow-hidden">
       {/* Dynamic Background Gradient */}
       <div className="absolute inset-0 z-0">
-        <motion.div 
+        <motion.div
           className="absolute inset-0 bg-gradient-to-br from-navy via-[#112a45] to-[#0d3b4f] opacity-80"
           animate={{
             background: [
@@ -37,6 +37,18 @@ export function HeroSection() {
           transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
         />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(46,230,214,0.08)_0%,transparent_60%)]" />
+        {/* Secondary glow */}
+        <motion.div
+          className="absolute inset-0"
+          animate={{
+            background: [
+              "radial-gradient(ellipse at 30% 50%, rgba(46,230,214,0.04) 0%, transparent 50%)",
+              "radial-gradient(ellipse at 70% 50%, rgba(46,230,214,0.06) 0%, transparent 50%)",
+              "radial-gradient(ellipse at 30% 50%, rgba(46,230,214,0.04) 0%, transparent 50%)"
+            ]
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
       </div>
 
       {/* Floating Particles */}
@@ -44,17 +56,18 @@ export function HeroSection() {
         {mounted && particles.map((p) => (
           <motion.div
             key={p.id}
-            className="absolute rounded-full bg-cyan/20 blur-[1px]"
-            style={{ 
-              left: `${p.x}%`, 
+            className="absolute rounded-full bg-cyan/30 blur-[1px]"
+            style={{
+              left: `${p.x}%`,
               top: `${p.y}%`,
               width: p.size,
               height: p.size
             }}
             animate={{
-              y: [0, -100, 0],
-              x: [0, Math.random() * 50 - 25, 0],
-              opacity: [0, 0.5, 0],
+              y: [0, -120, 0],
+              x: [0, Math.random() * 40 - 20, 0],
+              opacity: [0, 0.6, 0],
+              scale: [0.5, 1.2, 0.5],
             }}
             transition={{
               duration: p.duration,
@@ -75,7 +88,7 @@ export function HeroSection() {
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
         >
           <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold leading-tight max-w-5xl mx-auto tracking-tight px-2">
-            Turn Ideas into Engineering Specs. <span className="text-cyan inline-block">Instantly.</span>
+            Plan It. See It. <span className="text-cyan inline-block">Build It.</span>
           </h1>
         </motion.div>
 
@@ -86,7 +99,8 @@ export function HeroSection() {
           transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="mt-6 text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Skip the planning grunt work. BlueprintAI generates your user personas, visual flows, and database schemas—so you can start building today.
+            The AI-powered planning tool for vibe coders, PMs, designers, and engineers.
+            Turn your raw idea into a complete blueprint — with strategy, visual flows, and engineering specs — before writing a single line of code.
           </p>
         </motion.div>
 
@@ -107,8 +121,8 @@ export function HeroSection() {
           transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           className="mt-8 flex flex-col md:flex-row items-center justify-center gap-4"
         >
-          <motion.div 
-            whileHover={{ scale: 1.05 }} 
+          <motion.div
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="w-full md:w-auto relative group"
           >
@@ -124,18 +138,18 @@ export function HeroSection() {
                 ease: "easeInOut"
               }}
             />
-            <Link href="/dashboard" className="relative block bg-cyan text-navy px-8 py-4 rounded-md font-bold text-lg hover:bg-white transition-all shadow-[0_0_20px_rgba(46,230,214,0.2)] hover:shadow-[0_0_30px_rgba(46,230,214,0.4)]">
-              Generate Your Blueprint — Free
+            <Link href="/signup" className="relative block bg-cyan text-navy px-8 py-4 rounded-md font-bold text-lg hover:bg-white transition-all shadow-[0_0_20px_rgba(46,230,214,0.2)] hover:shadow-[0_0_30px_rgba(46,230,214,0.4)]">
+              Start Your Blueprint — Free
             </Link>
           </motion.div>
-          
-          <motion.div 
-            whileHover={{ scale: 1.05 }} 
+
+          <motion.div
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="w-full md:w-auto"
           >
             <Link href="#demo" className="block border border-white/20 text-white px-8 py-4 rounded-md font-bold text-lg hover:border-white transition-all hover:bg-white/5 backdrop-blur-sm">
-              Watch 90-Second Demo
+              See It in Action
             </Link>
           </motion.div>
         </motion.div>
@@ -147,7 +161,7 @@ export function HeroSection() {
           transition={{ duration: 1, delay: 0.8 }}
           className="mt-6 text-sm text-gray-500 font-medium"
         >
-          No credit card required · Built for founders, PMs, and teams
+          No credit card required &middot; Built for vibe coders, PMs, designers & engineers
         </motion.p>
       </div>
     </section>

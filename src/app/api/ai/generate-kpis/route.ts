@@ -107,7 +107,7 @@ export async function POST(req: Request) {
 
     try {
       const completion = await openai.chat.completions.create({
-        model: "gpt-4-turbo-preview", 
+        model: "gpt-4o", 
         response_format: { type: "json_object" },
         messages: [
           {
@@ -133,7 +133,7 @@ export async function POST(req: Request) {
         data: {
           teamId: team.id,
           action: 'GENERATE_KPIS',
-          model: 'gpt-4-turbo-preview',
+          model: 'gpt-4o',
           inputTokens: completion.usage?.prompt_tokens || 0,
           outputTokens: completion.usage?.completion_tokens || 0,
         }

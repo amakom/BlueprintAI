@@ -1,15 +1,19 @@
 import OpenAI from 'openai';
 
-// Initialize OpenAI client
-// Note: It will automatically use process.env.OPENAI_API_KEY
-// Make sure this environment variable is set in your .env.local file
+const apiKey = process.env.OPENAI_API_KEY || 'dummy-key-for-build';
 
 export const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || 'dummy-key-for-build', // Fallback to avoid build errors if env is missing, but runtime will fail if not set
-  dangerouslyAllowBrowser: false, // Only allow server-side usage
+  apiKey,
+  dangerouslyAllowBrowser: false,
 });
 
-// Helper to check if AI is configured
+// Check if a real OpenAI API key is configured (not a placeholder)
 export const isAIConfigured = () => {
-  return !!process.env.OPENAI_API_KEY;
+  const key = process.env.OPENAI_API_KEY;
+  if (!key) return false;
+  // Reject obvious placeholder values
+  if (key === 'dummy-key-for-build') return false;
+  if (key.includes('your-') || key.includes('placeholder') || key.includes('example')) return false;
+  // Valid OpenAI keys start with sk-
+  return key.startsWith('sk-');
 };

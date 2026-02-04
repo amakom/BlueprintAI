@@ -167,7 +167,7 @@ export function CanvasFlowAnimation() {
                           opacity: 1,
                           y: 0,
                           scale: 1,
-                          transition: { duration: 0.5, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }
+                          transition: { duration: 0.5, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] as const }
                         }}
                         className="absolute w-[140px] rounded-md border border-white/15 bg-white/8 backdrop-blur-sm overflow-hidden shadow-lg shadow-black/20"
                         style={{ left: n.x, top: n.y }}

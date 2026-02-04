@@ -30,7 +30,7 @@ export function SpecConversionAnimation() {
   const appear = useMemo(
     () => ({
       initial: { opacity: 0, y: 10, scale: 0.98 },
-      enter: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+      enter: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const } },
     }),
     []
   )
@@ -38,7 +38,7 @@ export function SpecConversionAnimation() {
   const stagger = useMemo(
     () => ({
       initial: { opacity: 0, y: 8 },
-      enter: (i: number) => ({ opacity: 1, y: 0, transition: { duration: 0.4, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] } }),
+      enter: (i: number) => ({ opacity: 1, y: 0, transition: { duration: 0.4, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] as const } }),
     }),
     []
   )
@@ -212,7 +212,7 @@ export function SpecConversionAnimation() {
             <motion.div
               key="doc-view"
               initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }}
+              animate={{ opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } }}
               exit={{ opacity: 0 }}
               className="grid md:grid-cols-3 gap-4"
             >

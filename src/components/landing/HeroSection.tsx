@@ -85,7 +85,7 @@ export function HeroSection() {
         <motion.div
           initial={{ opacity: 0, y: 30, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] as const }}
         >
           <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold leading-tight max-w-5xl mx-auto tracking-tight px-2">
             Plan It. See It. <span className="text-cyan inline-block">Build It.</span>
@@ -96,7 +96,7 @@ export function HeroSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] as const }}
         >
           <p className="mt-6 text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
             The AI-powered planning tool for vibe coders, PMs, designers, and engineers.
@@ -108,7 +108,7 @@ export function HeroSection() {
         <motion.div
           initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
           className="mt-12"
         >
           <ProductDemoAnimation />
@@ -118,7 +118,7 @@ export function HeroSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] as const }}
           className="mt-8 flex flex-col md:flex-row items-center justify-center gap-4"
         >
           <motion.div

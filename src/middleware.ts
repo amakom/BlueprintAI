@@ -15,12 +15,18 @@ export async function middleware(req: NextRequest) {
   }
 
   // Define public paths
-  const isPublicPath = 
-    pathname === '/' || 
-    pathname === '/login' || 
-    pathname === '/signup' || 
-    pathname.startsWith('/api/auth') || 
-    pathname.startsWith('/api/webhooks');
+  const isPublicPath =
+    pathname === '/' ||
+    pathname === '/login' ||
+    pathname === '/signup' ||
+    pathname === '/forgot-password' ||
+    pathname === '/reset-password' ||
+    pathname === '/verify' ||
+    pathname === '/pricing' ||
+    pathname.startsWith('/share/') ||
+    pathname.startsWith('/api/auth') ||
+    pathname.startsWith('/api/webhooks') ||
+    pathname.startsWith('/api/share/');
 
   const token = req.cookies.get('token')?.value;
   const payload = token ? await verifyToken(token) : null;

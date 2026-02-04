@@ -14,8 +14,14 @@ export default function SignupPage() {
     password: '',
   });
 
+  const passwordValid = formData.password.length >= 8;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!passwordValid) {
+      setError('Password must be at least 8 characters');
+      return;
+    }
     setLoading(true);
     setError('');
 
@@ -83,13 +89,19 @@ export default function SignupPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-navy mb-1">Password</label>
-            <input 
-              type="password" 
+            <input
+              type="password"
               required
+              minLength={8}
               className="w-full p-2 border border-border rounded-md"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             />
+            {formData.password.length > 0 && (
+              <p className={`text-xs mt-1 ${passwordValid ? 'text-green-600' : 'text-gray-400'}`}>
+                {passwordValid ? 'Password strength: Good' : `${8 - formData.password.length} more characters needed`}
+              </p>
+            )}
           </div>
           <button 
             type="submit" 

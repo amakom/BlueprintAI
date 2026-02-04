@@ -117,7 +117,7 @@ export function Sidebar() {
               recentProjects.map((project) => (
                 <Link
                   key={project.id}
-                  href={`/project/${project.id}`}
+                  href={`/canvas/${project.id}`}
                   onClick={() => setIsMobileOpen(false)}
                   className="flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors hover:bg-white/10 text-gray-300 hover:text-white"
                 >

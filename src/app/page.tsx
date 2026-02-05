@@ -307,7 +307,7 @@ export default function LandingPage() {
               description="For solo founders, PMs & designers"
               features={["Unlimited projects", "100 AI generations/month", "Cloud sync & export", "Full engineering specs"]}
               ctaText="Upgrade to Pro"
-              ctaLink="/signup?plan=pro"
+              ctaLink="/pricing"
               variant="pro"
               delay={0.1}
             />
@@ -316,7 +316,7 @@ export default function LandingPage() {
               description="For startups, agencies & engineering teams"
               features={["Unlimited collaborators", "1000 AI generations/month", "Real-time collaboration", "Shared workspaces & roles"]}
               ctaText="Start Team Plan"
-              ctaLink="/signup?plan=team"
+              ctaLink="/pricing"
               variant="team"
               delay={0.2}
             />

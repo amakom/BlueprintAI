@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 
@@ -47,9 +48,7 @@ function LoginForm() {
     <div className="bg-white p-6 md:p-8 rounded-md shadow-sm border border-border w-full max-w-md">
       <div className="flex justify-center mb-6">
         <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-          <div className="w-8 h-8 bg-cyan rounded-md flex items-center justify-center text-navy text-lg font-bold">
-            B
-          </div>
+          <Image src="/icon.svg" alt="BlueprintAI" width={32} height={32} className="rounded-md" />
           <span className="text-xl font-bold text-navy">BlueprintAI</span>
         </Link>
       </div>

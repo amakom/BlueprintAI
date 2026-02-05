@@ -1,0 +1,43 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <rect width="512" height="512" rx="96" fill="#0a1628"/>
+
+  <!-- Blueprint grid lines -->
+  <g opacity="0.15" stroke="#00f0ff" stroke-width="1">
+    <line x1="128" y1="64" x2="128" y2="448"/>
+    <line x1="256" y1="64" x2="256" y2="448"/>
+    <line x1="384" y1="64" x2="384" y2="448"/>
+    <line x1="64" y1="128" x2="448" y2="128"/>
+    <line x1="64" y1="256" x2="448" y2="256"/>
+    <line x1="64" y1="384" x2="448" y2="384"/>
+  </g>
+
+  <!-- Stylized B -->
+  <path d="M160 96H296C359.346 96 416 152.654 416 216C416 252 396 283 366 300C406 320 432 360 432 408C432 471.346 375.346 416 312 416H160V96Z" fill="none" stroke="#00f0ff" stroke-width="0"/>
+
+  <!-- B letter with modern geometric style -->
+  <g fill="#00f0ff">
+    <!-- Vertical bar of B -->
+    <rect x="140" y="88" width="48" height="336" rx="8"/>
+
+    <!-- Top bowl of B -->
+    <path d="M188 88H300C344.183 88 380 123.817 380 168V168C380 212.183 344.183 248 300 248H188V88Z" fill="#00f0ff"/>
+    <rect x="188" y="120" width="112" height="96" rx="0" fill="#0a1628"/>
+
+    <!-- Bottom bowl of B -->
+    <path d="M188 264H316C368.467 264 412 307.533 412 360V360C412 412.467 368.467 424 316 424H188V264Z" fill="#00f0ff"/>
+    <rect x="188" y="296" width="144" height="96" rx="0" fill="#0a1628"/>
+  </g>
+
+  <!-- AI circuit nodes -->
+  <circle cx="420" cy="120" r="12" fill="#00f0ff"/>
+  <circle cx="92" cy="420" r="12" fill="#00f0ff"/>
+  <circle cx="420" cy="420" r="8" fill="#00f0ff" opacity="0.6"/>
+  <circle cx="92" cy="120" r="8" fill="#00f0ff" opacity="0.6"/>
+
+  <!-- Connecting lines (AI neural network suggestion) -->
+  <g stroke="#00f0ff" stroke-width="2" opacity="0.4">
+    <line x1="420" y1="132" x2="380" y2="168"/>
+    <line x1="92" y1="408" x2="140" y2="380"/>
+  </g>
+</svg>

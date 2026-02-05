@@ -2,6 +2,7 @@ import { getSession } from '@/lib/auth';
 import { UserRole } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { LayoutDashboard, Users, CreditCard, Activity, ShieldAlert, Folder, FileText, Server } from 'lucide-react';
 
 export default async function AdminLayout({
@@ -30,9 +31,7 @@ export default async function AdminLayout({
         <div className="p-6 border-b border-white/10">
             <Link href="/" className="block">
               <h1 className="text-xl font-bold flex items-center gap-2 hover:opacity-90 transition-opacity">
-                  <div className="w-8 h-8 bg-cyan rounded-md flex items-center justify-center text-navy font-bold">
-                    B
-                  </div>
+                  <Image src="/icon.svg" alt="BlueprintAI" width={32} height={32} className="rounded-md" />
                   BlueprintAI
               </h1>
             </Link>

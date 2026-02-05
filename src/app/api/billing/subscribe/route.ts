@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
       customizations: {
         title: `BlueprintAI ${planConfig.name} Plan`,
         description: `Monthly subscription for ${planConfig.name}`,
-        logo: 'https://blueprint-ai.com/logo.png', // Placeholder
+        logo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://blueprintai.dev'}/logo.svg`,
       },
       // Note: For recurring, we normally need a plan ID from Flutterwave.
       // If we don't pass payment_plan, it's a one-time payment.

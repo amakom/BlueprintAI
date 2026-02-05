@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Testimonials } from '@/components/landing/Testimonials';
 import { HeroSection } from '@/components/landing/HeroSection';
 import { StrategyThinkingAnimation } from '@/components/landing/StrategyThinkingAnimation';
@@ -23,9 +24,7 @@ export default function LandingPage() {
 
       <nav className="container mx-auto px-4 md:px-6 py-4 md:py-6 flex items-center justify-between relative z-10">
         <Link href="/" className="text-2xl font-bold flex items-center gap-2 hover:opacity-90 transition-opacity">
-          <div className="w-8 h-8 bg-cyan rounded-md flex items-center justify-center text-navy text-lg font-bold">
-            B
-          </div>
+          <Image src="/icon.svg" alt="BlueprintAI" width={32} height={32} className="rounded-md" />
           <span className="hidden md:block">BlueprintAI</span>
         </Link>
         <div className="flex items-center gap-3 md:gap-6">

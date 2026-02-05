@@ -13,7 +13,6 @@ interface PricingTableProps {
 }
 
 export function PricingTable({ initialTeamId, initialUserEmail, initialUserName }: PricingTableProps) {
-  const [currency, setCurrency] = useState<'USD' | 'NGN'>('USD');
   const [loading, setLoading] = useState<string | null>(null);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [selectedPreview, setSelectedPreview] = useState<'FREE' | 'PRO' | 'TEAM'>('FREE');
@@ -31,9 +30,9 @@ export function PricingTable({ initialTeamId, initialUserEmail, initialUserName 
       const res = await fetch('/api/billing/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            planId, 
-            currency,
+        body: JSON.stringify({
+            planId,
+            currency: 'USD',
             teamId,
             userEmail,
             userName
@@ -56,18 +55,18 @@ export function PricingTable({ initialTeamId, initialUserEmail, initialUserName 
   const plans = [
     {
       ...SUBSCRIPTION_PLANS.FREE,
-      priceDisplay: currency === 'USD' ? '$0' : '₦0',
+      priceDisplay: '$0',
       period: '/month'
     },
     {
       ...SUBSCRIPTION_PLANS.PRO,
-      priceDisplay: currency === 'USD' ? '$10' : '₦15,000',
+      priceDisplay: '$10',
       period: '/month',
       highlight: true
     },
     {
       ...SUBSCRIPTION_PLANS.TEAM,
-      priceDisplay: currency === 'USD' ? '$39' : '₦60,000',
+      priceDisplay: '$39',
       period: '/month'
     }
   ];
@@ -76,16 +75,7 @@ export function PricingTable({ initialTeamId, initialUserEmail, initialUserName 
     <div className="w-full max-w-6xl mx-auto px-4 py-12">
       <div className="text-center mb-12">
         <h2 className="text-3xl font-bold text-navy mb-4">Simple, transparent pricing</h2>
-        <div className="flex items-center justify-center gap-4">
-            <span className={currency === 'USD' ? 'font-bold text-navy' : 'text-gray-500'}>USD</span>
-            <button 
-                onClick={() => setCurrency(c => c === 'USD' ? 'NGN' : 'USD')}
-                className="w-12 h-6 bg-gray-200 rounded-md relative transition-colors"
-            >
-                <div className={`absolute top-1 w-4 h-4 rounded-md bg-navy transition-all ${currency === 'NGN' ? 'left-7' : 'left-1'}`} />
-            </button>
-            <span className={currency === 'NGN' ? 'font-bold text-navy' : 'text-gray-500'}>NGN</span>
-        </div>
+        <p className="text-gray-500">All prices in USD</p>
       </div>
 
       <div className="grid md:grid-cols-3 gap-8">

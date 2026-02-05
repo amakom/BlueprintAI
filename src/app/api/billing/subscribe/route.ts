@@ -6,7 +6,7 @@ import { logAudit } from '@/lib/audit';
 
 export async function POST(req: NextRequest) {
   try {
-    const { planId, currency, teamId, userEmail, userName } = await req.json();
+    const { planId, teamId, userEmail, userName } = await req.json();
 
     if (!teamId || !userEmail) {
       return NextResponse.json({ error: 'Missing teamId or userEmail' }, { status: 400 });
@@ -17,13 +17,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });
     }
 
-    // Get price based on currency
-    const amount = currency === 'NGN' && planConfig.currency === 'USD' 
-        ? planConfig.price * 1500 // Simple conversion rate assumption for demo
-        : planConfig.price;
-    
-    // In a real app, fetch dynamic exchange rate or define NGN prices explicitly
-    const finalAmount = currency === 'NGN' ? (planId === 'pro' ? 15000 : 60000) : planConfig.price;
+    const finalAmount = planConfig.price;
 
     const tx_ref = `bp_${teamId}_${planId}_${Date.now()}`;
 
@@ -31,7 +25,7 @@ export async function POST(req: NextRequest) {
     const payload = {
       tx_ref,
       amount: finalAmount,
-      currency: currency || 'USD',
+      currency: 'USD',
       payment_options: 'card,banktransfer,mobilemoney',
       redirect_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/settings/billing?status=success`,
       customer: {

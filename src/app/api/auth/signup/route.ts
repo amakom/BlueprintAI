@@ -1,14 +1,26 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { hashPassword, setSession, signToken } from '@/lib/auth';
-import { sendEmail } from '@/lib/email';
-import { logAudit } from '@/lib/audit';
+import { sendVerificationEmail } from '@/lib/email';
 import crypto from 'crypto';
 import { logSystem } from '@/lib/system-log';
+import { z } from 'zod';
+
+// Input validation schema
+const signupSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name too long'),
+  email: z.string().email('Invalid email address'),
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .regex(/[0-9]/, 'Password must contain at least one number'),
+});
 
 export async function POST(req: Request) {
   console.log('Signup request started');
-  
+
   if (!process.env.DATABASE_URL) {
     console.error('Missing DATABASE_URL');
     await logSystem('ERROR', 'SYSTEM', 'Missing DATABASE_URL configuration');
@@ -17,16 +29,16 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    console.log('Request body parsed', { email: body.email, name: body.name });
-    
-    const { name, email, password } = body;
 
-    if (!email || !password || !name) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
+    // Validate input
+    const validation = signupSchema.safeParse(body);
+    if (!validation.success) {
+      const errors = validation.error.issues.map(e => e.message).join(', ');
+      return NextResponse.json({ error: errors }, { status: 400 });
     }
+
+    const { name, email, password } = validation.data;
+    console.log('Request body validated', { email, name });
 
     // Hash password
     console.log('Hashing password...');
@@ -49,14 +61,14 @@ export async function POST(req: Request) {
           name,
           email,
           password: hashedPassword,
-          role: role as any, // Cast to any or UserRole if imported
+          role: role as any,
         },
       });
 
       // Create Verification Token
       const token = crypto.randomBytes(32).toString('hex');
       const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
-      
+
       await tx.verificationToken.create({
         data: {
           identifier: email,
@@ -65,27 +77,12 @@ export async function POST(req: Request) {
         },
       });
 
-      // Send Verification Email (Async, non-blocking for transaction speed ideally, but here we wait to ensure it works)
-      // Note: In production, consider moving this out of the transaction or using a queue
-      // For now, we'll construct the link. Assuming localhost:3000 if not set.
-      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-      const verifyLink = `${baseUrl}/verify?token=${token}&email=${encodeURIComponent(email)}`;
-
-      await sendEmail({
-        to: email,
-        subject: 'Verify your email for BlueprintAI',
-        text: `Welcome ${name}! Please verify your email by clicking here: ${verifyLink}`,
-        html: `
-          <h1>Welcome to BlueprintAI, ${name}!</h1>
-          <p>Please verify your email address to secure your account.</p>
-          <p><a href="${verifyLink}">Verify Email</a></p>
-          <p>Or copy this link: ${verifyLink}</p>
-        `,
-      });
+      // Send Verification Email using new helper
+      await sendVerificationEmail(email, name, token);
 
       const teamName = `${name}'s Team`;
       const slug = `${name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Math.floor(Math.random() * 1000)}`;
-      
+
       const team = await tx.team.create({
         data: {
           name: teamName,
@@ -121,30 +118,28 @@ export async function POST(req: Request) {
       });
 
       // Seed with initial Canvas Document
-
-      // Seed with initial Canvas Document
       const initialContent = {
         nodes: [
           {
             id: 'welcome-1',
             type: 'userStory',
             position: { x: 100, y: 100 },
-            data: { 
-              title: 'Welcome to BlueprintAI', 
-              role: 'Builder', 
-              goal: 'visualize my product requirements', 
-              benefit: 'I can build faster' 
+            data: {
+              title: 'Welcome to BlueprintAI',
+              role: 'Builder',
+              goal: 'visualize my product requirements',
+              benefit: 'I can build faster'
             }
           },
           {
             id: 'welcome-2',
             type: 'userStory',
             position: { x: 500, y: 100 },
-            data: { 
-              title: 'Try AI Generation', 
-              role: 'Product Owner', 
-              goal: 'use the AI assistant', 
-              benefit: 'I can generate stories automatically' 
+            data: {
+              title: 'Try AI Generation',
+              role: 'Product Owner',
+              goal: 'use the AI assistant',
+              benefit: 'I can generate stories automatically'
             }
           }
         ],
@@ -176,8 +171,8 @@ export async function POST(req: Request) {
 
     // Create Session
     console.log('Signing token...');
-    const token = await signToken({ 
-      userId: result.user.id, 
+    const token = await signToken({
+      userId: result.user.id,
       email: result.user.email,
       role: result.user.role
     });
@@ -191,12 +186,12 @@ export async function POST(req: Request) {
     await logSystem('ERROR', 'AUTH', 'Signup failed', { error: error.message || 'Unknown' });
     const errorMessage = error?.message || 'Unknown error occurred';
     const errorStack = error?.stack || 'No stack trace';
-    
+
     return NextResponse.json(
-      { 
+      {
         error: errorMessage,
-        details: 'Check Vercel logs for full stack trace', 
-        stack: process.env.NODE_ENV === 'development' ? errorStack : undefined 
+        details: 'Check Vercel logs for full stack trace',
+        stack: process.env.NODE_ENV === 'development' ? errorStack : undefined
       },
       { status: 500 }
     );

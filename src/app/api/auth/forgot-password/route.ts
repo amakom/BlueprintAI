@@ -1,17 +1,25 @@
-
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { sendEmail } from '@/lib/email';
+import { sendPasswordResetEmail } from '@/lib/email';
 import { logAudit } from '@/lib/audit';
 import crypto from 'crypto';
+import { z } from 'zod';
+
+const forgotPasswordSchema = z.object({
+  email: z.string().email('Invalid email address'),
+});
 
 export async function POST(req: Request) {
   try {
-    const { email } = await req.json();
+    const body = await req.json();
 
-    if (!email) {
-      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+    // Validate input
+    const validation = forgotPasswordSchema.safeParse(body);
+    if (!validation.success) {
+      return NextResponse.json({ error: 'Invalid email address' }, { status: 400 });
     }
+
+    const { email } = validation.data;
 
     const user = await prisma.user.findUnique({ where: { email } });
 
@@ -37,23 +45,8 @@ export async function POST(req: Request) {
       },
     });
 
-    // Send Email
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-    const resetLink = `${baseUrl}/reset-password?token=${token}&email=${encodeURIComponent(email)}`;
-
-    await sendEmail({
-      to: email,
-      subject: 'Reset your password for BlueprintAI',
-      text: `Hello ${user.name || 'User'}, Click here to reset your password: ${resetLink}. This link expires in 1 hour.`,
-      html: `
-        <h1>Reset Password</h1>
-        <p>Hello ${user.name || 'User'},</p>
-        <p>You requested a password reset. Click the link below to proceed:</p>
-        <p><a href="${resetLink}">Reset Password</a></p>
-        <p>This link expires in 1 hour.</p>
-        <p>If you didn't request this, please ignore this email.</p>
-      `,
-    });
+    // Send Email using new helper
+    await sendPasswordResetEmail(email, user.name || 'User', token);
 
     await logAudit({
       userId: user.id,

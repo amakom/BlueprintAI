@@ -14,7 +14,7 @@ import { ActivityLogModal } from '@/features/team/ActivityLogModal';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { AlertModal } from '@/components/ui/AlertModal';
 import { ConfirmModal } from '@/components/ui/ConfirmModal';
-import { PropertiesPanel } from '@/features/canvas/PropertiesPanel';
+import { SidebarPropertiesPanel } from '@/features/canvas/SidebarPropertiesPanel';
 
 interface Project {
   id: string;
@@ -427,7 +427,7 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
 
                   {propertiesExpanded && (
                     <div className="px-0">
-                      <PropertiesPanel />
+                      <SidebarPropertiesPanel />
                     </div>
                   )}
                 </div>

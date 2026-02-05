@@ -361,7 +361,12 @@ export default function LandingPage() {
           <Link href="/" className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 inline-block hover:opacity-80 transition-opacity">BlueprintAI</Link>
           <p className="text-gray-400 text-lg mb-2">Plan It. See It. Build It.</p>
           <p className="text-gray-500 text-sm">For Vibe Coders, PMs, Designers & Engineers</p>
-          <p className="mt-12 text-xs text-gray-600">&copy; {new Date().getFullYear()} BlueprintAI. All rights reserved.</p>
+          <div className="mt-8 flex flex-wrap gap-6 justify-center text-sm text-gray-500">
+            <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <a href="mailto:support@blueprintai.dev" className="hover:text-white transition-colors">Contact</a>
+          </div>
+          <p className="mt-8 text-xs text-gray-600">&copy; {new Date().getFullYear()} BlueprintAI. All rights reserved.</p>
         </div>
       </footer>
     </div>

@@ -250,13 +250,14 @@ enum SubscriptionStatus {
   CANCELLED
   PAST_DUE
   UNPAID
+  PAUSED
 }
 
 model Subscription {
   id                        String             @id @default(cuid())
   teamId                    String             @unique
-  flutterwaveCustomerId     String?
-  flutterwaveSubscriptionId String?            @unique
+  lemonCustomerId           String?
+  lemonSubscriptionId       String?            @unique
   status                    SubscriptionStatus @default(ACTIVE)
   plan                      PlanType           @default(FREE)
   currency                  Currency           @default(USD)
@@ -284,10 +285,10 @@ model Invoice {
   amount          Float
   currency        Currency
   status          String
-  flutterwaveRef  String?  @unique
+  lemonOrderId    String?  @unique
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  
+
   subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
 }
 

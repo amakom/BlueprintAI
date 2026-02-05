@@ -2,8 +2,8 @@ export type PlanConfig = {
   id: string; // Internal ID
   name: string;
   price: number;
-  currency: 'USD' | 'NGN';
-  flutterwavePlanId?: string; // ID from Flutterwave Dashboard
+  currency: 'USD';
+  lemonVariantId?: string; // Variant ID from Lemonsqueezy Dashboard
   features: string[];
   highlight?: boolean;
 };
@@ -21,7 +21,7 @@ export const SUBSCRIPTION_PLANS: Record<string, PlanConfig> = {
     name: 'Pro',
     price: 10,
     currency: 'USD',
-    flutterwavePlanId: process.env.FLW_PLAN_ID_PRO, 
+    lemonVariantId: process.env.LEMON_VARIANT_PRO,
     features: ['Unlimited Projects', 'AI PRD Generation', 'Priority Support'],
     highlight: true,
   },
@@ -30,7 +30,7 @@ export const SUBSCRIPTION_PLANS: Record<string, PlanConfig> = {
     name: 'Team',
     price: 39,
     currency: 'USD',
-    flutterwavePlanId: process.env.FLW_PLAN_ID_TEAM,
+    lemonVariantId: process.env.LEMON_VARIANT_TEAM,
     features: ['Everything in Pro', 'Team Collaboration', 'Role Management'],
   },
   ENTERPRISE: {

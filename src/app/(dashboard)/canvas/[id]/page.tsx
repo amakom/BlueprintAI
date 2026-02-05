@@ -3,6 +3,7 @@
 import { Play, Share2, Download, Lock, Check, X, Edit2, Trash2, History, Sparkles, Pause, FileText, FileJson } from 'lucide-react';
 import { useSubscription } from '@/hooks/use-subscription';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { CanvasProvider } from '@/features/canvas/CanvasContext';
@@ -244,7 +245,7 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
             {/* Left: Logo + Project Name */}
             <div className="flex items-center gap-3">
               <Link href="/dashboard" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                <div className="w-7 h-7 bg-cyan rounded-md flex items-center justify-center text-navy font-bold text-sm">B</div>
+                <Image src="/icon.svg" alt="BlueprintAI" width={28} height={28} className="rounded-md" />
               </Link>
 
               <span className="text-white/30">/</span>

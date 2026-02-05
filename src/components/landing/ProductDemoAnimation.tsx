@@ -232,7 +232,14 @@ export function ProductDemoAnimation() {
         <div className="hidden md:flex w-64 bg-[#0B1F33] flex-col z-20">
            {/* Logo */}
            <div className="h-16 flex items-center px-6 gap-3">
-            <div className="w-8 h-8 bg-cyan rounded-md flex items-center justify-center text-navy font-bold text-lg">B</div>
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="rounded-md">
+              <rect width="32" height="32" rx="7" fill="#0a1628"/>
+              <g transform="translate(6, 5)">
+                <path d="M3 0H11.25C14 0 16.25 2.25 16.25 5C16.25 6.7 15.4 8.2 14.1 9C16.5 10.1 18.12 12.5 18.12 15.25C18.12 18.9 15.15 22 11.56 22H3V0Z" fill="#00f0ff"/>
+                <path d="M6.75 3.25H10.3C11.75 3.25 12.93 4.43 12.93 5.88C12.93 7.33 11.75 8.5 10.3 8.5H6.75V3.25Z" fill="#0a1628"/>
+                <path d="M6.75 11.75H10.6C12.57 11.75 14.18 13.36 14.18 15.33C14.18 17.3 12.57 18.9 10.6 18.9H6.75V11.75Z" fill="#0a1628"/>
+              </g>
+            </svg>
             <span className="font-bold text-white tracking-tight text-lg">BlueprintAI</span>
           </div>
 
@@ -613,7 +620,14 @@ export function ProductDemoAnimation() {
              <div className="w-72 bg-white border-l border-slate-200 flex flex-col">
                 <div className="h-12 border-b border-slate-100 flex items-center px-4 justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 bg-cyan rounded-md flex items-center justify-center text-navy font-bold text-[10px]">B</div>
+                    <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="rounded">
+                      <rect width="32" height="32" rx="7" fill="#0a1628"/>
+                      <g transform="translate(6, 5)">
+                        <path d="M3 0H11.25C14 0 16.25 2.25 16.25 5C16.25 6.7 15.4 8.2 14.1 9C16.5 10.1 18.12 12.5 18.12 15.25C18.12 18.9 15.15 22 11.56 22H3V0Z" fill="#00f0ff"/>
+                        <path d="M6.75 3.25H10.3C11.75 3.25 12.93 4.43 12.93 5.88C12.93 7.33 11.75 8.5 10.3 8.5H6.75V3.25Z" fill="#0a1628"/>
+                        <path d="M6.75 11.75H10.6C12.57 11.75 14.18 13.36 14.18 15.33C14.18 17.3 12.57 18.9 10.6 18.9H6.75V11.75Z" fill="#0a1628"/>
+                      </g>
+                    </svg>
                     <span className="font-bold text-slate-900 text-sm">BlueprintAI</span>
                   </div>
                   <PanelRight size={16} className="text-slate-400" />

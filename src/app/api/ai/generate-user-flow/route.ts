@@ -90,13 +90,33 @@ export async function POST(req: Request) {
       }, { status: 403 });
     }
 
-    // 5. Generate User Flow (Real AI Only)
+    // 5. Generate User Flow
     let nodes: any[] = [];
     let edges: any[] = [];
     let usageLog = { inputTokens: 0, outputTokens: 0, model: 'unknown' };
 
     if (!isAIConfigured()) {
-        return NextResponse.json({ error: 'OPENAI_API_KEY is not configured in environment variables.' }, { status: 500 });
+        // Return mock data for development/demo when OpenAI is not configured
+        const mockNodes = [
+          { id: `story-${Date.now()}`, type: 'userStory', position: { x: 100, y: 100 }, data: { label: 'User Entry', description: `As a user, I want to ${prompt || 'access the application'}`, userName: 'AI' } },
+          { id: `screen-${Date.now()+1}`, type: 'screen', position: { x: 400, y: 100 }, data: { label: 'Main Screen', description: 'Primary user interface', userName: 'AI' } },
+          { id: `story-${Date.now()+2}`, type: 'userStory', position: { x: 700, y: 100 }, data: { label: 'Complete Action', description: 'User completes their goal', userName: 'AI' } },
+        ];
+        const mockEdges = [
+          { id: `e-${Date.now()}`, source: mockNodes[0].id, target: mockNodes[1].id, type: 'deletable', animated: true },
+          { id: `e-${Date.now()+1}`, source: mockNodes[1].id, target: mockNodes[2].id, type: 'deletable', animated: true },
+        ];
+
+        await prisma.aIUsageLog.create({
+          data: { teamId: team.id, action: 'generate_user_flow_mock', inputTokens: 0, outputTokens: 0, model: 'mock' },
+        });
+
+        return NextResponse.json({
+          nodes: mockNodes,
+          edges: mockEdges,
+          warning: 'Using demo data. Configure OPENAI_API_KEY for real AI generation.',
+          usage: { used: monthlyUsage + 1, limit: limits.maxAIGenerationsPerMonth }
+        });
     }
 
     try {

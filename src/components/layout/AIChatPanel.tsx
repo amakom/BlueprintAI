@@ -225,9 +225,14 @@ export function AIChatPanel() {
       <div className="p-4 border-b border-border bg-cloud/50">
         <div className="flex items-center justify-between">
           <h2 className="font-bold text-navy flex items-center gap-2">
-            <div className="w-6 h-6 bg-cyan rounded-md flex items-center justify-center text-navy text-xs font-bold">
-              B
-            </div>
+            <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="rounded">
+              <rect width="32" height="32" rx="7" fill="#0a1628"/>
+              <g transform="translate(6, 5)">
+                <path d="M3 0H11.25C14 0 16.25 2.25 16.25 5C16.25 6.7 15.4 8.2 14.1 9C16.5 10.1 18.12 12.5 18.12 15.25C18.12 18.9 15.15 22 11.56 22H3V0Z" fill="#00f0ff"/>
+                <path d="M6.75 3.25H10.3C11.75 3.25 12.93 4.43 12.93 5.88C12.93 7.33 11.75 8.5 10.3 8.5H6.75V3.25Z" fill="#0a1628"/>
+                <path d="M6.75 11.75H10.6C12.57 11.75 14.18 13.36 14.18 15.33C14.18 17.3 12.57 18.9 10.6 18.9H6.75V11.75Z" fill="#0a1628"/>
+              </g>
+            </svg>
             BlueprintAI
           </h2>
           <button

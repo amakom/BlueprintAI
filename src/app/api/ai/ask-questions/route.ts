@@ -55,7 +55,30 @@ export async function POST(req: Request) {
     }
 
     if (!isAIConfigured()) {
-      return NextResponse.json({ error: 'OPENAI_API_KEY is not configured.' }, { status: 500 });
+      // Return mock questions for development/demo
+      return NextResponse.json({
+        message: "Great idea! Let me ask a few questions to build a better plan. (Demo mode - configure OPENAI_API_KEY for real AI)",
+        questions: [
+          {
+            id: 'q1',
+            question: 'Who is the primary user of this product?',
+            options: [
+              { label: 'Consumers (B2C)', value: 'b2c' },
+              { label: 'Businesses (B2B)', value: 'b2b' },
+              { label: 'Both', value: 'both' }
+            ]
+          },
+          {
+            id: 'q2',
+            question: 'What platform are you building for?',
+            options: [
+              { label: 'Web App', value: 'web' },
+              { label: 'Mobile App', value: 'mobile' },
+              { label: 'Both', value: 'both' }
+            ]
+          }
+        ]
+      });
     }
 
     const systemPrompt = `You are BlueprintAI, an expert AI planning assistant for software products.

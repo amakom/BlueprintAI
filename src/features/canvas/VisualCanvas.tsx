@@ -43,7 +43,6 @@ const edgeTypes: EdgeTypes = {
 interface VisualCanvasProps {
   projectId: string;
   readOnly?: boolean;
-  hideSidebars?: boolean;
 }
 
 export function VisualCanvas(props: VisualCanvasProps) {
@@ -55,7 +54,7 @@ export function VisualCanvas(props: VisualCanvasProps) {
     );
 }
 
-function VisualCanvasContent({ projectId, readOnly = false, hideSidebars = false }: VisualCanvasProps) {
+function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps) {
   const { 
     nodes, 
     edges, 
@@ -305,7 +304,7 @@ function VisualCanvasContent({ projectId, readOnly = false, hideSidebars = false
   return (
     <div className={`w-full h-full relative flex transition-colors duration-300 ${isDarkMode ? 'bg-[#0b1f33]' : 'bg-white'}`}>
         {/* Component Library Sidebar */}
-        {!readOnly && !isPlayMode && !hideSidebars && (
+        {!readOnly && !isPlayMode && (
            <div className={`bg-white border-r border-slate-200 z-10 shadow-sm shrink-0 flex flex-col transition-all duration-300 relative ${isLibraryCollapsed ? 'w-0 border-none' : 'w-48'}`}>
               <button 
             onClick={() => setIsLibraryCollapsed(!isLibraryCollapsed)}
@@ -551,7 +550,7 @@ function VisualCanvasContent({ projectId, readOnly = false, hideSidebars = false
         </div>
 
         {/* Properties Panel (Right Sidebar) */}
-        {!readOnly && !isPlayMode && !hideSidebars && (
+        {!readOnly && !isPlayMode && (
            <div className={`bg-white border-l border-slate-200 z-10 shadow-sm shrink-0 flex flex-col transition-all duration-300 relative ${isPropertiesCollapsed ? 'w-0 border-none' : 'w-64'}`}>
               <button 
             onClick={() => setIsPropertiesCollapsed(!isPropertiesCollapsed)}

@@ -1,6 +1,6 @@
 'use client';
 
-import { Play, Share2, Download, Lock, Check, X, Edit2, Trash2, History, Pause, FileText, FileJson, Plus, Smartphone, Monitor, Layout, ChevronDown, ChevronUp, Home } from 'lucide-react';
+import { Play, Share2, Download, Lock, Check, X, Edit2, Trash2, History, Sparkles, Pause, FileText, FileJson } from 'lucide-react';
 import { useSubscription } from '@/hooks/use-subscription';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -14,7 +14,6 @@ import { ActivityLogModal } from '@/features/team/ActivityLogModal';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { AlertModal } from '@/components/ui/AlertModal';
 import { ConfirmModal } from '@/components/ui/ConfirmModal';
-import { SidebarPropertiesPanel } from '@/features/canvas/SidebarPropertiesPanel';
 
 interface Project {
   id: string;
@@ -25,7 +24,7 @@ interface Project {
 
 export default function CanvasPage({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const { limits } = useSubscription();
+  const { limits, isLoading: isSubLoading, plan } = useSubscription();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -42,16 +41,15 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
   // View Mode state
   const [mode, setMode] = useState<'canvas' | 'strategy' | 'spec'>('canvas');
 
+  // AI Panel toggle for full-width canvas (Figma-like)
+  const [showAIPanel, setShowAIPanel] = useState(false);
+
   // Play/Preview mode
   const [isPreviewMode, setIsPreviewMode] = useState(false);
 
   // Export dropdown
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
-
-  // Left Sidebar sections collapse state
-  const [libraryExpanded, setLibraryExpanded] = useState(true);
-  const [propertiesExpanded, setPropertiesExpanded] = useState(true);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -213,16 +211,16 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
   if (loading) {
     return (
       <div className="flex h-full">
-        <div className="w-64 bg-white border-r border-border p-4">
-          <Skeleton className="h-8 w-full mb-4" />
-          <Skeleton className="h-6 w-3/4 mb-2" />
-          <Skeleton className="h-6 w-1/2" />
-        </div>
-        <div className="flex-1 relative bg-navy flex items-center justify-center">
-          <Skeleton className="h-32 w-48 rounded-md bg-white/5" />
-        </div>
-        <div className="w-80 bg-white border-l border-border">
-          <Skeleton className="h-full w-full" />
+        <div className="flex-1 relative bg-navy flex flex-col">
+          <header className="h-12 bg-navy border-b border-white/10 flex items-center justify-between px-4 z-10">
+            <div className="flex items-center gap-4">
+              <Skeleton className="h-4 w-20 bg-white/10" />
+              <Skeleton className="h-6 w-32 bg-white/10" />
+            </div>
+          </header>
+          <div className="flex-1 relative overflow-hidden flex items-center justify-center">
+            <Skeleton className="h-32 w-48 rounded-md bg-white/5" />
+          </div>
         </div>
       </div>
     );
@@ -238,18 +236,21 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
 
   return (
     <CanvasProvider>
-      <div className="flex h-full bg-cloud">
-        {/* LEFT SIDEBAR - Main Menu + Library + Properties */}
-        <div className={`w-64 bg-white border-r border-border flex flex-col shrink-0 ${isPreviewMode ? 'opacity-50 pointer-events-none' : ''}`}>
-          {/* Logo & Project Name Header */}
-          <div className="p-4 border-b border-border">
-            <div className="flex items-center gap-2 mb-3">
+      <div className="flex h-full bg-navy">
+        {/* Main Canvas Area - Full Width like Figma */}
+        <div className="flex-1 relative overflow-hidden flex flex-col">
+          {/* Compact Toolbar - Figma Style */}
+          <header className={`h-12 bg-navy border-b border-white/10 flex items-center justify-between px-3 z-10 ${isPreviewMode ? 'opacity-50 pointer-events-none' : ''}`}>
+            {/* Left: Logo + Project Name */}
+            <div className="flex items-center gap-3">
               <Link href="/dashboard" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                <div className="w-8 h-8 bg-cyan rounded-md flex items-center justify-center text-navy font-bold text-sm">B</div>
+                <div className="w-7 h-7 bg-cyan rounded-md flex items-center justify-center text-navy font-bold text-sm">B</div>
               </Link>
-              <span className="text-gray-400">/</span>
+
+              <span className="text-white/30">/</span>
+
               {isRenaming ? (
-                <div className="flex items-center gap-1 flex-1">
+                <div className="flex items-center gap-1">
                   <input
                     ref={inputRef}
                     type="text"
@@ -262,9 +263,9 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
                         setNewName(project.name);
                       }
                     }}
-                    className="font-medium text-navy bg-gray-100 border border-cyan/50 rounded px-2 py-0.5 text-sm outline-none focus:ring-1 focus:ring-cyan flex-1 min-w-0"
+                    className="font-medium text-white bg-white/10 border border-cyan/50 rounded px-2 py-0.5 text-sm outline-none focus:ring-1 focus:ring-cyan w-40"
                   />
-                  <button onClick={handleRenameSubmit} className="p-1 hover:bg-gray-100 text-green-600 rounded">
+                  <button onClick={handleRenameSubmit} className="p-1 hover:bg-white/10 text-green-400 rounded">
                     <Check className="w-3.5 h-3.5" />
                   </button>
                   <button
@@ -272,193 +273,90 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
                       setIsRenaming(false);
                       setNewName(project.name);
                     }}
-                    className="p-1 hover:bg-gray-100 text-red-500 rounded"
+                    className="p-1 hover:bg-white/10 text-red-400 rounded"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center gap-1.5 group flex-1 min-w-0">
-                  <span className="font-medium text-navy text-sm truncate">{project.name}</span>
+                <div className="flex items-center gap-1.5 group">
+                  <span className="font-medium text-white text-sm">{project.name}</span>
                   <button
                     onClick={() => setIsRenaming(true)}
-                    className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-100 text-gray-400 rounded transition-opacity shrink-0"
+                    className="opacity-0 group-hover:opacity-100 p-1 hover:bg-white/10 text-white/50 rounded transition-opacity"
                   >
                     <Edit2 className="w-3 h-3" />
                   </button>
+                  <button
+                    onClick={handleDeleteProject}
+                    className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-500/20 text-red-400 rounded transition-opacity"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </button>
                 </div>
               )}
+
+              <span className="px-1.5 py-0.5 bg-white/10 text-white/50 text-[10px] rounded font-medium">Draft</span>
             </div>
 
-            {/* Quick Actions */}
-            <div className="flex items-center gap-1">
-              <Link
-                href="/dashboard"
-                className="flex items-center gap-1.5 px-2 py-1.5 text-xs text-gray-500 hover:text-navy hover:bg-gray-100 rounded transition-colors"
-              >
-                <Home className="w-3.5 h-3.5" />
-                Dashboard
-              </Link>
-              <button
-                onClick={() => setIsActivityOpen(true)}
-                className="flex items-center gap-1.5 px-2 py-1.5 text-xs text-gray-500 hover:text-navy hover:bg-gray-100 rounded transition-colors"
-              >
-                <History className="w-3.5 h-3.5" />
-                Activity
-              </button>
-              <button
-                onClick={handleDeleteProject}
-                className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors ml-auto"
-                title="Delete Project"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-
-          {/* View Mode Tabs */}
-          <div className="px-3 py-2 border-b border-border">
-            <div className="flex bg-gray-100 rounded-md p-0.5">
+            {/* Center: View Mode Tabs */}
+            <div className="absolute left-1/2 -translate-x-1/2 flex bg-white/5 rounded-md p-0.5">
               <button
                 onClick={() => setMode('canvas')}
-                className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-all ${mode === 'canvas' ? 'bg-white text-navy shadow-sm' : 'text-gray-500 hover:text-navy'}`}
+                className={`px-4 py-1 text-xs font-medium rounded transition-all ${mode === 'canvas' ? 'bg-white/10 text-white' : 'text-white/50 hover:text-white'}`}
               >
                 Canvas
               </button>
               <button
                 onClick={() => setMode('strategy')}
-                className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-all ${mode === 'strategy' ? 'bg-white text-navy shadow-sm' : 'text-gray-500 hover:text-navy'}`}
+                className={`px-4 py-1 text-xs font-medium rounded transition-all ${mode === 'strategy' ? 'bg-white/10 text-white' : 'text-white/50 hover:text-white'}`}
               >
                 Strategy
               </button>
               <button
                 onClick={() => setMode('spec')}
-                className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-all ${mode === 'spec' ? 'bg-white text-navy shadow-sm' : 'text-gray-500 hover:text-navy'}`}
+                className={`px-4 py-1 text-xs font-medium rounded transition-all ${mode === 'spec' ? 'bg-white/10 text-white' : 'text-white/50 hover:text-white'}`}
               >
                 Specs
               </button>
             </div>
-          </div>
 
-          {/* Scrollable Content: Library + Properties */}
-          <div className="flex-1 overflow-y-auto">
-            {mode === 'canvas' && (
-              <>
-                {/* Library Section */}
-                <div className="border-b border-border">
-                  <button
-                    onClick={() => setLibraryExpanded(!libraryExpanded)}
-                    className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
-                  >
-                    <span className="text-xs font-bold text-navy uppercase tracking-wider">Library</span>
-                    {libraryExpanded ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
-                  </button>
-
-                  {libraryExpanded && (
-                    <div className="px-4 pb-4 space-y-2">
-                      <p className="text-[10px] text-gray-400 uppercase mb-2">Drag to canvas</p>
-
-                      {/* Nodes */}
-                      <div className="space-y-1.5">
-                        <LibraryItem
-                          icon={<Plus size={12} />}
-                          label="User Story"
-                          description="Define requirements"
-                          nodeType="userStory"
-                          bgColor="bg-navy"
-                          iconColor="text-white"
-                        />
-                        <LibraryItem
-                          icon={<Smartphone size={12} />}
-                          label="Screen"
-                          description="Generic Screen"
-                          nodeType="screen"
-                          bgColor="bg-white border border-gray-200"
-                          iconColor="text-navy"
-                        />
-                      </div>
-
-                      {/* Frames */}
-                      <div className="pt-2">
-                        <p className="text-[10px] text-gray-400 uppercase mb-2">Frames</p>
-                        <div className="space-y-1.5">
-                          <LibraryItem
-                            icon={<Smartphone size={12} />}
-                            label="Mobile App"
-                            description="390 x 844"
-                            nodeType="screen"
-                            initialData={{ label: 'iPhone 14', style: { width: 390, height: 844 } }}
-                            bgColor="bg-gray-100"
-                            iconColor="text-gray-600"
-                          />
-                          <LibraryItem
-                            icon={<Monitor size={12} />}
-                            label="Web App"
-                            description="1440 x 900"
-                            nodeType="screen"
-                            initialData={{ label: 'Web Desktop', style: { width: 1440, height: 900 } }}
-                            bgColor="bg-gray-100"
-                            iconColor="text-gray-600"
-                          />
-                          <LibraryItem
-                            icon={<Layout size={12} />}
-                            label="Social Post"
-                            description="1080 x 1080"
-                            nodeType="screen"
-                            initialData={{ label: 'Social Post', style: { width: 1080, height: 1080 } }}
-                            bgColor="bg-gray-100"
-                            iconColor="text-gray-600"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Properties Section */}
-                <div>
-                  <button
-                    onClick={() => setPropertiesExpanded(!propertiesExpanded)}
-                    className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
-                  >
-                    <span className="text-xs font-bold text-navy uppercase tracking-wider">Properties</span>
-                    {propertiesExpanded ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
-                  </button>
-
-                  {propertiesExpanded && (
-                    <div className="px-0">
-                      <SidebarPropertiesPanel />
-                    </div>
-                  )}
-                </div>
-              </>
-            )}
-
-            {mode !== 'canvas' && (
-              <div className="p-4 text-center text-gray-400 text-sm">
-                <p>Switch to Canvas view to access Library and Properties.</p>
+            {/* Right: Actions */}
+            <div className="flex items-center gap-1">
+              {/* Collaborators */}
+              <div className="flex -space-x-1.5 mr-2">
+                <div className="w-6 h-6 rounded-full bg-cyan border-2 border-navy text-[10px] flex items-center justify-center text-navy font-bold">Y</div>
+                <div className="w-6 h-6 rounded-full bg-amber border-2 border-navy text-[10px] flex items-center justify-center text-navy font-bold">L</div>
               </div>
-            )}
-          </div>
 
-          {/* Bottom Actions */}
-          <div className="p-3 border-t border-border space-y-2">
-            {/* Preview Mode Toggle */}
-            <button
-              onClick={() => setIsPreviewMode(!isPreviewMode)}
-              className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isPreviewMode
-                  ? 'bg-cyan text-navy'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              {isPreviewMode ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-              {isPreviewMode ? 'Exit Preview' : 'Preview Mode'}
-            </button>
+              {/* Live Indicator */}
+              {limits.canRealTimeEdit && (
+                <div className="flex items-center gap-1 text-[10px] text-green-400 font-bold px-2 mr-1">
+                  <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+                  LIVE
+                </div>
+              )}
 
-            {/* Export & Share */}
-            <div className="flex gap-2">
-              <div className="relative flex-1">
+              {/* Activity Log */}
+              <button
+                onClick={() => setIsActivityOpen(true)}
+                className="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded transition-colors"
+                title="Activity Log"
+              >
+                <History className="w-4 h-4" />
+              </button>
+
+              {/* Play/Preview Mode */}
+              <button
+                onClick={() => setIsPreviewMode(!isPreviewMode)}
+                className={`p-2 rounded transition-colors ${isPreviewMode ? 'bg-cyan text-navy' : 'text-white/60 hover:text-white hover:bg-white/10'}`}
+                title={isPreviewMode ? 'Exit Preview' : 'Preview Mode'}
+              >
+                {isPreviewMode ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+              </button>
+
+              {/* Export Button */}
+              <div className="relative">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -469,54 +367,62 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
                     setShowExportMenu(!showExportMenu);
                   }}
                   disabled={isExporting}
-                  className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`p-2 rounded transition-colors flex items-center gap-1 ${
                     limits.canExport
-                      ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      : 'bg-gray-50 text-gray-400 cursor-not-allowed'
+                      ? 'text-white/60 hover:text-white hover:bg-white/10'
+                      : 'text-white/30 cursor-not-allowed'
                   }`}
+                  title={limits.canExport ? 'Export' : 'Upgrade to Export'}
                 >
                   <Download className={`w-4 h-4 ${isExporting ? 'animate-pulse' : ''}`} />
-                  Export
                   {!limits.canExport && <Lock className="w-3 h-3" />}
                 </button>
 
+                {/* Export Dropdown */}
                 {showExportMenu && limits.canExport && (
-                  <div className="absolute bottom-full left-0 mb-1 w-full bg-white rounded-md shadow-xl border border-gray-200 py-1 z-50 animate-in fade-in slide-in-from-bottom-2 duration-150">
+                  <div className="absolute right-0 top-full mt-1 bg-white rounded-md shadow-xl border border-gray-200 py-1 min-w-[160px] z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                     <button
                       onClick={() => handleExport('markdown')}
                       className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
                     >
                       <FileText className="w-4 h-4 text-gray-400" />
-                      Markdown
+                      Export as Markdown
                     </button>
                     <button
                       onClick={() => handleExport('json')}
                       className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
                     >
                       <FileJson className="w-4 h-4 text-gray-400" />
-                      JSON
+                      Export as JSON
                     </button>
                   </div>
                 )}
               </div>
 
+              {/* AI Panel Toggle */}
               <button
-                className="flex-1 bg-navy text-white px-3 py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 hover:bg-navy/90 transition-colors"
+                onClick={() => setShowAIPanel(!showAIPanel)}
+                className={`p-2 rounded transition-colors ${showAIPanel ? 'bg-cyan text-navy' : 'text-white/60 hover:text-white hover:bg-white/10'}`}
+                title="AI Assistant"
+              >
+                <Sparkles className="w-4 h-4" />
+              </button>
+
+              {/* Share */}
+              <button
+                className="bg-white text-navy px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 hover:bg-gray-100 transition-colors ml-1"
                 onClick={() => {
                   if (limits.maxCollaborators <= 2) {
                     setError('Upgrade to Pro to add more collaborators!');
                   }
                 }}
               >
-                <Share2 className="w-4 h-4" />
+                <Share2 className="w-3.5 h-3.5" />
                 Share
               </button>
             </div>
-          </div>
-        </div>
+          </header>
 
-        {/* CENTER - Canvas Content */}
-        <div className="flex-1 relative overflow-hidden flex flex-col">
           {/* Preview Mode Banner */}
           {isPreviewMode && (
             <div className="bg-cyan text-navy px-4 py-2 flex items-center justify-between text-sm font-medium z-20">
@@ -533,10 +439,10 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
             </div>
           )}
 
-          {/* Canvas/Strategy/Spec View */}
+          {/* Canvas Content - Maximum Space */}
           <div className={`flex-1 relative overflow-hidden ${mode === 'canvas' ? 'bg-navy' : 'bg-cloud'}`}>
             {mode === 'canvas' ? (
-              <VisualCanvas projectId={project.id} hideSidebars={true} />
+              <VisualCanvas projectId={project.id} />
             ) : mode === 'strategy' ? (
               <StrategyView projectId={project.id} />
             ) : (
@@ -545,10 +451,12 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
           </div>
         </div>
 
-        {/* RIGHT SIDEBAR - AI Chat Panel (Always Visible) */}
-        <div className="w-80 border-l border-border bg-white flex-shrink-0">
-          <AIChatPanel />
-        </div>
+        {/* AI Panel - Slide-in from Right (Figma Properties Panel Style) */}
+        {showAIPanel && (
+          <div className="w-80 border-l border-white/10 bg-white flex-shrink-0 animate-in slide-in-from-right duration-200">
+            <AIChatPanel />
+          </div>
+        )}
       </div>
 
       {/* Activity Log Modal */}
@@ -568,51 +476,6 @@ export default function CanvasPage({ params }: { params: { id: string } }) {
         confirmText="Delete Project"
       />
     </CanvasProvider>
-  );
-}
-
-// Library Item Component for drag-and-drop
-function LibraryItem({
-  icon,
-  label,
-  description,
-  nodeType,
-  initialData,
-  bgColor,
-  iconColor
-}: {
-  icon: React.ReactNode;
-  label: string;
-  description: string;
-  nodeType: string;
-  initialData?: any;
-  bgColor: string;
-  iconColor: string;
-}) {
-  const onDragStart = (event: React.DragEvent) => {
-    event.dataTransfer.setData('application/reactflow', nodeType);
-    if (initialData) {
-      event.dataTransfer.setData('application/reactflow/data', JSON.stringify(initialData));
-    }
-    event.dataTransfer.effectAllowed = 'move';
-  };
-
-  return (
-    <div
-      className="p-2.5 border border-gray-200 rounded-md bg-gray-50 cursor-grab active:cursor-grabbing hover:border-navy hover:shadow-sm transition-all group"
-      onDragStart={onDragStart}
-      draggable
-    >
-      <div className="flex items-center gap-2">
-        <div className={`p-1.5 ${bgColor} ${iconColor} rounded-md group-hover:bg-cyan group-hover:text-navy transition-colors`}>
-          {icon}
-        </div>
-        <div>
-          <span className="font-medium text-navy text-xs block">{label}</span>
-          <span className="text-[10px] text-gray-400">{description}</span>
-        </div>
-      </div>
-    </div>
   );
 }
 

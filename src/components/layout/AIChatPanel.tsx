@@ -214,7 +214,7 @@ export function AIChatPanel() {
     }
   };
 
-  const ChatContent = () => (
+  const chatContent = (
     <div className="flex flex-col h-full bg-white shadow-lg w-full">
       <AlertModal
         isOpen={errorAlert.isOpen}
@@ -412,7 +412,7 @@ export function AIChatPanel() {
 
       {/* Desktop Panel */}
       <div className="hidden lg:flex w-80 bg-white border-l border-border flex-col h-full shadow-lg">
-        <ChatContent />
+        {chatContent}
       </div>
 
       {/* Mobile Drawer */}
@@ -431,7 +431,7 @@ export function AIChatPanel() {
             >
               <X className="w-5 h-5" />
             </button>
-            <ChatContent />
+            {chatContent}
           </div>
         </div>
       )}

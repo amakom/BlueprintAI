@@ -288,14 +288,16 @@ export default function LandingPage() {
         {/* PRICING SECTION */}
         <section id="pricing" className="container mx-auto px-6 py-16 md:py-24 border-t border-white/5">
           <FadeUp className="text-center mb-16">
-            <h2 className="text-2xl md:text-5xl font-bold">Simple pricing that scales with you</h2>
-            <p className="mt-4 text-gray-400">Start free. Upgrade when you need more power.</p>
+            <h2 className="text-2xl md:text-5xl font-bold">Early Access — Limited Beta</h2>
+            <p className="mt-4 text-gray-400">Get lifetime Pro access for a one-time price. Only 20 spots available.</p>
           </FadeUp>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto items-start">
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-start">
             <PricingCard
               title="Free"
               description="For exploring ideas & solo vibe coding"
+              price="$0"
+              period="forever"
               features={["1 project", "5 AI generations/month", "Basic visual canvas", "Local drafts"]}
               ctaText="Start Free"
               ctaLink="/signup"
@@ -303,22 +305,16 @@ export default function LandingPage() {
               delay={0}
             />
             <PricingCard
-              title="Pro"
-              description="For solo founders, PMs & designers"
-              features={["Unlimited projects", "100 AI generations/month", "Cloud sync & export", "Full engineering specs"]}
-              ctaText="Upgrade to Pro"
+              title="Pro — Lifetime"
+              description="Beta testers get Pro forever. No subscriptions."
+              price="$49"
+              period="one-time"
+              badge="BETA — 20 SPOTS"
+              features={["Unlimited projects", "100 AI generations/month", "Cloud sync & export", "Full engineering specs", "Priority support", "All future Pro updates"]}
+              ctaText="Get Lifetime Access"
               ctaLink="/pricing"
               variant="pro"
               delay={0.1}
-            />
-            <PricingCard
-              title="Team"
-              description="For startups, agencies & engineering teams"
-              features={["Unlimited collaborators", "1000 AI generations/month", "Real-time collaboration", "Shared workspaces & roles"]}
-              ctaText="Start Team Plan"
-              ctaLink="/pricing"
-              variant="team"
-              delay={0.2}
             />
           </div>
         </section>

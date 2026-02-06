@@ -7,6 +7,9 @@ import { useReducedMotion } from 'framer-motion';
 interface PricingCardProps {
   title: string;
   description: string;
+  price?: string;
+  period?: string;
+  badge?: string;
   features: string[];
   ctaText: string;
   ctaLink: string;
@@ -14,14 +17,17 @@ interface PricingCardProps {
   delay?: number;
 }
 
-export function PricingCard({ 
-  title, 
-  description, 
-  features, 
-  ctaText, 
-  ctaLink, 
+export function PricingCard({
+  title,
+  description,
+  price,
+  period,
+  badge,
+  features,
+  ctaText,
+  ctaLink,
   variant = 'default',
-  delay = 0 
+  delay = 0
 }: PricingCardProps) {
   const shouldReduceMotion = useReducedMotion();
   const isPro = variant === 'pro';
@@ -94,14 +100,14 @@ export function PricingCard({
         ${isPro ? 'border-2 shadow-2xl shadow-cyan/10 md:-mt-4 z-10' : ''}
       `}
     >
-      {isPro && (
+      {(badge || isPro) && (
         <div className="absolute top-0 right-0 bg-cyan text-navy text-xs font-bold px-3 py-1 rounded-bl-md rounded-tr-md">
-          RECOMMENDED
+          {badge || 'RECOMMENDED'}
         </div>
       )}
 
       <div className="mb-4">
-        <motion.h3 
+        <motion.h3
           className={`text-2xl font-bold ${theme.title}`}
           whileHover={{ scale: 1.05, originX: 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 10 }}
@@ -110,6 +116,13 @@ export function PricingCard({
         </motion.h3>
         <p className="text-gray-400 text-sm mt-1">{description}</p>
       </div>
+
+      {price && (
+        <div className="mb-6">
+          <span className="text-3xl font-bold text-white">{price}</span>
+          {period && <span className="text-gray-400 ml-1">{period}</span>}
+        </div>
+      )}
 
       <ul className="space-y-4 mb-8 flex-1">
         {features.map((feature, index) => (

@@ -18,11 +18,11 @@ export const SUBSCRIPTION_PLANS: Record<string, PlanConfig> = {
   },
   PRO: {
     id: 'pro',
-    name: 'Pro',
-    price: 10,
+    name: 'Pro — Lifetime',
+    price: 49,
     currency: 'USD',
     lemonVariantId: process.env.LEMON_VARIANT_PRO,
-    features: ['Unlimited Projects', 'AI PRD Generation', 'Priority Support'],
+    features: ['Unlimited Projects', 'AI PRD Generation', 'Priority Support', 'All future Pro updates'],
     highlight: true,
   },
   TEAM: {

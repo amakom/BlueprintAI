@@ -23,6 +23,8 @@ export async function middleware(req: NextRequest) {
     pathname === '/reset-password' ||
     pathname === '/verify' ||
     pathname === '/pricing' ||
+    pathname === '/privacy' ||
+    pathname === '/terms' ||
     pathname.startsWith('/share/') ||
     pathname.startsWith('/api/auth') ||
     pathname.startsWith('/api/webhooks') ||

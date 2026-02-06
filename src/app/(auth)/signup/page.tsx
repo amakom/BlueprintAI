@@ -15,12 +15,16 @@ export default function SignupPage() {
     password: '',
   });
 
-  const passwordValid = formData.password.length >= 8;
+  const hasMinLength = formData.password.length >= 8;
+  const hasUppercase = /[A-Z]/.test(formData.password);
+  const hasLowercase = /[a-z]/.test(formData.password);
+  const hasNumber = /[0-9]/.test(formData.password);
+  const passwordValid = hasMinLength && hasUppercase && hasLowercase && hasNumber;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!passwordValid) {
-      setError('Password must be at least 8 characters');
+      setError('Password must be at least 8 characters with uppercase, lowercase, and a number');
       return;
     }
     setLoading(true);
@@ -97,9 +101,20 @@ export default function SignupPage() {
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             />
             {formData.password.length > 0 && (
-              <p className={`text-xs mt-1 ${passwordValid ? 'text-green-600' : 'text-gray-400'}`}>
-                {passwordValid ? 'Password strength: Good' : `${8 - formData.password.length} more characters needed`}
-              </p>
+              <div className="mt-1 space-y-0.5">
+                <p className={`text-xs ${hasMinLength ? 'text-green-600' : 'text-gray-400'}`}>
+                  {hasMinLength ? '\u2713' : '\u2022'} At least 8 characters
+                </p>
+                <p className={`text-xs ${hasUppercase ? 'text-green-600' : 'text-gray-400'}`}>
+                  {hasUppercase ? '\u2713' : '\u2022'} One uppercase letter
+                </p>
+                <p className={`text-xs ${hasLowercase ? 'text-green-600' : 'text-gray-400'}`}>
+                  {hasLowercase ? '\u2713' : '\u2022'} One lowercase letter
+                </p>
+                <p className={`text-xs ${hasNumber ? 'text-green-600' : 'text-gray-400'}`}>
+                  {hasNumber ? '\u2713' : '\u2022'} One number
+                </p>
+              </div>
             )}
           </div>
           <button 

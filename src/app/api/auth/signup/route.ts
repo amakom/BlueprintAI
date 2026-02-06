@@ -180,7 +180,8 @@ export async function POST(req: Request) {
     await setSession(token);
     console.log('Session set');
 
-    return NextResponse.json({ success: true, user: result.user, team: result.team });
+    const { password: _, ...safeUser } = result.user;
+    return NextResponse.json({ success: true, user: safeUser, team: result.team });
   } catch (error: any) {
     console.error('Signup error full object:', error);
     await logSystem('ERROR', 'AUTH', 'Signup failed', { error: error.message || 'Unknown' });

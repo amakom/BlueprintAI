@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { Home, Layers, Settings, FileText, PlusCircle, LogOut, Users, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -19,7 +18,6 @@ import { UserRole } from '@/lib/permissions';
 import { ShieldAlert } from 'lucide-react';
 
 export function Sidebar() {
-  const router = useRouter();
   const { plan, isLoading: isSubLoading } = useSubscription();
   const [user, setUser] = useState<{name: string, email: string, role: string} | null>(null);
   const [recentProjects, setRecentProjects] = useState<any[]>([]);
@@ -48,7 +46,8 @@ export function Sidebar() {
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
-      router.push('/login');
+      // Full page reload to clear all cached state
+      window.location.href = '/login';
     } catch (error) {
       console.error('Logout failed', error);
     }

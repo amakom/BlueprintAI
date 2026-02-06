@@ -66,7 +66,8 @@ export async function POST(req: Request) {
 
     await logSystem('INFO', 'AUTH', 'User logged in', { userId: user.id, email: user.email });
 
-    return NextResponse.json({ success: true, user });
+    const { password: _, ...safeUser } = user;
+    return NextResponse.json({ success: true, user: safeUser });
   } catch (error) {
     console.error('Login error:', error);
     await logSystem('ERROR', 'AUTH', 'Login error', { error: error instanceof Error ? error.message : 'Unknown' });

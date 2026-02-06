@@ -36,7 +36,7 @@ export async function GET() {
         userEmail: inv.subscription?.team?.members[0]?.user.email || 'Unknown',
         plan: inv.subscription?.plan || 'UNKNOWN',
         date: inv.createdAt,
-        ref: inv.flutterwaveRef
+        ref: inv.lemonOrderId
     }));
     
     return NextResponse.json({ invoices: formatted });

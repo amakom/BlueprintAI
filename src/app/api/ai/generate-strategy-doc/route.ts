@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { getPlanLimits, PlanType } from '@/lib/permissions';
 import { logSystem } from '@/lib/system-log';
-import { generateAI, isAIConfigured, AI_MODEL } from '@/lib/openai';
+import { generateAI, isAIConfigured } from '@/lib/openai';
 
 export async function POST(req: Request) {
   try {
@@ -136,33 +136,39 @@ To become the leading platform in the industry, empowering users to achieve more
     }
 
     // Real AI Generation
-    const systemPrompt = "You are an expert Product Manager. Generate a comprehensive Product Strategy Document in Markdown format. The output must be a JSON object with a single key 'text' containing the Markdown string. The document should include sections: Executive Summary, Vision Statement, Target Market, Value Proposition, Key Features, and Go-to-Market Strategy.";
-    const userPrompt = `Project Name: ${project.name}\nDescription: ${contextDescription}\n\nGenerate the strategy document.`;
+    try {
+      const systemPrompt = "You are an expert Product Manager. Generate a comprehensive Product Strategy Document in Markdown format. The output must be a JSON object with a single key 'text' containing the Markdown string. The document should include sections: Executive Summary, Vision Statement, Target Market, Value Proposition, Key Features, and Go-to-Market Strategy.";
+      const userPrompt = `Project Name: ${project.name}\nDescription: ${contextDescription}\n\nGenerate the strategy document.`;
 
-    const aiResponse = await generateAI(systemPrompt, userPrompt, { jsonMode: true });
-    const result = JSON.parse(aiResponse.text);
+      const aiResponse = await generateAI(systemPrompt, userPrompt, { jsonMode: true });
+      const result = JSON.parse(aiResponse.text);
 
-    // Log AI Usage
-    await prisma.aIUsageLog.create({
-      data: {
-        teamId: team.id,
-        action: 'GENERATE_STRATEGY_DOC',
-        inputTokens: aiResponse.usage.inputTokens,
-        outputTokens: aiResponse.usage.outputTokens,
-        model: aiResponse.usage.model,
-      },
-    });
+      // Log AI Usage
+      await prisma.aIUsageLog.create({
+        data: {
+          teamId: team.id,
+          action: 'GENERATE_STRATEGY_DOC',
+          inputTokens: aiResponse.usage.inputTokens,
+          outputTokens: aiResponse.usage.outputTokens,
+          model: aiResponse.usage.model,
+        },
+      });
 
-    return NextResponse.json({ doc: result });
+      return NextResponse.json({ doc: result });
 
-  } catch (error) {
-    console.error('Error generating strategy doc:', error);
+    } catch (aiError) {
+      console.error('AI Generation Error for strategy doc:', aiError);
+      const errorMsg = aiError instanceof Error ? aiError.message : 'Unknown AI error';
 
-    let errorMsg = error instanceof Error ? error.message : 'Unknown AI error';
-    if (errorMsg.includes('429') || errorMsg.includes('quota')) {
-        errorMsg = "AI API quota exceeded. Please try again later.";
+      if (errorMsg.includes('429') || errorMsg.includes('quota')) {
+        return NextResponse.json({ error: 'AI API quota exceeded. Please try again later.' }, { status: 500 });
+      }
+
+      return NextResponse.json({ error: `AI Generation Failed: ${errorMsg}` }, { status: 500 });
     }
 
-    return NextResponse.json({ error: `AI Generation Failed: ${errorMsg}` }, { status: 500 });
+  } catch (error) {
+    console.error('Request Error:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

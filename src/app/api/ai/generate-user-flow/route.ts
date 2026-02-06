@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { getPlanLimits, PlanType } from '@/lib/permissions';
 import { logSystem } from '@/lib/system-log';
-import { openai, isAIConfigured, AI_MODEL } from '@/lib/openai';
+import { generateAI, isAIConfigured, AI_MODEL } from '@/lib/openai';
 
 export async function POST(req: Request) {
   try {
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     }
 
     const team = project.team;
-    
+
     // Check if team is blocked from using AI
     if (team.aiBlocked) {
       return NextResponse.json({ error: 'AI generation has been temporarily disabled for your team.' }, { status: 403 });
@@ -85,8 +85,8 @@ export async function POST(req: Request) {
     });
 
     if (monthlyUsage >= limits.maxAIGenerationsPerMonth) {
-      return NextResponse.json({ 
-        error: `Monthly AI limit reached (${monthlyUsage}/${limits.maxAIGenerationsPerMonth}). Please upgrade.` 
+      return NextResponse.json({
+        error: `Monthly AI limit reached (${monthlyUsage}/${limits.maxAIGenerationsPerMonth}). Please upgrade.`
       }, { status: 403 });
     }
 
@@ -96,7 +96,7 @@ export async function POST(req: Request) {
     let usageLog = { inputTokens: 0, outputTokens: 0, model: 'unknown' };
 
     if (!isAIConfigured()) {
-        // Return mock data for development/demo when OpenAI is not configured
+        // Return mock data for development/demo when AI is not configured
         const mockNodes = [
           { id: `story-${Date.now()}`, type: 'userStory', position: { x: 100, y: 100 }, data: { label: 'User Entry', description: `As a user, I want to ${prompt || 'access the application'}`, userName: 'AI' } },
           { id: `screen-${Date.now()+1}`, type: 'screen', position: { x: 400, y: 100 }, data: { label: 'Main Screen', description: 'Primary user interface', userName: 'AI' } },
@@ -114,7 +114,7 @@ export async function POST(req: Request) {
         return NextResponse.json({
           nodes: mockNodes,
           edges: mockEdges,
-          warning: 'Using demo data. Configure OPENAI_API_KEY for real AI generation.',
+          warning: 'Using demo data. Configure GEMINI_API_KEY for real AI generation.',
           usage: { used: monthlyUsage + 1, limit: limits.maxAIGenerationsPerMonth }
         });
     }
@@ -150,17 +150,9 @@ Request: ${prompt}
 
 Generate a detailed user flow including key screens and user actions.`;
 
-        const completion = await openai.chat.completions.create({
-          model: AI_MODEL,
-          response_format: { type: "json_object" },
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt }
-          ]
-        });
+        const aiResponse = await generateAI(systemPrompt, userPrompt, { jsonMode: true });
+        const result = JSON.parse(aiResponse.text);
 
-        const result = JSON.parse(completion.choices[0].message.content || '{}');
-        
         // Transform to React Flow format
         nodes = (result.nodes || []).map((n: any) => ({
           id: n.id,
@@ -176,19 +168,15 @@ Generate a detailed user flow including key screens and user actions.`;
           type: 'deletable',
           animated: true
         }));
-        
-        usageLog = {
-          inputTokens: completion.usage?.prompt_tokens || 0,
-          outputTokens: completion.usage?.completion_tokens || 0,
-          model: completion.model
-        };
+
+        usageLog = aiResponse.usage;
 
     } catch (aiError) {
-        console.error('OpenAI generation failed:', aiError);
+        console.error('AI generation failed:', aiError);
         let errorMsg = aiError instanceof Error ? aiError.message : 'Unknown AI error';
 
         if (errorMsg.includes('429') || errorMsg.includes('quota')) {
-            errorMsg = "System OpenAI API Key Quota Exceeded. Please check billing at platform.openai.com.";
+            errorMsg = "AI API quota exceeded. Please try again later.";
         }
 
         return NextResponse.json({ error: `AI Generation Failed: ${errorMsg}` }, { status: 500 });
@@ -205,9 +193,9 @@ Generate a detailed user flow including key screens and user actions.`;
       },
     });
 
-    return NextResponse.json({ 
-      nodes, 
-      edges, 
+    return NextResponse.json({
+      nodes,
+      edges,
       usage: {
         used: monthlyUsage + 1,
         limit: limits.maxAIGenerationsPerMonth

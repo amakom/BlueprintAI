@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
-import { openai, isAIConfigured, AI_MODEL } from '@/lib/openai';
+import { generateAI, isAIConfigured, AI_MODEL } from '@/lib/openai';
 
 export async function POST(req: Request) {
   const session = await getSession();
@@ -37,19 +37,20 @@ export async function POST(req: Request) {
     // Real AI Generation
     if (isAIConfigured()) {
       try {
-        const prompt = `
+        const systemPrompt = 'You are an expert Technical Architect.';
+        const userPrompt = `
           You are a Senior Technical Product Manager and System Architect.
           Generate a detailed Engineering Specification (PRD) in Markdown format based on the following Visual Canvas Data.
-          
+
           Project Name: ${project.name}
           Project Description: ${project.description || 'N/A'}
-          
+
           Canvas Nodes (User Stories, Screens, etc.):
           ${JSON.stringify(nodes.map((n: any) => ({ type: n.type, label: n.data.label, details: n.data })))}
-          
+
           Canvas Connections (Flow):
           ${JSON.stringify(edges.map((e: any) => ({ from: e.source, to: e.target })))}
-          
+
           Structure the response as a professional Technical Spec with the following sections:
           1. Executive Summary
           2. User Flows & User Stories (Detailed breakdown)
@@ -57,28 +58,20 @@ export async function POST(req: Request) {
           4. Backend Data Models (Prisma Schema suggestions)
           5. API Endpoints (RESTful definitions)
           6. Edge Cases & Error Handling
-          
+
           Output valid Markdown only. Do not wrap in markdown code blocks.
         `;
 
-        const response = await openai.chat.completions.create({
-          model: AI_MODEL,
-          messages: [
-            { role: 'system', content: 'You are an expert Technical Architect.' },
-            { role: 'user', content: prompt }
-          ],
-          temperature: 0.7,
-        });
-
-        const specMarkdown = response.choices[0].message.content || '';
+        const aiResponse = await generateAI(systemPrompt, userPrompt, { temperature: 0.7 });
+        const specMarkdown = aiResponse.text;
 
         // Log Usage
         await prisma.aIUsageLog.create({
           data: {
             teamId: project.teamId,
             action: 'generate_spec',
-            inputTokens: JSON.stringify(nodes).length / 4, // Approx
-            outputTokens: specMarkdown.length / 4, // Approx
+            inputTokens: aiResponse.usage.inputTokens,
+            outputTokens: aiResponse.usage.outputTokens,
             model: AI_MODEL,
           }
         });
@@ -86,7 +79,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ spec: specMarkdown });
 
       } catch (aiError) {
-        console.error('OpenAI API Error:', aiError);
+        console.error('Gemini API Error:', aiError);
         // Fallback to mock if AI fails
       }
     }
@@ -95,11 +88,11 @@ export async function POST(req: Request) {
     console.warn('Using fallback mock generation for spec');
     const userStories = nodes.filter((n: any) => n.type === 'userStory');
     const screens = nodes.filter((n: any) => n.type === 'screen');
-    
+
     let specMarkdown = `# Engineering Specification: ${project.name}\n\n`;
     specMarkdown += `**Generated on:** ${new Date().toLocaleDateString()}\n\n`;
-    specMarkdown += `> **Note:** This is a mock specification generated because the OpenAI API Key is missing or failed.\n\n`;
-    
+    specMarkdown += `> **Note:** This is a mock specification generated because the Gemini API Key is missing or failed.\n\n`;
+
     specMarkdown += `## 1. Overview\n`;
     specMarkdown += `This document outlines the technical implementation details for the ${project.name} user flows.\n\n`;
 

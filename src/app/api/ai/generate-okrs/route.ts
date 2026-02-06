@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { getPlanLimits, PlanType } from '@/lib/permissions';
 import { logSystem } from '@/lib/system-log';
-import { openai, isAIConfigured, AI_MODEL } from '@/lib/openai';
+import { generateAI, isAIConfigured, AI_MODEL } from '@/lib/openai';
 
 export async function POST(req: Request) {
   try {
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     }
 
     const team = project.team;
-    
+
     // Check if team is blocked from using AI
     if (team.aiBlocked) {
       await logSystem('WARN', 'AI', 'Blocked team attempted generation', { teamId: team.id, userId: session.userId });
@@ -88,8 +88,8 @@ export async function POST(req: Request) {
 
     if (monthlyUsage >= limits.maxAIGenerationsPerMonth) {
       await logSystem('WARN', 'AI', 'Monthly quota exceeded', { teamId: team.id, plan });
-      return NextResponse.json({ 
-        error: `Monthly AI limit reached (${monthlyUsage}/${limits.maxAIGenerationsPerMonth}). Please upgrade your plan.` 
+      return NextResponse.json({
+        error: `Monthly AI limit reached (${monthlyUsage}/${limits.maxAIGenerationsPerMonth}). Please upgrade your plan.`
       }, { status: 403 });
     }
 
@@ -98,7 +98,7 @@ export async function POST(req: Request) {
 
     // If AI is not configured (missing API Key), fallback to mock to prevent crashing
     if (!isAIConfigured()) {
-       console.warn('OpenAI API Key missing, falling back to mock data');
+       console.warn('Gemini API Key missing, falling back to mock data');
        const mockOKRs = [
         {
           objective: "Improve User Acquisition (Mock)",
@@ -113,27 +113,11 @@ export async function POST(req: Request) {
     }
 
     try {
-      const completion = await openai.chat.completions.create({
-        model: AI_MODEL, 
-        response_format: { type: "json_object" },
-        messages: [
-          {
-            role: "system",
-            content: "You are an expert Product Manager. Generate 3-5 strategic OKRs (Objectives and Key Results) for the product described by the user. Return a JSON object with a single key 'okrs' containing an array of objects. Each object must have 'objective' (string) and 'keyResults' (array of strings)."
-          },
-          {
-            role: "user",
-            content: `Product Description: ${contextDescription}`
-          }
-        ]
-      });
+      const systemPrompt = "You are an expert Product Manager. Generate 3-5 strategic OKRs (Objectives and Key Results) for the product described by the user. Return a JSON object with a single key 'okrs' containing an array of objects. Each object must have 'objective' (string) and 'keyResults' (array of strings).";
+      const userPrompt = `Product Description: ${contextDescription}`;
 
-      const content = completion.choices[0].message.content;
-      if (!content) {
-        throw new Error("No content received from AI");
-      }
-
-      const result = JSON.parse(content);
+      const aiResponse = await generateAI(systemPrompt, userPrompt, { jsonMode: true });
+      const result = JSON.parse(aiResponse.text);
 
       // Log usage
       await prisma.aIUsageLog.create({
@@ -141,8 +125,8 @@ export async function POST(req: Request) {
           teamId: team.id,
           action: 'GENERATE_OKRS',
           model: AI_MODEL,
-          inputTokens: completion.usage?.prompt_tokens || 0,
-          outputTokens: completion.usage?.completion_tokens || 0,
+          inputTokens: aiResponse.usage.inputTokens,
+          outputTokens: aiResponse.usage.outputTokens,
         }
       });
 

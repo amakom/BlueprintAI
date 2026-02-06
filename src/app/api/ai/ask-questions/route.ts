@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { getPlanLimits, PlanType } from '@/lib/permissions';
-import { openai, isAIConfigured, AI_MODEL } from '@/lib/openai';
+import { generateAI, isAIConfigured } from '@/lib/openai';
 
 export async function POST(req: Request) {
   try {
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
     if (!isAIConfigured()) {
       // Return mock questions for development/demo
       return NextResponse.json({
-        message: "Great idea! Let me ask a few questions to build a better plan. (Demo mode - configure OPENAI_API_KEY for real AI)",
+        message: "Great idea! Let me ask a few questions to build a better plan. (Demo mode - configure GEMINI_API_KEY for real AI)",
         questions: [
           {
             id: 'q1',
@@ -119,25 +119,17 @@ ${context ? `Previous context: ${JSON.stringify(context)}` : ''}
 
 Generate clarifying questions to help plan this better.`;
 
-    const completion = await openai.chat.completions.create({
-      model: AI_MODEL,
-      response_format: { type: "json_object" },
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt }
-      ]
-    });
-
-    const result = JSON.parse(completion.choices[0].message.content || '{}');
+    const aiResponse = await generateAI(systemPrompt, userPrompt, { jsonMode: true });
+    const result = JSON.parse(aiResponse.text);
 
     // Log usage
     await prisma.aIUsageLog.create({
       data: {
         teamId: team.id,
         action: 'ask_clarifying_questions',
-        inputTokens: completion.usage?.prompt_tokens || 0,
-        outputTokens: completion.usage?.completion_tokens || 0,
-        model: completion.model,
+        inputTokens: aiResponse.usage.inputTokens,
+        outputTokens: aiResponse.usage.outputTokens,
+        model: aiResponse.usage.model,
       },
     });
 

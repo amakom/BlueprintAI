@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { getPlanLimits, PlanType } from '@/lib/permissions';
 import { logSystem } from '@/lib/system-log';
-import { openai, isAIConfigured, AI_MODEL } from '@/lib/openai';
+import { generateAI, isAIConfigured, AI_MODEL } from '@/lib/openai';
 
 export async function POST(req: Request) {
   try {
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     }
 
     const team = project.team;
-    
+
     if (team.aiBlocked) {
       await logSystem('WARN', 'AI', 'Blocked team attempted generation', { teamId: team.id, userId: session.userId });
       return NextResponse.json({ error: 'AI generation has been temporarily disabled for your team. Please contact support.' }, { status: 403 });
@@ -82,8 +82,8 @@ export async function POST(req: Request) {
 
     if (monthlyUsage >= limits.maxAIGenerationsPerMonth) {
       await logSystem('WARN', 'AI', 'Monthly quota exceeded', { teamId: team.id, plan });
-      return NextResponse.json({ 
-        error: `Monthly AI limit reached (${monthlyUsage}/${limits.maxAIGenerationsPerMonth}). Please upgrade your plan.` 
+      return NextResponse.json({
+        error: `Monthly AI limit reached (${monthlyUsage}/${limits.maxAIGenerationsPerMonth}). Please upgrade your plan.`
       }, { status: 403 });
     }
 
@@ -122,17 +122,13 @@ To become the leading platform in the industry, empowering users to achieve more
 - Free tier to drive adoption and product-led growth.
       `.trim();
 
-      // Log usage even for mock (optional, but consistent with other routes if we want to track 'attempts')
-      // For consistency with other real-AI routes, we usually only log real token usage, but we should count against quota to prevent abuse even of mock?
-      // Actually, in other routes we did log usage. Let's do it here too but with 0 tokens.
       await prisma.aIUsageLog.create({
         data: {
           teamId: team.id,
-          // userId removed as it's not in schema
           action: 'GENERATE_STRATEGY_DOC',
           inputTokens: 0,
           outputTokens: 0,
-          model: 'mock-gpt',
+          model: 'mock',
         },
       });
 
@@ -140,32 +136,20 @@ To become the leading platform in the industry, empowering users to achieve more
     }
 
     // Real AI Generation
-    const completion = await openai.chat.completions.create({
-      model: AI_MODEL, 
-      response_format: { type: "json_object" },
-      messages: [
-        {
-          role: "system",
-          content: "You are an expert Product Manager. Generate a comprehensive Product Strategy Document in Markdown format. The output must be a JSON object with a single key 'text' containing the Markdown string. The document should include sections: Executive Summary, Vision Statement, Target Market, Value Proposition, Key Features, and Go-to-Market Strategy."
-        },
-        {
-          role: "user",
-          content: `Project Name: ${project.name}\nDescription: ${contextDescription}\n\nGenerate the strategy document.`
-        }
-      ],
-    });
+    const systemPrompt = "You are an expert Product Manager. Generate a comprehensive Product Strategy Document in Markdown format. The output must be a JSON object with a single key 'text' containing the Markdown string. The document should include sections: Executive Summary, Vision Statement, Target Market, Value Proposition, Key Features, and Go-to-Market Strategy.";
+    const userPrompt = `Project Name: ${project.name}\nDescription: ${contextDescription}\n\nGenerate the strategy document.`;
 
-    const result = JSON.parse(completion.choices[0].message.content || '{"text": ""}');
-    
+    const aiResponse = await generateAI(systemPrompt, userPrompt, { jsonMode: true });
+    const result = JSON.parse(aiResponse.text);
+
     // Log AI Usage
     await prisma.aIUsageLog.create({
       data: {
         teamId: team.id,
-        // userId is not in the schema for AIUsageLog
         action: 'GENERATE_STRATEGY_DOC',
-        inputTokens: completion.usage?.prompt_tokens || 0,
-        outputTokens: completion.usage?.completion_tokens || 0,
-        model: completion.model,
+        inputTokens: aiResponse.usage.inputTokens,
+        outputTokens: aiResponse.usage.outputTokens,
+        model: aiResponse.usage.model,
       },
     });
 
@@ -173,10 +157,10 @@ To become the leading platform in the industry, empowering users to achieve more
 
   } catch (error) {
     console.error('Error generating strategy doc:', error);
-    
+
     let errorMsg = error instanceof Error ? error.message : 'Unknown AI error';
     if (errorMsg.includes('429') || errorMsg.includes('quota')) {
-        errorMsg = "System OpenAI API Key Quota Exceeded. Please check billing at platform.openai.com.";
+        errorMsg = "AI API quota exceeded. Please try again later.";
     }
 
     return NextResponse.json({ error: `AI Generation Failed: ${errorMsg}` }, { status: 500 });

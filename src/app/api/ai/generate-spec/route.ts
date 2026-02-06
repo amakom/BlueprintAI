@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
-import { openai, isAIConfigured } from '@/lib/openai';
+import { openai, isAIConfigured, AI_MODEL } from '@/lib/openai';
 
 export async function POST(req: Request) {
   const session = await getSession();
@@ -62,7 +62,7 @@ export async function POST(req: Request) {
         `;
 
         const response = await openai.chat.completions.create({
-          model: 'gpt-4o',
+          model: AI_MODEL,
           messages: [
             { role: 'system', content: 'You are an expert Technical Architect.' },
             { role: 'user', content: prompt }
@@ -79,7 +79,7 @@ export async function POST(req: Request) {
             action: 'generate_spec',
             inputTokens: JSON.stringify(nodes).length / 4, // Approx
             outputTokens: specMarkdown.length / 4, // Approx
-            model: 'gpt-4o'
+            model: AI_MODEL,
           }
         });
 

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { getPlanLimits, PlanType } from '@/lib/permissions';
-import { openai, isAIConfigured } from '@/lib/openai';
+import { openai, isAIConfigured, AI_MODEL } from '@/lib/openai';
 
 export async function POST(req: Request) {
   try {
@@ -120,7 +120,7 @@ ${context ? `Previous context: ${JSON.stringify(context)}` : ''}
 Generate clarifying questions to help plan this better.`;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: AI_MODEL,
       response_format: { type: "json_object" },
       messages: [
         { role: "system", content: systemPrompt },

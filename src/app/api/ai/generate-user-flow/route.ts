@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { getPlanLimits, PlanType } from '@/lib/permissions';
 import { logSystem } from '@/lib/system-log';
-import { openai, isAIConfigured } from '@/lib/openai';
+import { openai, isAIConfigured, AI_MODEL } from '@/lib/openai';
 
 export async function POST(req: Request) {
   try {
@@ -151,7 +151,7 @@ Request: ${prompt}
 Generate a detailed user flow including key screens and user actions.`;
 
         const completion = await openai.chat.completions.create({
-          model: "gpt-4o",
+          model: AI_MODEL,
           response_format: { type: "json_object" },
           messages: [
             { role: "system", content: systemPrompt },

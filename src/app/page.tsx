@@ -7,6 +7,7 @@ import { CanvasFlowAnimation } from '@/components/landing/CanvasFlowAnimation';
 import { SpecConversionAnimation } from '@/components/landing/SpecConversionAnimation';
 import { InteractiveCanvasNodeAnimation } from '@/components/landing/InteractiveCanvasNodeAnimation';
 import { PricingCard } from '@/components/landing/PricingCard';
+import { ProductWalkthrough } from '@/components/landing/ProductWalkthrough';
 import { FadeUp, SlideIn, ScaleIn, StaggerContainer, StaggerItem } from '@/components/landing/ScrollAnimation';
 
 export default function LandingPage() {
@@ -42,24 +43,24 @@ export default function LandingPage() {
           <div className="max-w-4xl mx-auto text-center">
             <FadeUp>
               <h2 className="text-2xl md:text-5xl font-bold mb-8 md:mb-12">
-                Most Products Fail <span className="text-red-400">Because Nobody Planned Them Properly.</span>
+                Most Products Fail <span className="text-red-400">Before the First Line of Code.</span>
               </h2>
             </FadeUp>
 
             <FadeUp delay={0.2} className="bg-white/5 rounded-md p-6 md:p-12 border border-white/10 text-left">
-              <p className="text-lg md:text-xl text-gray-300 mb-6 md:mb-8 font-medium">You have the idea. But jumping straight into code without a blueprint is where every project goes wrong.</p>
+              <p className="text-lg md:text-xl text-gray-300 mb-6 md:mb-8 font-medium">You have the idea. But jumping straight into code without a plan is where things fall apart.</p>
               <ul className="space-y-4 mb-8">
                 <li className="flex items-start gap-3">
                   <ScaleIn delay={0.3}><span className="text-red-400 text-xl">&#10005;</span></ScaleIn>
-                  <span className="text-gray-300 text-base md:text-lg">Vibe coders start building without knowing what they're building.</span>
+                  <span className="text-gray-300 text-base md:text-lg">Developers start building without knowing what to build.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <ScaleIn delay={0.4}><span className="text-red-400 text-xl">&#10005;</span></ScaleIn>
-                  <span className="text-gray-300 text-base md:text-lg">PMs waste weeks writing specs that go stale before sprint 1.</span>
+                  <span className="text-gray-300 text-base md:text-lg">Product managers spend weeks on specs that are outdated by sprint 1.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <ScaleIn delay={0.5}><span className="text-red-400 text-xl">&#10005;</span></ScaleIn>
-                  <span className="text-gray-300 text-base md:text-lg">Designers hand off mockups with no context. Engineers guess what they mean.</span>
+                  <span className="text-gray-300 text-base md:text-lg">Designers hand off mockups without context. Engineers guess the rest.</span>
                 </li>
               </ul>
 
@@ -83,11 +84,11 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
               <SlideIn direction="left">
                 <h2 className="text-2xl md:text-5xl font-bold mb-6 leading-tight">
-                  Your AI Planning Partner. Always On. Always Sharp.
+                  One Tool. Complete Clarity. From Idea to Spec.
                 </h2>
                 <p className="text-lg md:text-xl text-gray-300 mb-8 leading-relaxed">
-                  The better the plan you give an AI agent, the better the product it builds.
-                  BlueprintAI connects <strong className="text-white">strategy, user flows, and technical specs</strong> into one living blueprint — so every team member starts with clarity.
+                  The better the plan, the better the product.
+                  BlueprintAI connects <strong className="text-white">strategy, user flows, and technical specs</strong> into one living blueprint — so every team member starts on the same page.
                 </p>
               </SlideIn>
               <SlideIn direction="right" className="bg-navy/50 p-8 rounded-md border border-white/10">
@@ -149,7 +150,7 @@ export default function LandingPage() {
                 <li className="flex items-center gap-2"><ScaleIn delay={0.4}><span className="w-1.5 h-1.5 bg-cyan rounded-sm"></span></ScaleIn> Who else is in the market? (Competitor Analysis)</li>
               </ul>
               <blockquote className="border-l-4 border-cyan pl-4 text-gray-400 italic">
-                Every vibe coder must plan the project first before diving into production.
+                The better the plan, the better the product. Every time.
               </blockquote>
             </SlideIn>
           </div>
@@ -199,7 +200,7 @@ export default function LandingPage() {
         <section className="container mx-auto px-6 py-12 md:py-20 border-t border-white/5 bg-white/5 rounded-md my-10">
           <FadeUp className="text-center mb-12">
             <h2 className="text-2xl md:text-5xl font-bold">Why Teams Choose BlueprintAI</h2>
-            <p className="mt-4 text-gray-400 max-w-2xl mx-auto">Save a ton of headaches by planning properly from the beginning.</p>
+            <p className="mt-4 text-gray-400 max-w-2xl mx-auto">The right plan saves weeks of rework. Here&apos;s how BlueprintAI gets you there.</p>
           </FadeUp>
           <StaggerContainer className="grid md:grid-cols-3 gap-6">
             <StaggerItem className="p-6 bg-navy rounded-md border border-white/10 hover:border-cyan/50 transition-colors">
@@ -229,36 +230,29 @@ export default function LandingPage() {
             </StaggerItem>
             <StaggerItem className="p-6 bg-navy rounded-md border border-white/10 hover:border-cyan/50 transition-colors md:col-span-1">
               <ScaleIn delay={0.7} className="text-4xl mb-4">&#128640;</ScaleIn>
-              <h3 className="text-xl font-bold mb-2">Ship With Audacity</h3>
-              <p className="text-gray-400">When every feature is planned, scoped, and documented — you build with confidence, not anxiety.</p>
+              <h3 className="text-xl font-bold mb-2">Ship With Confidence</h3>
+              <p className="text-gray-400">When every feature is planned, scoped, and documented — you build faster and ship without second-guessing.</p>
             </StaggerItem>
           </StaggerContainer>
         </section>
 
         {/* PRODUCT DEMO SECTION */}
-        <section id="demo" className="container mx-auto px-6 py-16 md:py-24 text-center">
-          <FadeUp>
+        <section id="demo" className="container mx-auto px-6 py-16 md:py-24">
+          <FadeUp className="text-center mb-10">
             <h2 className="text-2xl md:text-5xl font-bold mb-4">See BlueprintAI in Action</h2>
-            <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto">Watch how a raw idea becomes a production-ready blueprint — with strategy, visual flows, and engineering specs.</p>
+            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">From raw idea to production-ready blueprint in 3 steps. Click through or let it play.</p>
           </FadeUp>
 
-          <ScaleIn delay={0.2} className="relative rounded-md overflow-hidden border border-white/10 shadow-2xl shadow-cyan/10 bg-white/5 aspect-video flex items-center justify-center group cursor-pointer max-w-5xl mx-auto">
-            <div className="relative z-10 text-center">
-              <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-md flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 border border-white/20">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-white ml-1">
-                  <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <span className="font-bold text-white text-lg tracking-wide">Watch Demo</span>
-            </div>
-          </ScaleIn>
+          <FadeUp delay={0.2}>
+            <ProductWalkthrough />
+          </FadeUp>
         </section>
 
         {/* FEATURE HIGHLIGHTS */}
         <section className="container mx-auto px-6 py-12 md:py-20 border-t border-white/5">
           <FadeUp className="text-center mb-12">
-            <h2 className="text-2xl md:text-4xl font-bold">Every Feature Actually Works</h2>
-            <p className="mt-4 text-gray-400">No half-baked demos. Real tools for real product teams.</p>
+            <h2 className="text-2xl md:text-4xl font-bold">Built for Real Product Teams</h2>
+            <p className="mt-4 text-gray-400">Tools that work the way you think — from canvas to codebase.</p>
           </FadeUp>
           <StaggerContainer className="grid md:grid-cols-2 gap-8 md:gap-12">
             <StaggerItem className="border-b border-white/10 pb-8 md:border-b-0 md:border-r md:pr-8">
@@ -338,8 +332,8 @@ export default function LandingPage() {
         {/* FINAL CTA */}
         <section className="container mx-auto px-6 py-20 md:py-32 text-center">
           <FadeUp>
-            <h2 className="text-3xl md:text-6xl font-bold mb-6">Ready to build with a plan?</h2>
-            <p className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">Stop guessing. Start planning. Every great product starts with a great blueprint.</p>
+            <h2 className="text-3xl md:text-6xl font-bold mb-6">Stop Guessing. Start Building.</h2>
+            <p className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">Every great product starts with a great plan. Create your first blueprint in under 5 minutes — free.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/signup" className="px-8 py-4 bg-cyan text-navy font-bold rounded-md hover:bg-white transition-all text-lg shadow-lg shadow-cyan/20">
                 Get Started for Free

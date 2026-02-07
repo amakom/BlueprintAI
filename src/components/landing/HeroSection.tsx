@@ -99,8 +99,7 @@ export function HeroSection() {
           transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] as const }}
         >
           <p className="mt-6 text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            The AI-powered planning tool for vibe coders, PMs, designers, and engineers.
-            Turn your raw idea into a complete blueprint — with strategy, visual flows, and engineering specs — before writing a single line of code.
+            The AI-powered planning tool that turns your idea into a complete product blueprint — with strategy, visual flows, and engineering specs — before you write a single line of code.
           </p>
         </motion.div>
 

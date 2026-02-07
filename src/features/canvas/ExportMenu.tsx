@@ -85,7 +85,7 @@ export function ExportMenu({ projectId }: ExportMenuProps) {
     setIsOpen(false);
   };
 
-  const buildFullAIPrompt = async (): Promise<string> => {
+  const buildFullAIPrompt = async (): Promise<{ prompt: string; plan: string }> => {
     // Fetch all project context from the API
     let context: any = null;
     try {
@@ -271,18 +271,20 @@ export function ExportMenu({ projectId }: ExportMenuProps) {
       prompt += `> Upgrade at: ${window.location.origin}/pricing\n`;
     }
 
-    return prompt;
+    return { prompt, plan };
   };
 
   const handleCopyForAI = async () => {
     setIsLoadingAI(true);
     try {
-      const prompt = await buildFullAIPrompt();
+      const { prompt, plan } = await buildFullAIPrompt();
       await navigator.clipboard.writeText(prompt);
       setCopiedAI(true);
 
+      const isFree = plan === 'FREE';
+
       // Show upgrade hint for free users, keep menu open
-      if (userPlan === 'FREE') {
+      if (isFree) {
         setShowUpgradeHint(true);
       } else {
         setIsOpen(false);
@@ -290,7 +292,7 @@ export function ExportMenu({ projectId }: ExportMenuProps) {
 
       setTimeout(() => {
         setCopiedAI(false);
-        if (showUpgradeHint) {
+        if (isFree) {
           setShowUpgradeHint(false);
           setIsOpen(false);
         }

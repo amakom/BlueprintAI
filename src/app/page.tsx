@@ -197,6 +197,103 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* AI CONTEXT CLEANER — HERO FEATURE */}
+        <section className="relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan/5 to-transparent pointer-events-none" />
+          <div className="container mx-auto px-6 py-20 md:py-32 relative">
+            <div className="max-w-5xl mx-auto">
+              <FadeUp className="text-center mb-12">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full mb-6">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-400"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                  <span className="text-sm font-bold text-purple-300">The Feature That Changes Everything</span>
+                </div>
+                <h2 className="text-3xl md:text-6xl font-extrabold mb-6 leading-tight">
+                  One Click. <span className="text-cyan">Perfect Prompt.</span><br />
+                  Your AI Agent Builds the Rest.
+                </h2>
+                <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                  BlueprintAI&apos;s <strong className="text-white">Context Cleaner</strong> takes your entire project — personas, strategy, user stories, screen flows, KPIs, competitor analysis, and engineering specs — and packages it into one clean, structured prompt. Paste it into <strong className="text-white">Cursor, Claude, Copilot, or any AI coding agent</strong> and watch it build exactly what you planned.
+                </p>
+              </FadeUp>
+
+              <FadeUp delay={0.2}>
+                <div className="grid md:grid-cols-2 gap-8 items-center">
+                  {/* Left: What gets included */}
+                  <SlideIn direction="left" className="bg-white/5 border border-white/10 rounded-lg p-6 md:p-8">
+                    <h3 className="text-lg font-bold text-white mb-4">What your AI agent receives:</h3>
+                    <div className="space-y-3">
+                      {[
+                        { label: 'Target Personas', desc: 'Who the users are, their goals & pain points', color: 'bg-amber-500/20 text-amber-400' },
+                        { label: 'Product Strategy', desc: 'OKRs, KPIs, and competitive positioning', color: 'bg-blue-500/20 text-blue-400' },
+                        { label: 'User Stories', desc: 'Every feature requirement, structured', color: 'bg-green-500/20 text-green-400' },
+                        { label: 'Screen Map', desc: 'Pages, routes, and navigation flow', color: 'bg-purple-500/20 text-purple-400' },
+                        { label: 'Engineering Spec', desc: 'Database schemas, API routes, components', color: 'bg-cyan/20 text-cyan' },
+                        { label: 'Build Instructions', desc: 'Step-by-step implementation order', color: 'bg-red-500/20 text-red-400' },
+                      ].map((item, i) => (
+                        <ScaleIn key={item.label} delay={0.1 + i * 0.08}>
+                          <div className="flex items-center gap-3">
+                            <div className={`w-8 h-8 rounded-md flex items-center justify-center text-xs font-bold shrink-0 ${item.color}`}>
+                              {i + 1}
+                            </div>
+                            <div>
+                              <span className="text-white text-sm font-bold">{item.label}</span>
+                              <span className="text-gray-500 text-sm ml-2">— {item.desc}</span>
+                            </div>
+                          </div>
+                        </ScaleIn>
+                      ))}
+                    </div>
+                  </SlideIn>
+
+                  {/* Right: The prompt output preview */}
+                  <SlideIn direction="right" className="bg-[#0d1117] border border-white/10 rounded-lg overflow-hidden font-mono text-[11px] md:text-xs">
+                    <div className="flex items-center gap-2 px-4 py-2.5 bg-white/5 border-b border-white/10">
+                      <div className="flex gap-1.5">
+                        <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
+                      </div>
+                      <span className="text-gray-500 text-[10px] ml-2">prompt.md — copied to clipboard</span>
+                    </div>
+                    <div className="p-4 space-y-1.5 text-gray-400 max-h-[340px] overflow-hidden relative">
+                      <div className="text-cyan font-bold"># Product Blueprint: PetWalk App</div>
+                      <div className="text-gray-600">&gt; Generated by BlueprintAI</div>
+                      <div className="mt-2 text-purple-400">## Target Users (Personas)</div>
+                      <div>### 1. Busy Owner — Pet Parent</div>
+                      <div className="text-gray-600">Goals: Quick booking, GPS tracking</div>
+                      <div className="mt-2 text-blue-400">## OKRs &amp; KPIs</div>
+                      <div>- D7 Retention: 42% | Conversion: 3.8%</div>
+                      <div className="mt-2 text-green-400">## User Stories (5)</div>
+                      <div>1. <span className="text-white">Sign Up</span>: Create account...</div>
+                      <div>2. <span className="text-white">Search</span>: Find nearby walkers...</div>
+                      <div className="mt-2 text-purple-400">## Screens &amp; Navigation</div>
+                      <div>Sign Up → Dashboard → Search → Book</div>
+                      <div className="mt-2 text-cyan">## Engineering Spec</div>
+                      <div>model User &#123; id, email, role &#125;</div>
+                      <div>POST /api/auth/register</div>
+                      <div>GET  /api/walkers</div>
+                      <div className="mt-2 text-red-400">## Implementation Order</div>
+                      <div>1. Database schema</div>
+                      <div>2. API routes</div>
+                      <div>3. Frontend pages</div>
+                      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#0d1117] to-transparent" />
+                    </div>
+                  </SlideIn>
+                </div>
+              </FadeUp>
+
+              <FadeUp delay={0.4} className="text-center mt-12">
+                <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-6">
+                  The better the prompt, the better the code. BlueprintAI gives your AI agent <strong className="text-white">10x more context</strong> than a blank chat window ever could.
+                </p>
+                <Link href="/signup" className="inline-flex items-center gap-2 px-8 py-4 bg-cyan text-navy font-bold rounded-md hover:bg-white transition-all text-lg shadow-lg shadow-cyan/20">
+                  Try Context Cleaner Free
+                </Link>
+              </FadeUp>
+            </div>
+          </div>
+        </section>
+
         {/* CORE BENEFITS SECTION */}
         <section className="container mx-auto px-6 py-12 md:py-20 border-t border-white/5 bg-white/5 rounded-md my-10">
           <FadeUp className="text-center mb-12">

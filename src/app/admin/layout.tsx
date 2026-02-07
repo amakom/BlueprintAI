@@ -3,7 +3,7 @@ import { UserRole } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { LayoutDashboard, Users, CreditCard, Activity, ShieldAlert, Folder, FileText, Server } from 'lucide-react';
+import { LayoutDashboard, Users, CreditCard, Activity, ShieldAlert, Folder, FileText, Server, Mail } from 'lucide-react';
 
 export default async function AdminLayout({
   children,
@@ -22,6 +22,7 @@ export default async function AdminLayout({
     { label: 'Projects', href: '/admin/projects', icon: Folder },
     { label: 'Payments', href: '/admin/billing', icon: CreditCard },
     { label: 'Logs', href: '/admin/logs', icon: FileText },
+    { label: 'Newsletter', href: '/admin/newsletter', icon: Mail },
   ];
 
   return (

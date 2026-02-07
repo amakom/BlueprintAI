@@ -415,3 +415,32 @@ model Competitor {
 
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }
+
+// --- Mailing List & Newsletter ---
+
+model Subscriber {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  name           String?
+  source         String    @default("landing_page") // landing_page, signup, admin
+  status         String    @default("active") // active, unsubscribed
+  subscribedAt   DateTime  @default(now())
+  unsubscribedAt DateTime?
+  metadata       Json?
+
+  @@index([email])
+  @@index([status])
+  @@index([subscribedAt])
+}
+
+model NewsletterCampaign {
+  id          String   @id @default(cuid())
+  subject     String
+  body        String   // HTML content
+  sentBy      String   // admin user ID
+  sentAt      DateTime @default(now())
+  recipientCount Int   @default(0)
+  status      String   @default("sent") // draft, sent, failed
+
+  @@index([sentAt])
+}

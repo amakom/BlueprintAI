@@ -8,6 +8,7 @@ import { SpecConversionAnimation } from '@/components/landing/SpecConversionAnim
 import { InteractiveCanvasNodeAnimation } from '@/components/landing/InteractiveCanvasNodeAnimation';
 import { PricingCard } from '@/components/landing/PricingCard';
 import { ProductWalkthrough } from '@/components/landing/ProductWalkthrough';
+import { SubscribeForm } from '@/components/landing/SubscribeForm';
 import { FadeUp, SlideIn, ScaleIn, StaggerContainer, StaggerItem } from '@/components/landing/ScrollAnimation';
 
 export default function LandingPage() {
@@ -334,13 +335,18 @@ export default function LandingPage() {
           <FadeUp>
             <h2 className="text-3xl md:text-6xl font-bold mb-6">Stop Guessing. Start Building.</h2>
             <p className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">Every great product starts with a great plan. Create your first blueprint in under 5 minutes — free.</p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <Link href="/signup" className="px-8 py-4 bg-cyan text-navy font-bold rounded-md hover:bg-white transition-all text-lg shadow-lg shadow-cyan/20">
                 Get Started for Free
               </Link>
               <Link href="#demo" className="px-8 py-4 bg-transparent border border-white/20 text-white font-bold rounded-md hover:bg-white/10 transition-all text-lg">
                 View Demo
               </Link>
+            </div>
+
+            <div className="border-t border-white/10 pt-8">
+              <p className="text-sm text-gray-500 mb-4">Not ready to sign up? Stay in the loop:</p>
+              <SubscribeForm />
             </div>
           </FadeUp>
         </section>

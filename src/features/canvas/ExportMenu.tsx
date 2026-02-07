@@ -93,14 +93,16 @@ export function ExportMenu({ projectId }: ExportMenuProps) {
     let prompt = `Build the following application based on this blueprint.\n\n`;
     prompt += `## User Stories\n`;
     userStories.forEach((story, i) => {
-      prompt += `${i + 1}. **${story.data.label || 'Untitled'}**: ${story.data.description || 'No description.'}\n`;
+      const d = story.data as any;
+      prompt += `${i + 1}. **${d.label || 'Untitled'}**: ${d.description || 'No description.'}\n`;
     });
 
     if (screens.length > 0) {
       prompt += `\n## Screens & Pages\n`;
       screens.forEach((screen, i) => {
-        const route = (screen.data.label || 'screen').toLowerCase().replace(/\s+/g, '-');
-        prompt += `${i + 1}. **${screen.data.label || 'Untitled Screen'}** — Route: \`/${route}\`\n`;
+        const d = screen.data as any;
+        const route = String(d.label || 'screen').toLowerCase().replace(/\s+/g, '-');
+        prompt += `${i + 1}. **${d.label || 'Untitled Screen'}** — Route: \`/${route}\`\n`;
       });
     }
 

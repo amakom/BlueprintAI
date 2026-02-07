@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Loader2, ArrowRight, ArrowLeft, Layout, Smartphone, Globe, Box, Sparkles } from 'lucide-react';
+import { X, Loader2, ArrowRight, ArrowLeft, Layout, Smartphone, Globe, Box, Sparkles, ShoppingCart, Users, FileText, Rocket } from 'lucide-react';
 
 interface CreateProjectModalProps {
   isOpen: boolean;
@@ -16,6 +16,14 @@ const PROJECT_TYPES = [
   { id: 'other', label: 'Other', icon: Box, description: 'API, CLI, Library' },
 ];
 
+const TEMPLATES = [
+  { id: 'blank', label: 'Blank Project', icon: FileText, description: 'Start from scratch', prompt: '' },
+  { id: 'saas', label: 'SaaS Starter', icon: Rocket, description: 'Auth, dashboard, billing, settings', prompt: 'A SaaS application with user authentication (signup, login, password reset), a user dashboard showing key metrics, subscription billing with free and pro tiers, user settings page, and an admin panel. Include onboarding flow for new users.' },
+  { id: 'marketplace', label: 'Marketplace', icon: ShoppingCart, description: 'Buyers, sellers, listings, payments', prompt: 'A two-sided marketplace where sellers can list products with images, descriptions, and pricing. Buyers can browse, search, filter, add to cart, and checkout. Include seller dashboard, buyer order history, reviews and ratings, and admin moderation panel.' },
+  { id: 'social', label: 'Social Platform', icon: Users, description: 'Profiles, feeds, messaging', prompt: 'A social platform with user profiles, a news feed showing posts from followed users, the ability to create posts with text and images, like and comment on posts, follow/unfollow users, direct messaging, and notifications. Include user search and discovery.' },
+  { id: 'mobile-app', label: 'Mobile App', icon: Smartphone, description: 'Onboarding, tabs, profile', prompt: 'A mobile app with an onboarding walkthrough (3-4 slides), tab-based navigation (Home, Search, Activity, Profile), a home feed with cards, pull-to-refresh, a search page with filters, a notification/activity feed, and a profile page with settings and edit profile.' },
+];
+
 export function CreateProjectModal({ isOpen, onClose, onSubmit }: CreateProjectModalProps) {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -23,7 +31,8 @@ export function CreateProjectModal({ isOpen, onClose, onSubmit }: CreateProjectM
     description: '',
     type: 'web',
     aiPrompt: '',
-    useAI: false
+    useAI: false,
+    template: 'blank'
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -50,7 +59,7 @@ export function CreateProjectModal({ isOpen, onClose, onSubmit }: CreateProjectM
         aiPrompt: formData.useAI ? formData.aiPrompt : ''
       });
       // Reset form
-      setFormData({ name: '', description: '', type: 'web', aiPrompt: '', useAI: false });
+      setFormData({ name: '', description: '', type: 'web', aiPrompt: '', useAI: false, template: 'blank' });
       setStep(1);
     } catch (error) {
       console.error(error);
@@ -121,42 +130,82 @@ export function CreateProjectModal({ isOpen, onClose, onSubmit }: CreateProjectM
     </div>
   );
 
-  const renderStep3 = () => (
-    <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-200">
-      <div className="bg-gradient-to-br from-indigo-50 to-cyan/10 p-4 rounded-md border border-cyan/20">
-        <div className="flex items-center gap-2 mb-2">
-          <Sparkles className="w-5 h-5 text-indigo-600" />
-          <h3 className="font-bold text-navy">AI Kickstart</h3>
-        </div>
-        <p className="text-sm text-gray-600 mb-4">
-          Want to start with a generated PRD? Describe your vision and we'll create the initial structure for you.
-        </p>
-        
-        <div className="flex items-center gap-2 mb-4">
-          <input
-            type="checkbox"
-            id="useAI"
-            checked={formData.useAI}
-            onChange={(e) => setFormData({ ...formData, useAI: e.target.checked })}
-            className="rounded border-gray-300 text-cyan focus:ring-cyan"
-          />
-          <label htmlFor="useAI" className="text-sm font-medium text-navy cursor-pointer">
-            Yes, generate initial content with AI
-          </label>
+  const renderStep3 = () => {
+    const selectedTemplate = TEMPLATES.find(t => t.id === formData.template);
+    return (
+      <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-200">
+        {/* Template Selection */}
+        <div>
+          <label className="block text-sm font-medium text-navy mb-2">Start from a template</label>
+          <div className="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto pr-1">
+            {TEMPLATES.map((tpl) => {
+              const Icon = tpl.icon;
+              const isSelected = formData.template === tpl.id;
+              return (
+                <button
+                  key={tpl.id}
+                  type="button"
+                  onClick={() => {
+                    setFormData({
+                      ...formData,
+                      template: tpl.id,
+                      useAI: tpl.id !== 'blank',
+                      aiPrompt: tpl.prompt
+                    });
+                  }}
+                  className={`flex items-center gap-3 p-2.5 border rounded-md text-left transition-all ${
+                    isSelected
+                      ? 'border-cyan bg-cyan/5 ring-1 ring-cyan'
+                      : 'border-border hover:bg-gray-50 hover:border-cyan/50'
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 shrink-0 ${isSelected ? 'text-cyan' : 'text-gray-400'}`} />
+                  <div className="min-w-0">
+                    <div className={`text-sm font-medium ${isSelected ? 'text-navy' : 'text-gray-700'}`}>{tpl.label}</div>
+                    <div className="text-xs text-gray-500 truncate">{tpl.description}</div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {formData.useAI && (
-          <textarea
-            value={formData.aiPrompt}
-            onChange={(e) => setFormData({ ...formData, aiPrompt: e.target.value })}
-            placeholder="e.g., A fitness tracking app that gamifies workouts with social features..."
-            className="w-full p-3 border border-indigo-100 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition-all h-32 resize-none bg-white"
-            autoFocus
-          />
-        )}
+        {/* Custom AI Prompt */}
+        <div className="bg-gradient-to-br from-indigo-50 to-cyan/10 p-4 rounded-md border border-cyan/20">
+          <div className="flex items-center gap-2 mb-2">
+            <Sparkles className="w-5 h-5 text-indigo-600" />
+            <h3 className="font-bold text-navy text-sm">AI Kickstart</h3>
+          </div>
+          {selectedTemplate && selectedTemplate.id !== 'blank' ? (
+            <p className="text-xs text-gray-500 mb-3">Template prompt loaded. Edit below to customize.</p>
+          ) : (
+            <div className="flex items-center gap-2 mb-3">
+              <input
+                type="checkbox"
+                id="useAI"
+                checked={formData.useAI}
+                onChange={(e) => setFormData({ ...formData, useAI: e.target.checked })}
+                className="rounded border-gray-300 text-cyan focus:ring-cyan"
+              />
+              <label htmlFor="useAI" className="text-xs font-medium text-navy cursor-pointer">
+                Generate initial content with AI
+              </label>
+            </div>
+          )}
+
+          {formData.useAI && (
+            <textarea
+              value={formData.aiPrompt}
+              onChange={(e) => setFormData({ ...formData, aiPrompt: e.target.value })}
+              placeholder="e.g., A fitness tracking app that gamifies workouts with social features..."
+              className="w-full p-3 border border-indigo-100 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition-all h-24 resize-none bg-white text-sm"
+              autoFocus
+            />
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy/50 backdrop-blur-sm p-4">

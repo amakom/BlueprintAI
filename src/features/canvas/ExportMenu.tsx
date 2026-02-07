@@ -1,14 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
-import { 
-  Download, 
-  FileText, 
-  Copy, 
-  Share2, 
-  Check, 
+import {
+  Download,
+  FileText,
+  Copy,
+  Share2,
+  Check,
   Printer,
   ChevronDown,
   Loader2,
-  Globe
+  Globe,
+  Bot
 } from 'lucide-react';
 import { useCanvas } from './CanvasContext';
 import { useReactFlow } from '@xyflow/react';
@@ -23,7 +24,8 @@ export function ExportMenu({ projectId }: ExportMenuProps) {
   const [shareLink, setShareLink] = useState<string | null>(null);
   const [isLoadingShare, setIsLoadingShare] = useState(false);
   const [copied, setCopied] = useState(false);
-  
+  const [copiedAI, setCopiedAI] = useState(false);
+
   const menuRef = useRef<HTMLDivElement>(null);
   const { nodes } = useCanvas();
   const { getNodes } = useReactFlow(); // Get latest nodes state if needed
@@ -77,6 +79,53 @@ export function ExportMenu({ projectId }: ExportMenuProps) {
     await navigator.clipboard.writeText(content);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+    setIsOpen(false);
+  };
+
+  const getAIAgentPrompt = () => {
+    const currentNodes = nodes.length > 0 ? nodes : getNodes();
+    const userStories = currentNodes.filter(n => n.type === 'userStory');
+    const screens = currentNodes.filter(n => n.type === 'screen');
+
+    userStories.sort((a, b) => a.position.y - b.position.y);
+    screens.sort((a, b) => a.position.y - b.position.y);
+
+    let prompt = `Build the following application based on this blueprint.\n\n`;
+    prompt += `## User Stories\n`;
+    userStories.forEach((story, i) => {
+      prompt += `${i + 1}. **${story.data.label || 'Untitled'}**: ${story.data.description || 'No description.'}\n`;
+    });
+
+    if (screens.length > 0) {
+      prompt += `\n## Screens & Pages\n`;
+      screens.forEach((screen, i) => {
+        const route = (screen.data.label || 'screen').toLowerCase().replace(/\s+/g, '-');
+        prompt += `${i + 1}. **${screen.data.label || 'Untitled Screen'}** — Route: \`/${route}\`\n`;
+      });
+    }
+
+    prompt += `\n## Technical Requirements\n`;
+    prompt += `- Use Next.js 14 with TypeScript and Tailwind CSS\n`;
+    prompt += `- Use Prisma with PostgreSQL for the database\n`;
+    prompt += `- Implement proper error handling and loading states\n`;
+    prompt += `- Follow RESTful API conventions\n`;
+    prompt += `- Make the UI responsive and accessible\n`;
+
+    prompt += `\n## Implementation Order\n`;
+    prompt += `1. Set up the database schema based on the entities above\n`;
+    prompt += `2. Create the API routes\n`;
+    prompt += `3. Build the frontend pages and components\n`;
+    prompt += `4. Add authentication and authorization\n`;
+    prompt += `5. Test all user flows end-to-end\n`;
+
+    return prompt;
+  };
+
+  const handleCopyForAI = async () => {
+    const prompt = getAIAgentPrompt();
+    await navigator.clipboard.writeText(prompt);
+    setCopiedAI(true);
+    setTimeout(() => setCopiedAI(false), 2000);
     setIsOpen(false);
   };
 
@@ -192,6 +241,10 @@ export function ExportMenu({ projectId }: ExportMenuProps) {
             <button onClick={handleCopyToClipboard} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-navy hover:bg-cloud rounded-md text-left">
               {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-gray-500" />}
               Copy PRD to Clipboard
+            </button>
+            <button onClick={handleCopyForAI} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-navy hover:bg-purple-50 rounded-md text-left font-medium">
+              {copiedAI ? <Check className="w-4 h-4 text-green-500" /> : <Bot className="w-4 h-4 text-purple-600" />}
+              Copy for AI Agent
             </button>
             <div className="h-px bg-border my-1" />
             <button onClick={handleShareClick} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-navy hover:bg-cloud rounded-md text-left">

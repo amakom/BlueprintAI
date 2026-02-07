@@ -19,7 +19,7 @@ import { UserStoryNode } from './nodes/UserStoryNode';
 import { ScreenNode } from './nodes/ScreenNode';
 import { CommentNode } from './nodes/CommentNode';
 import { DeletableEdge } from './edges/DeletableEdge';
-import { Plus, Save, Smartphone, Sparkles, MessageSquare, History, Play, MousePointer, X, Layout, Monitor, ChevronLeft, ChevronRight, Moon, Sun } from 'lucide-react';
+import { Plus, Save, Smartphone, Sparkles, MessageSquare, History, Play, MousePointer, X, Layout, Monitor, ChevronLeft, ChevronRight, Moon, Sun, Keyboard } from 'lucide-react';
 import { PropertiesPanel } from './PropertiesPanel';
 import { useCanvas } from './CanvasContext';
 import { useEffect, useState, useCallback } from 'react';
@@ -91,10 +91,29 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
   });
 
   const [warning, setWarning] = useState<string | null>(null);
+  const [showShortcuts, setShowShortcuts] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('blueprint_theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) return;
+
+      if (e.key === '?') { setShowShortcuts(s => !s); return; }
+      if (e.key === 'Escape') { setShowShortcuts(false); setCommentMode(false); setPlayMode(false); return; }
+      if (e.key === 's' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); saveCanvas(); return; }
+      if (e.key === 'c' && !e.ctrlKey && !e.metaKey) { setCommentMode(m => !m); setPlayMode(false); return; }
+      if (e.key === 'p' && !e.ctrlKey && !e.metaKey) { setPlayMode(m => !m); setCommentMode(false); return; }
+      if (e.key === 'd' && !e.ctrlKey && !e.metaKey) { setIsDarkMode(m => !m); return; }
+      if (e.key === 'h' && !e.ctrlKey && !e.metaKey) { setShowHistory(h => !h); return; }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [saveCanvas]);
   
   // Comment Input State
   const [tempCommentPos, setTempCommentPos] = useState<{x: number, y: number} | null>(null);
@@ -451,6 +470,14 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
             {!readOnly && (
                 <>
                 <button
+                  onClick={() => setShowShortcuts(true)}
+                  className={`border p-2 rounded-md shadow-sm transition-colors flex items-center gap-2 ${isDarkMode ? 'bg-navy border-slate-700 text-white hover:bg-slate-800' : 'bg-white border-border hover:bg-gray-50 text-navy'}`}
+                  title="Keyboard Shortcuts (?)"
+                >
+                  <Keyboard className="w-4 h-4" />
+                </button>
+
+                <button
                   onClick={() => setIsDarkMode(!isDarkMode)}
                   className={`border p-2 rounded-md shadow-sm transition-colors flex items-center gap-2 ${isDarkMode ? 'bg-navy border-slate-700 text-white hover:bg-slate-800' : 'bg-white border-border hover:bg-gray-50 text-navy'}`}
                   title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
@@ -565,6 +592,40 @@ function VisualCanvasContent({ projectId, readOnly = false }: VisualCanvasProps)
               </div>
            </div>
         )}
+        {/* Keyboard Shortcuts Guide */}
+        {showShortcuts && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="bg-white rounded-md shadow-2xl w-full max-w-sm p-6 m-4 animate-in fade-in zoom-in-95">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-bold text-navy flex items-center gap-2">
+                  <Keyboard className="w-5 h-5 text-cyan" />
+                  Keyboard Shortcuts
+                </h3>
+                <button onClick={() => setShowShortcuts(false)} className="text-gray-400 hover:text-navy">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="space-y-2 text-sm">
+                {[
+                  ['Ctrl/Cmd + S', 'Save canvas'],
+                  ['C', 'Toggle comment mode'],
+                  ['P', 'Toggle prototype mode'],
+                  ['D', 'Toggle dark/light mode'],
+                  ['H', 'Toggle version history'],
+                  ['?', 'Show/hide this guide'],
+                  ['Escape', 'Close panels & modes'],
+                  ['Delete / Backspace', 'Delete selected node'],
+                ].map(([key, desc]) => (
+                  <div key={key} className="flex items-center justify-between py-1.5 border-b border-gray-100 last:border-0">
+                    <span className="text-gray-600">{desc}</span>
+                    <kbd className="px-2 py-0.5 bg-gray-100 text-navy text-xs font-mono rounded border border-gray-200">{key}</kbd>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         <AlertModal
             isOpen={!!warning}
             onClose={() => setWarning(null)}

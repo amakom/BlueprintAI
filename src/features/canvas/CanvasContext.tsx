@@ -1,12 +1,13 @@
 'use client';
 
-import { 
-  createContext, 
-  useContext, 
-  useState, 
-  useEffect, 
-  useCallback, 
-  ReactNode 
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  ReactNode
 } from 'react';
 import { 
   Node, 
@@ -193,13 +194,13 @@ export function CanvasProvider({ children, initialData, readOnly = false }: { ch
   }, [projectId, setNodes, setEdges]);
 
   // Save canvas
-  const saveCanvas = async () => {
+  const saveCanvas = useCallback(async () => {
     if (!projectId || readOnly) return;
     setIsSaving(true);
     try {
       // Filter out comment nodes before saving
       const nodesToSave = nodes.filter(n => n.type !== 'comment');
-      
+
       await fetch(`/api/projects/${projectId}/canvas`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -210,7 +211,32 @@ export function CanvasProvider({ children, initialData, readOnly = false }: { ch
     } finally {
       setIsSaving(false);
     }
-  };
+  }, [projectId, readOnly, nodes, edges]);
+
+  // Auto-save: debounce 30 seconds after any change
+  const autoSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasLoadedRef = useRef(false);
+
+  useEffect(() => {
+    // Don't auto-save until initial load is done
+    if (!projectId || readOnly) return;
+    if (!hasLoadedRef.current) {
+      // Mark as loaded after first render with nodes
+      if (nodes.length > 0 || edges.length > 0) {
+        hasLoadedRef.current = true;
+      }
+      return;
+    }
+
+    if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
+    autoSaveTimer.current = setTimeout(() => {
+      saveCanvas();
+    }, 30000);
+
+    return () => {
+      if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
+    };
+  }, [nodes, edges, projectId, readOnly, saveCanvas]);
 
   return (
     <CanvasContext.Provider value={{

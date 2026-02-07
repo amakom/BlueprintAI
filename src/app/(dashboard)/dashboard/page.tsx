@@ -1,6 +1,6 @@
 'use client';
 
-import { Plus, Sparkles, ArrowRight } from 'lucide-react';
+import { Plus, Sparkles, ArrowRight, Search } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CreateProjectModal } from '@/components/dashboard/CreateProjectModal';
@@ -24,6 +24,11 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredProjects = projects.filter(p =>
+    p.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     fetchProjects();
@@ -145,7 +150,7 @@ export default function DashboardPage() {
 
   return (
     <div className="container mx-auto px-6 py-8 pt-16 md:pt-8">
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
         <div>
           <h1 className="text-2xl font-bold text-navy">Projects</h1>
           <p className="text-gray-500">Manage and organize your product blueprints</p>
@@ -158,6 +163,19 @@ export default function DashboardPage() {
           New Project
         </button>
       </div>
+
+      {projects.length > 0 && (
+        <div className="relative mb-6">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search projects..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full md:w-80 pl-10 pr-4 py-2 border border-border rounded-md bg-white text-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan/50 focus:border-cyan transition-all"
+          />
+        </div>
+      )}
 
       {projects.length === 0 ? (
         // Guided Empty State
@@ -177,9 +195,15 @@ export default function DashboardPage() {
             Create Project <ArrowRight className="w-4 h-4" />
           </button>
         </div>
+      ) : filteredProjects.length === 0 && searchQuery ? (
+        <div className="text-center py-12 text-gray-500">
+          <Search className="w-8 h-8 mx-auto mb-3 text-gray-300" />
+          <p className="font-medium">No projects match &quot;{searchQuery}&quot;</p>
+          <p className="text-sm mt-1">Try a different search term</p>
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
+          {filteredProjects.map((project) => (
             <ProjectCard
               key={project.id}
               id={project.id}

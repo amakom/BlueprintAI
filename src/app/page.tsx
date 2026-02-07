@@ -289,7 +289,7 @@ export default function LandingPage() {
         <section id="pricing" className="container mx-auto px-6 py-16 md:py-24 border-t border-white/5">
           <FadeUp className="text-center mb-16">
             <h2 className="text-2xl md:text-5xl font-bold">Early Access — Limited Beta</h2>
-            <p className="mt-4 text-gray-400">Get lifetime Pro access for a one-time price. Only 20 spots available.</p>
+            <p className="mt-4 text-gray-400">Get lifetime Pro access for a one-time price. Only 50 spots available.</p>
           </FadeUp>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-start">
@@ -309,7 +309,7 @@ export default function LandingPage() {
               description="Beta testers get Pro forever. No subscriptions."
               price="$49"
               period="one-time"
-              badge="BETA — 20 SPOTS"
+              badge="BETA — 50 SPOTS"
               features={["Unlimited projects", "100 AI generations/month", "Cloud sync & export", "Full engineering specs", "Priority support", "All future Pro updates"]}
               ctaText="Get Lifetime Access"
               ctaLink="/pricing"

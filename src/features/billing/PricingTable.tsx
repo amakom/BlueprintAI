@@ -62,7 +62,7 @@ export function PricingTable({ initialTeamId, initialUserEmail, initialUserName 
       ...SUBSCRIPTION_PLANS.PRO,
       priceDisplay: '$49',
       period: 'one-time',
-      badge: 'BETA — 20 SPOTS',
+      badge: 'BETA — 50 SPOTS',
       highlight: true,
     },
   ];
@@ -71,7 +71,7 @@ export function PricingTable({ initialTeamId, initialUserEmail, initialUserName 
     <div className="w-full max-w-6xl mx-auto px-4 py-12">
       <div className="text-center mb-12">
         <h2 className="text-3xl font-bold text-navy mb-4">Early Access — Limited Beta</h2>
-        <p className="text-gray-500">Get lifetime Pro access for a one-time price. Only 20 spots available.</p>
+        <p className="text-gray-500">Get lifetime Pro access for a one-time price. Only 50 spots available.</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">

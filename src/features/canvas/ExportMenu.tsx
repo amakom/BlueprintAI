@@ -276,21 +276,25 @@ export function ExportMenu({ projectId }: ExportMenuProps) {
 
   const handleCopyForAI = async () => {
     setIsLoadingAI(true);
-    setIsOpen(false);
     try {
       const prompt = await buildFullAIPrompt();
       await navigator.clipboard.writeText(prompt);
       setCopiedAI(true);
 
-      // Show upgrade hint for free users
+      // Show upgrade hint for free users, keep menu open
       if (userPlan === 'FREE') {
         setShowUpgradeHint(true);
+      } else {
+        setIsOpen(false);
       }
 
       setTimeout(() => {
         setCopiedAI(false);
-        setShowUpgradeHint(false);
-      }, 5000);
+        if (showUpgradeHint) {
+          setShowUpgradeHint(false);
+          setIsOpen(false);
+        }
+      }, 6000);
     } catch (err) {
       console.error('Failed to build AI prompt', err);
     } finally {
@@ -397,7 +401,7 @@ export function ExportMenu({ projectId }: ExportMenuProps) {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-2 w-56 bg-white border border-border rounded-md shadow-lg z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+        <div className={`absolute top-full right-0 mt-2 bg-white border border-border rounded-md shadow-lg z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100 ${showUpgradeHint ? 'w-72' : 'w-56'}`}>
           <div className="p-1">
             <button onClick={handleExportMarkdown} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-navy hover:bg-cloud rounded-md text-left">
               <Download className="w-4 h-4 text-gray-500" />
@@ -416,6 +420,26 @@ export function ExportMenu({ projectId }: ExportMenuProps) {
               <span className="flex-1">{isLoadingAI ? 'Building Context...' : copiedAI ? 'Copied!' : 'Copy for AI Agent'}</span>
               <span className="px-1.5 py-0.5 bg-purple-100 text-purple-700 text-[10px] font-bold rounded">PRO</span>
             </button>
+
+            {/* Upgrade hint shown inside menu for free users after copy */}
+            {showUpgradeHint && (
+              <div className="mx-1 my-2 p-3 bg-gradient-to-br from-purple-50 to-white border border-purple-200 rounded-lg">
+                <p className="text-xs font-bold text-navy flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5 text-green-500" />
+                  Basic context copied!
+                </p>
+                <p className="text-[11px] text-gray-600 mt-1.5 leading-relaxed">
+                  Upgrade to <span className="font-semibold text-purple-700">Pro</span> for full Context Cleaner — personas, strategy, OKRs, KPIs, competitors, specs & nav flows.
+                </p>
+                <a
+                  href="/pricing"
+                  className="inline-block mt-2 text-[11px] font-bold text-white bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded transition-colors"
+                >
+                  Unlock Full Export →
+                </a>
+              </div>
+            )}
+
             <div className="h-px bg-border my-1" />
             <button onClick={handleShareClick} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-navy hover:bg-cloud rounded-md text-left">
               <Globe className="w-4 h-4 text-cyan" />
@@ -483,34 +507,6 @@ export function ExportMenu({ projectId }: ExportMenuProps) {
                 </button>
               </div>
             )}
-          </div>
-        </div>
-      )}
-      {/* Upgrade Hint Toast for Free Users */}
-      {showUpgradeHint && (
-        <div className="absolute top-full right-0 mt-2 w-80 bg-gradient-to-br from-purple-50 to-white border border-purple-200 rounded-lg shadow-xl z-50 p-4 animate-in fade-in slide-in-from-top-2 duration-200">
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <Bot className="w-4 h-4 text-purple-600" />
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-bold text-navy">Basic context copied!</p>
-              <p className="text-xs text-gray-600 mt-1 leading-relaxed">
-                Upgrade to Pro for the <span className="font-semibold text-purple-700">full Context Cleaner</span> — personas, strategy, OKRs, KPIs, competitors, specs & navigation flows.
-              </p>
-              <a
-                href="/pricing"
-                className="inline-flex items-center gap-1 mt-2 text-xs font-bold text-purple-700 hover:text-purple-900 transition-colors"
-              >
-                Unlock Full Export →
-              </a>
-            </div>
-            <button
-              onClick={() => setShowUpgradeHint(false)}
-              className="text-gray-400 hover:text-gray-600 flex-shrink-0"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
           </div>
         </div>
       )}
